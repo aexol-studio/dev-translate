@@ -1,0 +1,19 @@
+{
+  "name": "@aexol/dev-translate-config",
+  "version": "0.0.1",
+  "private": false,
+  "main": "./lib/index.js",
+  "author": "Aexol, Artur Czemiel",
+  "type": "module",
+  "scripts": {
+    "build": "tspc",
+    "start": "tspc --watch",
+    "lint": "tspc && eslint \"./src/**/*.{ts,js}\" --quiet --fix"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "config-maker": "^0.0.6"
+  }
+}

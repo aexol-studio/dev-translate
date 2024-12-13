@@ -1,0 +1,17 @@
+{
+  "name": "@aexol/testground-dev-translate",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./lib/index.js",
+  "author": "Aexol, Artur Czemiel",
+  "type": "module",
+  "scripts": {
+    "start": "node ../cli/lib/index.js -- translate"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@aexol/dev-translate":"^0.0.1"
+  }
+}

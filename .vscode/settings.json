@@ -1,0 +1,18 @@
+{
+    "cSpell.words": [
+        "aexol",
+        "axolotl",
+        "modularium",
+        "Supergraph"
+    ],
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.preferences.importModuleSpecifierEnding": "js",
+    "deno.enablePaths": [
+        "./deno/adapters/",
+        "./deno/examples/beerpub-yoga",
+    ],
+    "deno.enable": true,
+    "yaml.schemas": {
+        "https://www.artillery.io/schema.json": []
+    },
+}

@@ -1,0 +1,26 @@
+{
+    "title": "Global Filters",
+    "success": "Successfully edited global filters.",
+    "paramName": "Param name",
+    "optionValue": "Option value",
+    "addOption": "Add option",
+    "addGlobalFilter": "Add Global Filter",
+    "default": "default",
+    "duplicateContent":"Duplicate documents",
+    "duplicate":{
+        "from":"Take from",
+        "to": "Create documents in",
+        "version":"Assign version",
+        "sure":"Do you really want to duplicate documents?",
+        "selectModel":"Select model",
+        "translate":"Translate documents",
+        "langIn":"To language",
+        "success":"Duplication successful"
+    },
+    "validation": {
+        "emptyParam": "The name of the filter must not be empty",
+        "uniqueParam": "The filter name \"{{param}}\" should be unique",
+        "emptyOption": "The filter \"{{param}}\" must not contain an empty option",
+        "uniqueOption": "The \"{{option}}\" option for the \"{{param}}\" filter should be unique"
+    }
+}

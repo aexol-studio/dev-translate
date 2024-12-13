@@ -1,0 +1,9 @@
+{
+    "title":"Manage document versions",
+    "name":"Version name",
+    "from": "Visible from",
+    "to": "Visible until",
+    "new":"Create a new version",
+    "remove":"Remove version",
+    "edit":"Edit version"
+}

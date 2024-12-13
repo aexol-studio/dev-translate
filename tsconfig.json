@@ -1,0 +1,17 @@
+{
+    "files": [],
+    "references": [
+        {
+            "path": "./packages/core"
+        },
+        {
+            "path": "./packages/cli"
+        },
+        {
+            "path": "./packages/config"
+        },
+        {
+            "path": "./packages/testground"
+        },
+    ]
+}
