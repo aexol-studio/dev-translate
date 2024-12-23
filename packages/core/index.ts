@@ -121,7 +121,7 @@ export const translateLocaleFolder = async ({
           console.log('Consumed tokens', result?.consumedTokens);
           if (result) {
             results.push(result);
-            writeFileSync(path.join(outPath, srcFilePath), result.result);
+            writeFileSync(path.join(outPath, srcFilePath), JSON.stringify(JSON.parse(result.result), null, 4));
           }
         }),
       );

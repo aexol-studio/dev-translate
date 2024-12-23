@@ -1,1 +1,26 @@
-{"title":"Filtry globalne","success":"Pomyślnie edytowano filtry globalne.","paramName":"Nazwa parametru","optionValue":"Wartość opcji","addOption":"Dodaj opcję","addGlobalFilter":"Dodaj filtr globalny","default":"domyślny","duplicateContent":"Duplikaty dokumentów","duplicate":{"from":"Pobrane z","to":"Tworzenie dokumentów w","version":"Przypisywanie wersji","sure":"Czy naprawdę chcesz duplikować dokumenty?","selectModel":"Wybierz model","translate":"Tłumaczenie dokumentów","langIn":"Na język","success":"Duplikacja powiodła się"},"validation":{"emptyParam":"Nazwa filtra nie może być pusta","uniqueParam":"Nazwa filtra \"{{param}}\" powinna być unikalna","emptyOption":"Filtr \"{{param}}\" nie może zawierać pustej opcji","uniqueOption":"Opcja \"{{option}}\" dla filtra \"{{param}}\" powinna być unikalna"}}
+{
+    "title": "Filtry globalne",
+    "success": "Pomyślnie edytowano filtry globalne.",
+    "paramName": "Nazwa parametru",
+    "optionValue": "Wartość opcji",
+    "addOption": "Dodaj opcję",
+    "addGlobalFilter": "Dodaj filtr globalny",
+    "default": "domyślny",
+    "duplicateContent": "Duplikaty dokumentów",
+    "duplicate": {
+        "from": "Pobrane z",
+        "to": "Tworzenie dokumentów w",
+        "version": "Przypisywanie wersji",
+        "sure": "Czy naprawdę chcesz duplikować dokumenty?",
+        "selectModel": "Wybierz model",
+        "translate": "Tłumaczenie dokumentów",
+        "langIn": "Na język",
+        "success": "Duplikacja powiodła się"
+    },
+    "validation": {
+        "emptyParam": "Nazwa filtra nie może być pusta",
+        "uniqueParam": "Nazwa filtra \"{{param}}\" powinna być unikalna",
+        "emptyOption": "Filtr \"{{param}}\" nie może zawierać pustej opcji",
+        "uniqueOption": "Opcja \"{{option}}\" dla filtra \"{{param}}\" powinna być unikalna"
+    }
+}

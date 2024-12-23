@@ -1,1 +1,26 @@
-{"title":"Globale Filter","success":"Globale Filter erfolgreich bearbeitet.","paramName":"Param-Name","optionValue":"Wert der Option","addOption":"Option hinzufügen","addGlobalFilter":"Globalen Filter hinzufügen","default":"standard","duplicateContent":"Duplizieren von Dokumenten","duplicate":{"from":"Nehmen Sie von","to":"Dokumente erstellen in","version":"Version zuweisen","sure":"Wollen Sie wirklich Dokumente duplizieren?","selectModel":"Modell auswählen","translate":"Dokumente übersetzen","langIn":"In die Sprache","success":"Vervielfältigung erfolgreich"},"validation":{"emptyParam":"Der Name des Filters darf nicht leer sein","uniqueParam":"Der Filtername \"{{param}}\" sollte eindeutig sein","emptyOption":"Der Filter \"{{param}}\" darf keine leere Option enthalten","uniqueOption":"Die Option \"{{option}}\" für den Filter \"{{param}}\" muss eindeutig sein"}}
+{
+    "title": "Globale Filter",
+    "success": "Globale Filter erfolgreich bearbeitet.",
+    "paramName": "Param-Name",
+    "optionValue": "Wert der Option",
+    "addOption": "Option hinzufügen",
+    "addGlobalFilter": "Globalen Filter hinzufügen",
+    "default": "standard",
+    "duplicateContent": "Duplizieren von Dokumenten",
+    "duplicate": {
+        "from": "Nehmen Sie von",
+        "to": "Dokumente erstellen in",
+        "version": "Version zuweisen",
+        "sure": "Wollen Sie wirklich Dokumente duplizieren?",
+        "selectModel": "Modell auswählen",
+        "translate": "Dokumente übersetzen",
+        "langIn": "In die Sprache",
+        "success": "Vervielfältigung erfolgreich"
+    },
+    "validation": {
+        "emptyParam": "Der Name des Filters darf nicht leer sein",
+        "uniqueParam": "Der Filtername \"{{param}}\" sollte eindeutig sein",
+        "emptyOption": "Der Filter \"{{param}}\" darf keine leere Option enthalten",
+        "uniqueOption": "Die Option \"{{option}}\" für den Filter \"{{param}}\" muss eindeutig sein"
+    }
+}

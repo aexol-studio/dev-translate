@@ -1,1 +1,9 @@
-{"title":"Zarządzanie wersjami dokumentów","name":"Nazwa wersji","from":"Widoczne od","to":"Widoczny do","new":"Utwórz nową wersję","remove":"Usuń wersję","edit":"Edytuj wersję"}
+{
+    "title": "Zarządzanie wersjami dokumentów",
+    "name": "Nazwa wersji",
+    "from": "Widoczne od",
+    "to": "Widoczny do",
+    "new": "Utwórz nową wersję",
+    "remove": "Usuń wersję",
+    "edit": "Edytuj wersję"
+}
