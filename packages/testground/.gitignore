@@ -2,4 +2,4 @@
 /lib
 /node_modules
 .graphql-editor-auth.json
-.dev-translate.json
+dev-translate.json
