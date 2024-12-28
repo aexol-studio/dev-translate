@@ -2,19 +2,19 @@
     "search": "suche",
     "editModel": "Modell bearbeiten",
     "createModelModal": {
-        "trigger": "Erstellen <0>{{Modell}}</0>",
-        "header": "Erstelle ein neues {{model}}",
-        "existsError": "\"{{model}}\" mit dem Slug \"{{slug}}\" existiert bereits. Bitte fügen Sie Varianten zu dem bestehenden Modell hinzu, anstatt ein neues zu erstellen."
+        "trigger": "Erstellen <0>{{model}}</0>",
+        "header": "Erstellen eines neuen {{model}}",
+        "existsError": "\"{{model}}\" mit Slug \"{{slug}}\" existiert bereits. Bitte fügen Sie Varianten zu dem bestehenden Modell hinzu, anstatt ein neues zu erstellen."
     },
     "duplicateDocumentModelModal": {
         "trigger": "Dupliziertes Dokument",
-        "header": "Dupliziertes Dokument von slug: {{slug}}",
+        "header": "Dupliziertes Dokument vom Slug: {{slug}}",
         "existsError": "\"{{model}}\" mit Slug \"{{slug}}\" existiert bereits. Bitte wählen Sie beim Duplizieren einen anderen Slug",
         "inputPlaceholder": "neuer Slug"
     },
     "removeDocumentModal": {
         "trigger": "Dokument entfernen",
-        "header": "Dokument entfernen mit Slug: {{slug}}\n(Stamm-Parameter: {{params}})"
+        "header": "Dokument mit Slug entfernen: {{slug}}\n(Stamm-Parameter: {{params}})"
     },
     "table": {
         "slug": "Slug",
@@ -32,7 +32,7 @@
         "saved": "Das Modell wurde gespeichert",
         "removed": "Das Modell wurde entfernt",
         "addField": "Neues Feld hinzufügen",
-        "removeDescription": "Diese Aktion löscht das Modell \"{{model}}\" und alle seine Instanzen.",
+        "removeDescription": "Diese Aktion wird das Modell \"{{model}}\" und alle seine Instanzen löschen.",
         "row": {
             "fieldName": "Feldname",
             "selectType": "Typ auswählen",
@@ -41,19 +41,19 @@
             "search": "Suche",
             "sort": "Sortieren",
             "noValue": "Kein Wert",
-            "addOption": "Neue Option in \"{{Feld}}\" hinzufügen",
-            "addField": "Neues Feld in \"{{feld}}\" hinzufügen"
+            "addOption": "Neue Option in \"{{field}}\" hinzufügen",
+            "addField": "Neues Feld in \"{{field}}\" hinzufügen"
         },
         "validation": {
             "empty": "Das Modell kann kein leeres Feld haben.",
-            "unique": "Es darf nur ein Feld mit dem Namen \"{{Name}}\" vorhanden sein",
+            "unique": "Es darf nur ein Feld mit dem Namen \"{{name}}\" vorhanden sein",
             "numberField": "Der Feldname muss einen Buchstaben enthalten"
         }
     },
     "newVariantModal": {
         "trigger": "Neue Variante",
         "exists": "Es gibt bereits eine Variante mit diesen Einstellungen, bitte bearbeiten Sie diese, anstatt eine neue Variante zu erstellen.",
-        "translationError": "Inhalt kann nicht übersetzt werden. Bitte überprüfen Sie Ihren Übersetzungs-API-Schlüssel oder führen Sie die Variantenerstellung ohne ausgewählte Ergebnissprache durch, um den ursprünglichen Inhalt zu kopieren.",
+        "translationError": "Der Inhalt kann nicht übersetzt werden. Bitte überprüfen Sie Ihren Übersetzungs-API-Schlüssel oder führen Sie die Variantenerstellung ohne ausgewählte Ergebnissprache durch, um den ursprünglichen Inhalt zu kopieren.",
         "error": "Beim Erstellen der Variante ist ein Fehler aufgetreten.",
         "success": "Die Variante des Dokuments \"{{slug}}\" wurde erfolgreich erstellt.",
         "header": "Variante erstellen",
@@ -82,16 +82,16 @@
         "noParamsVariant": "keine Parameter",
         "defaultVariant": "standard",
         "removeDescription": "Diese Aktion kann nicht rückgängig gemacht werden.",
-        "version": "Version <0>{{Version}}</0>",
-        "validFrom": "Gültig von: {{from}}",
-        "validTo": "bis: {{bis}}"
+        "version": "Version <0>{{version}}</0>",
+        "validFrom": "Gültig ab: {{from}}",
+        "validTo": "bis: {{to}}"
     },
     "fieldRenderer": {
         "list": {
             "remove": "Element aus \"{{list}}\" entfernen",
-            "moveUp": "Element in \"{{Liste}}\" nach oben verschieben",
-            "moveDown": "Element in \"{{Liste}}\" nach unten verschieben",
-            "add": "Eintrag innerhalb von \"{{list}}\" hinzufügen"
+            "moveUp": "Element nach oben in \"{{list}}\" verschieben",
+            "moveDown": "Element in \"{{list}}\" nach unten verschieben",
+            "add": "Eintrag in \"{{list}}\" hinzufügen"
         },
         "number": {
             "error": "Bitte geben Sie eine gültige Nummer ein"
@@ -187,8 +187,8 @@
                     "numberedList": "Nummerierte Liste",
                     "checkList": "Liste prüfen",
                     "deleteSandpack": "Diesen Codeblock löschen",
-                    "undo": "Rückgängig machen {{Shortcut}}",
-                    "redo": "Wiederherstellen {{Kurzbefehl}}"
+                    "undo": "Rückgängig machen {{shortcut}}",
+                    "redo": "Wiederholen {{shortcut}}"
                 },
                 "admonitions": {
                     "note": "Hinweis",
@@ -222,14 +222,14 @@
                 "loading": "Inhalte generieren. Das kann eine Weile dauern.",
                 "placeholders": {
                     "blog": "Z.B. Blogbeitrag über die Nutzung von KI zur SEO-Optimierung",
-                    "product": "Z.B. Produktbeschreibung der fettfreien Fritteuse mit Schwerpunkt auf Gesundheit",
+                    "product": "Z.B. Produktbeschreibung der fettfreien Friteuse mit Schwerpunkt auf Gesundheit",
                     "trip": "Z.B. Beschreibung der Skireise in die Schweiz"
                 },
                 "error": "Beim Generieren des Inhalts ist ein Fehler aufgetreten."
             }
         },
-        "chars_zero": "{{Anzahl}} Zeichen",
-        "chars_one": "{{Anzahl}} Zeichen",
+        "chars_zero": "{{count}} Zeichen",
+        "chars_one": "{{count}} Zeichen",
         "chars_two": "{{count}} char",
         "chars_many": "{{count}} chars",
         "chars_few": "{{count}} chars",

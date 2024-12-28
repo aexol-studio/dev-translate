@@ -61,6 +61,71 @@ export const getOutputLanguages = (localePath: string, inputLang: string) => {
     );
 };
 
+const getLocalePaths = ({ srcLang, cwd, localeDir }: { cwd: string; localeDir: string; srcLang: LangPair }) => {
+  console.log('Operating in:', cwd);
+  const localePath = path.join(cwd, localeDir);
+  console.log('Locale path:', localePath);
+  const srcLangPath = path.join(localePath, srcLang.folderName);
+  const localeSrcFiles = readdirSync(srcLangPath).filter((f) => f.endsWith('.json'));
+  console.log('found the following locale files:', localeSrcFiles);
+  const outLangs = getOutputLanguages(localePath, srcLang.folderName);
+  return {
+    outLangs,
+    localeSrcFiles,
+    srcLangPath,
+    localePath,
+  };
+};
+
+export const predictLocaleFolder = async ({
+  srcLang,
+  apiKey,
+  cwd,
+  localeDir,
+}: {
+  cwd: string;
+  localeDir: string;
+  apiKey: string;
+  srcLang: LangPair;
+}) => {
+  const { localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({ cwd, localeDir, srcLang });
+  const translateChain = await Chain('https://backend.devtranslate.app/graphql', {
+    headers: {
+      'api-key': apiKey,
+      'Content-Type': 'application/json',
+    },
+  });
+  const predicted = {
+    cost: 0,
+    cached: 0,
+  };
+  await Promise.all(
+    localeSrcFiles.map(async (srcFilePath) => {
+      const srcFileContent = readFileSync(path.join(srcLangPath, srcFilePath), 'utf-8');
+      const result = await translateChain('query')({
+        api: {
+          predictTranslationCost: [
+            {
+              translate: {
+                content: srcFileContent,
+                inputLanguage: srcLang.lang,
+                languages: outLangs.map((ol) => ol.lang),
+              },
+            },
+            {
+              cached: true,
+              cost: true,
+            },
+          ],
+        },
+      });
+      predicted.cached += (result.api?.predictTranslationCost.cached as number | undefined) || 0;
+      predicted.cost += (result.api?.predictTranslationCost.cost as number | undefined) || 0;
+    }),
+  );
+  console.log(`This translation run will consume ${predicted.cost} tokens from your account.`);
+  if (predicted.cached) console.log(` It will also use ${predicted.cached} tokens from cache.`);
+};
 export const translateLocaleFolder = async ({
   srcLang,
   apiKey,
@@ -72,19 +137,13 @@ export const translateLocaleFolder = async ({
   apiKey: string;
   srcLang: LangPair;
 }) => {
-  console.log('Operating in:', cwd);
-  const localePath = path.join(cwd, localeDir);
-  console.log('Locale path:', localePath);
-  const srcLangPath = path.join(localePath, srcLang.folderName);
-  const localeSrcFiles = readdirSync(srcLangPath).filter((f) => f.endsWith('.json'));
-  console.log('found the following locale files:', localeSrcFiles);
+  const { localePath, localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({ cwd, localeDir, srcLang });
   const translateChain = await Chain('https://backend.devtranslate.app/graphql', {
     headers: {
       'api-key': apiKey,
       'Content-Type': 'application/json',
     },
   });
-  const outLangs = getOutputLanguages(localePath, srcLang.folderName);
   const results: Array<{
     result: string;
     language: Languages;
@@ -128,6 +187,17 @@ export const translateLocaleFolder = async ({
     }),
   );
   return results;
+};
+
+export const clearAccountCache = async ({ apiKey }: { apiKey: string }) => {
+  const translateChain = await Chain('https://backend.devtranslate.app/graphql', {
+    headers: {
+      'api-key': apiKey,
+      'Content-Type': 'application/json',
+    },
+  });
+  await translateChain('mutation')({ api: { clearCache: [{}, true] } });
+  console.log(`Your cache has been cleared`);
 };
 export type LangPair = {
   lang: Languages;

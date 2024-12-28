@@ -899,10 +899,14 @@ export type ValueTypes = {
 	/** if not specified it is auto detected */
 	inputLanguage?: ValueTypes["Languages"] | undefined | null | Variable<any, string>,
 	/** if not specified defaults to json */
-	format?: ValueTypes["Format"] | undefined | null | Variable<any, string>
+	format?: ValueTypes["Format"] | undefined | null | Variable<any, string>,
+	/** scope translation cache to individual project rather than account wide */
+	projectId?: string | undefined | null | Variable<any, string>,
+	omitCache?: boolean | undefined | null | Variable<any, string>
 };
 	["ApiMutation"]: AliasType<{
 translate?: [{	translate: ValueTypes["TranslateInput"] | Variable<any, string>},ValueTypes["TranslationResponse"]],
+clearCache?: [{	projectId?: string | undefined | null | Variable<any, string>},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["ApiKey"]: AliasType<{
@@ -956,9 +960,36 @@ translate?: [{	translate: ValueTypes["TranslateInput"] | Variable<any, string>},
 	pageInfo?:ValueTypes["PageInfo"],
 		__typename?: boolean | `@${string}`
 }>;
+	["UsersConnection"]: AliasType<{
+	items?:ValueTypes["User"],
+	pageInfo?:ValueTypes["PageInfo"],
+		__typename?: boolean | `@${string}`
+}>;
 	/** Size of everything . Works as a number */
 ["BigInt"]:unknown;
 	["Format"]:Format;
+	["ApiQuery"]: AliasType<{
+predictTranslationCost?: [{	translate: ValueTypes["TranslateInput"] | Variable<any, string>},ValueTypes["PredictionResponse"]],
+translations?: [{	page: ValueTypes["PageInput"] | Variable<any, string>},ValueTypes["StoredTranslationConnection"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["PredictionResponse"]: AliasType<{
+	cost?:boolean | `@${string}`,
+	cached?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["AdminQuery"]: AliasType<{
+users?: [{	page?: ValueTypes["PageInput"] | undefined | null | Variable<any, string>},ValueTypes["UsersConnection"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["AdminMutation"]: AliasType<{
+userOps?: [{	userId: string | Variable<any, string>},ValueTypes["UserOps"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["UserOps"]: AliasType<{
+changeUserTokens?: [{	tokens: ValueTypes["BigInt"] | Variable<any, string>},boolean | `@${string}`],
+		__typename?: boolean | `@${string}`
+}>;
 	["Mutation"]: AliasType<{
 	/** entry point for Weebhooks. */
 	webhook?:boolean | `@${string}`,
@@ -969,7 +1000,8 @@ translate?: [{	translate: ValueTypes["TranslateInput"] | Variable<any, string>},
 	["AuthorizedUserMutation"]: AliasType<{
 createApiKey?: [{	apiKey: ValueTypes["CreateApiKey"] | Variable<any, string>},boolean | `@${string}`],
 revokeApiKey?: [{	_id: string | Variable<any, string>},boolean | `@${string}`],
-translate?: [{	translate: ValueTypes["TranslateInput"] | Variable<any, string>},ValueTypes["TranslationResponse"]],
+	api?:ValueTypes["ApiMutation"],
+	admin?:ValueTypes["AdminMutation"],
 changePasswordWhenLogged?: [{	changePasswordData: ValueTypes["ChangePasswordWhenLoggedInput"] | Variable<any, string>},ValueTypes["ChangePasswordWhenLoggedResponse"]],
 editUser?: [{	updatedUser: ValueTypes["UpdateUserInput"] | Variable<any, string>},ValueTypes["EditUserResponse"]],
 integrateSocialAccount?: [{	userData: ValueTypes["SimpleUserInput"] | Variable<any, string>},ValueTypes["IntegrateSocialAccountResponse"]],
@@ -977,7 +1009,8 @@ integrateSocialAccount?: [{	userData: ValueTypes["SimpleUserInput"] | Variable<a
 }>;
 	["AuthorizedUserQuery"]: AliasType<{
 	apiKeys?:ValueTypes["ApiKey"],
-translations?: [{	page: ValueTypes["PageInput"] | Variable<any, string>},ValueTypes["StoredTranslationConnection"]],
+	api?:ValueTypes["ApiQuery"],
+	admin?:ValueTypes["AdminQuery"],
 	me?:ValueTypes["User"],
 		__typename?: boolean | `@${string}`
 }>;
@@ -989,10 +1022,13 @@ translations?: [{	page: ValueTypes["PageInput"] | Variable<any, string>},ValueTy
 	createdAt?:boolean | `@${string}`,
 	fullName?:boolean | `@${string}`,
 	avatarUrl?:boolean | `@${string}`,
+translations?: [{	page: ValueTypes["PageInput"] | Variable<any, string>},ValueTypes["StoredTranslationConnection"]],
+	boughtTokens?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
 	users?:ValueTypes["UsersQuery"],
+	api?:ValueTypes["ApiQuery"],
 		__typename?: boolean | `@${string}`
 }>;
 	["UsersQuery"]: AliasType<{
@@ -1160,10 +1196,14 @@ export type ResolverInputTypes = {
 	/** if not specified it is auto detected */
 	inputLanguage?: ResolverInputTypes["Languages"] | undefined | null,
 	/** if not specified defaults to json */
-	format?: ResolverInputTypes["Format"] | undefined | null
+	format?: ResolverInputTypes["Format"] | undefined | null,
+	/** scope translation cache to individual project rather than account wide */
+	projectId?: string | undefined | null,
+	omitCache?: boolean | undefined | null
 };
 	["ApiMutation"]: AliasType<{
 translate?: [{	translate: ResolverInputTypes["TranslateInput"]},ResolverInputTypes["TranslationResponse"]],
+clearCache?: [{	projectId?: string | undefined | null},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
 	["ApiKey"]: AliasType<{
@@ -1217,9 +1257,36 @@ translate?: [{	translate: ResolverInputTypes["TranslateInput"]},ResolverInputTyp
 	pageInfo?:ResolverInputTypes["PageInfo"],
 		__typename?: boolean | `@${string}`
 }>;
+	["UsersConnection"]: AliasType<{
+	items?:ResolverInputTypes["User"],
+	pageInfo?:ResolverInputTypes["PageInfo"],
+		__typename?: boolean | `@${string}`
+}>;
 	/** Size of everything . Works as a number */
 ["BigInt"]:unknown;
 	["Format"]:Format;
+	["ApiQuery"]: AliasType<{
+predictTranslationCost?: [{	translate: ResolverInputTypes["TranslateInput"]},ResolverInputTypes["PredictionResponse"]],
+translations?: [{	page: ResolverInputTypes["PageInput"]},ResolverInputTypes["StoredTranslationConnection"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["PredictionResponse"]: AliasType<{
+	cost?:boolean | `@${string}`,
+	cached?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["AdminQuery"]: AliasType<{
+users?: [{	page?: ResolverInputTypes["PageInput"] | undefined | null},ResolverInputTypes["UsersConnection"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["AdminMutation"]: AliasType<{
+userOps?: [{	userId: string},ResolverInputTypes["UserOps"]],
+		__typename?: boolean | `@${string}`
+}>;
+	["UserOps"]: AliasType<{
+changeUserTokens?: [{	tokens: ResolverInputTypes["BigInt"]},boolean | `@${string}`],
+		__typename?: boolean | `@${string}`
+}>;
 	["Mutation"]: AliasType<{
 	/** entry point for Weebhooks. */
 	webhook?:boolean | `@${string}`,
@@ -1230,7 +1297,8 @@ translate?: [{	translate: ResolverInputTypes["TranslateInput"]},ResolverInputTyp
 	["AuthorizedUserMutation"]: AliasType<{
 createApiKey?: [{	apiKey: ResolverInputTypes["CreateApiKey"]},boolean | `@${string}`],
 revokeApiKey?: [{	_id: string},boolean | `@${string}`],
-translate?: [{	translate: ResolverInputTypes["TranslateInput"]},ResolverInputTypes["TranslationResponse"]],
+	api?:ResolverInputTypes["ApiMutation"],
+	admin?:ResolverInputTypes["AdminMutation"],
 changePasswordWhenLogged?: [{	changePasswordData: ResolverInputTypes["ChangePasswordWhenLoggedInput"]},ResolverInputTypes["ChangePasswordWhenLoggedResponse"]],
 editUser?: [{	updatedUser: ResolverInputTypes["UpdateUserInput"]},ResolverInputTypes["EditUserResponse"]],
 integrateSocialAccount?: [{	userData: ResolverInputTypes["SimpleUserInput"]},ResolverInputTypes["IntegrateSocialAccountResponse"]],
@@ -1238,7 +1306,8 @@ integrateSocialAccount?: [{	userData: ResolverInputTypes["SimpleUserInput"]},Res
 }>;
 	["AuthorizedUserQuery"]: AliasType<{
 	apiKeys?:ResolverInputTypes["ApiKey"],
-translations?: [{	page: ResolverInputTypes["PageInput"]},ResolverInputTypes["StoredTranslationConnection"]],
+	api?:ResolverInputTypes["ApiQuery"],
+	admin?:ResolverInputTypes["AdminQuery"],
 	me?:ResolverInputTypes["User"],
 		__typename?: boolean | `@${string}`
 }>;
@@ -1250,10 +1319,13 @@ translations?: [{	page: ResolverInputTypes["PageInput"]},ResolverInputTypes["Sto
 	createdAt?:boolean | `@${string}`,
 	fullName?:boolean | `@${string}`,
 	avatarUrl?:boolean | `@${string}`,
+translations?: [{	page: ResolverInputTypes["PageInput"]},ResolverInputTypes["StoredTranslationConnection"]],
+	boughtTokens?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
 	users?:ResolverInputTypes["UsersQuery"],
+	api?:ResolverInputTypes["ApiQuery"],
 		__typename?: boolean | `@${string}`
 }>;
 	["UsersQuery"]: AliasType<{
@@ -1426,10 +1498,14 @@ export type ModelTypes = {
 	/** if not specified it is auto detected */
 	inputLanguage?: ModelTypes["Languages"] | undefined | null,
 	/** if not specified defaults to json */
-	format?: ModelTypes["Format"] | undefined | null
+	format?: ModelTypes["Format"] | undefined | null,
+	/** scope translation cache to individual project rather than account wide */
+	projectId?: string | undefined | null,
+	omitCache?: boolean | undefined | null
 };
 	["ApiMutation"]: {
-		translate?: ModelTypes["TranslationResponse"] | undefined | null
+		translate?: ModelTypes["TranslationResponse"] | undefined | null,
+	clearCache?: boolean | undefined | null
 };
 	["ApiKey"]: {
 		name: string,
@@ -1470,9 +1546,30 @@ export type ModelTypes = {
 		items?: Array<ModelTypes["StoredTranslation"]> | undefined | null,
 	pageInfo: ModelTypes["PageInfo"]
 };
+	["UsersConnection"]: {
+		items?: Array<ModelTypes["User"]> | undefined | null,
+	pageInfo: ModelTypes["PageInfo"]
+};
 	/** Size of everything . Works as a number */
 ["BigInt"]:any;
 	["Format"]:Format;
+	["ApiQuery"]: {
+		predictTranslationCost: ModelTypes["PredictionResponse"],
+	translations?: ModelTypes["StoredTranslationConnection"] | undefined | null
+};
+	["PredictionResponse"]: {
+		cost: ModelTypes["BigInt"],
+	cached: ModelTypes["BigInt"]
+};
+	["AdminQuery"]: {
+		users?: ModelTypes["UsersConnection"] | undefined | null
+};
+	["AdminMutation"]: {
+		userOps?: ModelTypes["UserOps"] | undefined | null
+};
+	["UserOps"]: {
+		changeUserTokens?: boolean | undefined | null
+};
 	["Mutation"]: {
 		/** entry point for Weebhooks. */
 	webhook?: string | undefined | null,
@@ -1482,14 +1579,16 @@ export type ModelTypes = {
 	["AuthorizedUserMutation"]: {
 		createApiKey?: string | undefined | null,
 	revokeApiKey?: boolean | undefined | null,
-	translate?: ModelTypes["TranslationResponse"] | undefined | null,
+	api?: ModelTypes["ApiMutation"] | undefined | null,
+	admin?: ModelTypes["AdminMutation"] | undefined | null,
 	changePasswordWhenLogged: ModelTypes["ChangePasswordWhenLoggedResponse"],
 	editUser: ModelTypes["EditUserResponse"],
 	integrateSocialAccount: ModelTypes["IntegrateSocialAccountResponse"]
 };
 	["AuthorizedUserQuery"]: {
 		apiKeys?: Array<ModelTypes["ApiKey"]> | undefined | null,
-	translations?: ModelTypes["StoredTranslationConnection"] | undefined | null,
+	api?: ModelTypes["ApiQuery"] | undefined | null,
+	admin?: ModelTypes["AdminQuery"] | undefined | null,
 	me?: ModelTypes["User"] | undefined | null
 };
 	["User"]: {
@@ -1499,10 +1598,13 @@ export type ModelTypes = {
 	emailConfirmed: boolean,
 	createdAt?: string | undefined | null,
 	fullName?: string | undefined | null,
-	avatarUrl?: string | undefined | null
+	avatarUrl?: string | undefined | null,
+	translations?: ModelTypes["StoredTranslationConnection"] | undefined | null,
+	boughtTokens?: ModelTypes["BigInt"] | undefined | null
 };
 	["Query"]: {
-		users?: ModelTypes["UsersQuery"] | undefined | null
+		users?: ModelTypes["UsersQuery"] | undefined | null,
+	api?: ModelTypes["ApiQuery"] | undefined | null
 };
 	["UsersQuery"]: {
 		user?: ModelTypes["AuthorizedUserQuery"] | undefined | null,
@@ -1659,11 +1761,15 @@ export type GraphQLTypes = {
 	/** if not specified it is auto detected */
 	inputLanguage?: GraphQLTypes["Languages"] | undefined | null,
 	/** if not specified defaults to json */
-	format?: GraphQLTypes["Format"] | undefined | null
+	format?: GraphQLTypes["Format"] | undefined | null,
+	/** scope translation cache to individual project rather than account wide */
+	projectId?: string | undefined | null,
+	omitCache?: boolean | undefined | null
 };
 	["ApiMutation"]: {
 	__typename: "ApiMutation",
-	translate?: GraphQLTypes["TranslationResponse"] | undefined | null
+	translate?: GraphQLTypes["TranslationResponse"] | undefined | null,
+	clearCache?: boolean | undefined | null
 };
 	["ApiKey"]: {
 	__typename: "ApiKey",
@@ -1716,9 +1822,36 @@ export type GraphQLTypes = {
 	items?: Array<GraphQLTypes["StoredTranslation"]> | undefined | null,
 	pageInfo: GraphQLTypes["PageInfo"]
 };
+	["UsersConnection"]: {
+	__typename: "UsersConnection",
+	items?: Array<GraphQLTypes["User"]> | undefined | null,
+	pageInfo: GraphQLTypes["PageInfo"]
+};
 	/** Size of everything . Works as a number */
 ["BigInt"]: "scalar" & { name: "BigInt" };
 	["Format"]: Format;
+	["ApiQuery"]: {
+	__typename: "ApiQuery",
+	predictTranslationCost: GraphQLTypes["PredictionResponse"],
+	translations?: GraphQLTypes["StoredTranslationConnection"] | undefined | null
+};
+	["PredictionResponse"]: {
+	__typename: "PredictionResponse",
+	cost: GraphQLTypes["BigInt"],
+	cached: GraphQLTypes["BigInt"]
+};
+	["AdminQuery"]: {
+	__typename: "AdminQuery",
+	users?: GraphQLTypes["UsersConnection"] | undefined | null
+};
+	["AdminMutation"]: {
+	__typename: "AdminMutation",
+	userOps?: GraphQLTypes["UserOps"] | undefined | null
+};
+	["UserOps"]: {
+	__typename: "UserOps",
+	changeUserTokens?: boolean | undefined | null
+};
 	["Mutation"]: {
 	__typename: "Mutation",
 	/** entry point for Weebhooks. */
@@ -1730,7 +1863,8 @@ export type GraphQLTypes = {
 	__typename: "AuthorizedUserMutation",
 	createApiKey?: string | undefined | null,
 	revokeApiKey?: boolean | undefined | null,
-	translate?: GraphQLTypes["TranslationResponse"] | undefined | null,
+	api?: GraphQLTypes["ApiMutation"] | undefined | null,
+	admin?: GraphQLTypes["AdminMutation"] | undefined | null,
 	changePasswordWhenLogged: GraphQLTypes["ChangePasswordWhenLoggedResponse"],
 	editUser: GraphQLTypes["EditUserResponse"],
 	integrateSocialAccount: GraphQLTypes["IntegrateSocialAccountResponse"]
@@ -1738,7 +1872,8 @@ export type GraphQLTypes = {
 	["AuthorizedUserQuery"]: {
 	__typename: "AuthorizedUserQuery",
 	apiKeys?: Array<GraphQLTypes["ApiKey"]> | undefined | null,
-	translations?: GraphQLTypes["StoredTranslationConnection"] | undefined | null,
+	api?: GraphQLTypes["ApiQuery"] | undefined | null,
+	admin?: GraphQLTypes["AdminQuery"] | undefined | null,
 	me?: GraphQLTypes["User"] | undefined | null
 };
 	["User"]: {
@@ -1749,11 +1884,14 @@ export type GraphQLTypes = {
 	emailConfirmed: boolean,
 	createdAt?: string | undefined | null,
 	fullName?: string | undefined | null,
-	avatarUrl?: string | undefined | null
+	avatarUrl?: string | undefined | null,
+	translations?: GraphQLTypes["StoredTranslationConnection"] | undefined | null,
+	boughtTokens?: GraphQLTypes["BigInt"] | undefined | null
 };
 	["Query"]: {
 	__typename: "Query",
-	users?: GraphQLTypes["UsersQuery"] | undefined | null
+	users?: GraphQLTypes["UsersQuery"] | undefined | null,
+	api?: GraphQLTypes["ApiQuery"] | undefined | null
 };
 	["UsersQuery"]: {
 	__typename: "UsersQuery",

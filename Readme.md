@@ -27,7 +27,7 @@ Interactive command will ask you for the paths and will create a `.dev-translate
 
 ```
 {
-    "apiKey": "4404413a.b16aaa6",
+    "apiKey": "YOUR_API_KEY",
     "localeDir": "locales",
     "inputLanguageFolderName": "en",
     "inputLanguage": "ENUS"
@@ -40,9 +40,25 @@ Then dev-translate CLI will translate all the json files from input Language and
 
 For example if you have a folder `./locales/` with `en` , `pl`. `de`, `fr`, `in` and you choose `en` as an input language. Dev translate will automatically translate from `en` to all other langauges keeping the json file structure.
 
+## Predict translation cost
+
+As translations consume tokens from API you can easily predict translation cost of your locale folder by running:
+
+```sh
+dev-translate predict
+```
+
 ## Cache
 
 Dev-translate backend includes cache inside it so we don't need to implement local cache here
+
+### Clear Account cache
+
+If you want to clear your cache not to reuse cached translations anymore:
+
+```sh
+dev-translate clear
+```
 
 ## Beta
 
@@ -61,3 +77,5 @@ $ npm run start
 
 - [ ] support XML files in CLI
 - [x] support JSON files in CLI
+- [x] support predictions
+- [x] support cache clear

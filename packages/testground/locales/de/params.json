@@ -21,6 +21,6 @@
         "emptyParam": "Der Name des Filters darf nicht leer sein",
         "uniqueParam": "Der Filtername \"{{param}}\" sollte eindeutig sein",
         "emptyOption": "Der Filter \"{{param}}\" darf keine leere Option enthalten",
-        "uniqueOption": "Die Option \"{{option}}\" für den Filter \"{{param}}\" muss eindeutig sein"
+        "uniqueOption": "Die \"{{option}}\"-Option für den \"{{param}}\"-Filter sollte eindeutig sein"
     }
 }

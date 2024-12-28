@@ -12,6 +12,9 @@ export const AllTypesProps: Record<string,any> = {
 	ApiMutation:{
 		translate:{
 			translate:"TranslateInput"
+		},
+		clearCache:{
+
 		}
 	},
 	CreateApiKey:{
@@ -22,15 +25,35 @@ export const AllTypesProps: Record<string,any> = {
 	},
 	BigInt: `scalar.BigInt` as const,
 	Format: "enum" as const,
+	ApiQuery:{
+		predictTranslationCost:{
+			translate:"TranslateInput"
+		},
+		translations:{
+			page:"PageInput"
+		}
+	},
+	AdminQuery:{
+		users:{
+			page:"PageInput"
+		}
+	},
+	AdminMutation:{
+		userOps:{
+
+		}
+	},
+	UserOps:{
+		changeUserTokens:{
+			tokens:"BigInt"
+		}
+	},
 	AuthorizedUserMutation:{
 		createApiKey:{
 			apiKey:"CreateApiKey"
 		},
 		revokeApiKey:{
 
-		},
-		translate:{
-			translate:"TranslateInput"
 		},
 		changePasswordWhenLogged:{
 			changePasswordData:"ChangePasswordWhenLoggedInput"
@@ -42,7 +65,7 @@ export const AllTypesProps: Record<string,any> = {
 			userData:"SimpleUserInput"
 		}
 	},
-	AuthorizedUserQuery:{
+	User:{
 		translations:{
 			page:"PageInput"
 		}
@@ -134,7 +157,8 @@ export const AllTypesProps: Record<string,any> = {
 
 export const ReturnTypes: Record<string,any> = {
 	ApiMutation:{
-		translate:"TranslationResponse"
+		translate:"TranslationResponse",
+		clearCache:"Boolean"
 	},
 	ApiKey:{
 		name:"String",
@@ -173,7 +197,28 @@ export const ReturnTypes: Record<string,any> = {
 		items:"StoredTranslation",
 		pageInfo:"PageInfo"
 	},
+	UsersConnection:{
+		items:"User",
+		pageInfo:"PageInfo"
+	},
 	BigInt: `scalar.BigInt` as const,
+	ApiQuery:{
+		predictTranslationCost:"PredictionResponse",
+		translations:"StoredTranslationConnection"
+	},
+	PredictionResponse:{
+		cost:"BigInt",
+		cached:"BigInt"
+	},
+	AdminQuery:{
+		users:"UsersConnection"
+	},
+	AdminMutation:{
+		userOps:"UserOps"
+	},
+	UserOps:{
+		changeUserTokens:"Boolean"
+	},
 	Mutation:{
 		webhook:"String",
 		api:"ApiMutation",
@@ -182,14 +227,16 @@ export const ReturnTypes: Record<string,any> = {
 	AuthorizedUserMutation:{
 		createApiKey:"String",
 		revokeApiKey:"Boolean",
-		translate:"TranslationResponse",
+		api:"ApiMutation",
+		admin:"AdminMutation",
 		changePasswordWhenLogged:"ChangePasswordWhenLoggedResponse",
 		editUser:"EditUserResponse",
 		integrateSocialAccount:"IntegrateSocialAccountResponse"
 	},
 	AuthorizedUserQuery:{
 		apiKeys:"ApiKey",
-		translations:"StoredTranslationConnection",
+		api:"ApiQuery",
+		admin:"AdminQuery",
 		me:"User"
 	},
 	User:{
@@ -199,10 +246,13 @@ export const ReturnTypes: Record<string,any> = {
 		emailConfirmed:"Boolean",
 		createdAt:"String",
 		fullName:"String",
-		avatarUrl:"String"
+		avatarUrl:"String",
+		translations:"StoredTranslationConnection",
+		boughtTokens:"BigInt"
 	},
 	Query:{
-		users:"UsersQuery"
+		users:"UsersQuery",
+		api:"ApiQuery"
 	},
 	UsersQuery:{
 		user:"AuthorizedUserQuery",

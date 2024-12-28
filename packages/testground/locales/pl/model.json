@@ -8,22 +8,22 @@
     },
     "duplicateDocumentModelModal": {
         "trigger": "Zduplikowany dokument",
-        "header": "Zduplikowany dokument ze slug: {{slug}}",
+        "header": "Duplikat dokumentu ze slug: {{slug}}",
         "existsError": "\"{{model}}\" ze slugiem \"{{slug}}\" już istnieje. Wybierz inny slug podczas duplikowania",
         "inputPlaceholder": "nowy slug"
     },
     "removeDocumentModal": {
         "trigger": "Usuń dokument",
-        "header": "Usunięcie dokumentu ze slugiem: {{slug}}\n(root params: {{params}})"
+        "header": "Usuń dokument ze slugiem: {{slug}}\n(root params: {{params}})"
     },
     "table": {
-        "slug": "Slug",
+        "slug": "Ślimak",
         "version": "Wersja",
         "visibleFrom": "Visibe od",
         "visibleTo": "Widoczny dla",
         "createdAt": "Utworzono w",
         "updatedAt": "Zaktualizowano w",
-        "draft_version": "Projekt",
+        "draft_version": "Wersja robocza",
         "draft_version_yes": "Draft",
         "draft_version_no": "Online"
     },
@@ -32,7 +32,7 @@
         "saved": "Model został zapisany",
         "removed": "Model został usunięty",
         "addField": "Dodaj nowe pole",
-        "removeDescription": "Ta akcja usunie model \"{{model}}\" i wszystkie jego instancje.",
+        "removeDescription": "Ta akcja spowoduje usunięcie modelu \"{{model}}\" i wszystkich jego instancji.",
         "row": {
             "fieldName": "Nazwa pola",
             "selectType": "Wybierz typ",
@@ -82,7 +82,7 @@
         "noParamsVariant": "bez parametrów",
         "defaultVariant": "domyślny",
         "removeDescription": "Tej akcji nie można cofnąć.",
-        "version": "Wersja <0>{{wersja}}</0>",
+        "version": "Wersja <0>{{version}}</0>",
         "validFrom": "Obowiązuje od: {{from}}",
         "validTo": "do: {{to}}"
     },
@@ -187,8 +187,8 @@
                     "numberedList": "Lista numerowana",
                     "checkList": "Lista kontrolna",
                     "deleteSandpack": "Usuń ten blok kodu",
-                    "undo": "Cofnij {{skrót}}",
-                    "redo": "Ponów {{skrót}}"
+                    "undo": "Cofnij {{shortcut}}",
+                    "redo": "Redo {{shortcut}}"
                 },
                 "admonitions": {
                     "note": "Uwaga",
