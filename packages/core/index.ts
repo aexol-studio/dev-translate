@@ -62,13 +62,14 @@ export const getOutputLanguages = (localePath: string, inputLang: string) => {
 };
 
 const getLocalePaths = ({ srcLang, cwd, localeDir }: { cwd: string; localeDir: string; srcLang: LangPair }) => {
-  console.log('Operating in:', cwd);
   const localePath = path.join(cwd, localeDir);
   console.log('Locale path:', localePath);
   const srcLangPath = path.join(localePath, srcLang.folderName);
   const localeSrcFiles = readdirSync(srcLangPath).filter((f) => f.endsWith('.json'));
-  console.log('found the following locale files:', localeSrcFiles);
   const outLangs = getOutputLanguages(localePath, srcLang.folderName);
+  console.log(
+    `found the following output locale folders: ${outLangs.map((ol) => `folder: ${ol.folderName}, languageCode:${ol.lang}`).join('; ')}`,
+  );
   return {
     outLangs,
     localeSrcFiles,
@@ -177,7 +178,6 @@ export const translateLocaleFolder = async ({
             },
           });
           const result = translatedContent.api?.translate?.results?.at(0);
-          console.log('Consumed tokens', result?.consumedTokens);
           if (result) {
             results.push(result);
             writeFileSync(path.join(outPath, srcFilePath), JSON.stringify(JSON.parse(result.result), null, 4));
@@ -186,6 +186,7 @@ export const translateLocaleFolder = async ({
       );
     }),
   );
+  console.log(`All translations consumed ${results.reduce((a, b) => a + (b.consumedTokens as number), 0)} tokens`);
   return results;
 };
 

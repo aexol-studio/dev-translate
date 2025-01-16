@@ -33,18 +33,15 @@ const setupFileWatcher = async (opts: {
     persistent: true,
   });
 
-  watcher.on('change', (filePath: string) => {
-    console.log(`File changed: ${filePath}`);
+  watcher.on('change', () => {
     translate();
   });
 
-  watcher.on('add', (filePath: string) => {
-    console.log(`File added: ${filePath}`);
+  watcher.on('add', () => {
     translate();
   });
 
-  watcher.on('unlink', (filePath: string) => {
-    console.log(`File removed: ${filePath}`);
+  watcher.on('unlink', () => {
     translate();
   });
 

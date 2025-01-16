@@ -1,6 +1,6 @@
 {
   "name": "@aexol/vite-plugin-dev-translate",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "private": false,
   "main": "./lib/index.js",
   "author": "Aexol, Artur Czemiel",
@@ -15,7 +15,7 @@
     "commonjs"
   ],
   "dependencies": {
-    "@aexol/dev-translate-core": "^0.0.7",
+    "@aexol/dev-translate-core": "^0.0.8",
     "chokidar": "^3.6.0"
   },
   "peerDependencies": {
