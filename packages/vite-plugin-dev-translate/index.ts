@@ -1,7 +1,7 @@
 import chokidar from 'chokidar';
 import path from 'path';
 import { Plugin } from 'vite';
-import { LangPair, translateLocaleFolder } from '@aexol/dev-translate-core';
+import { LangPair, translateLocaleFolder, Languages } from '@aexol/dev-translate-core';
 
 export type DevTranslateOptions = {
   apiKey: string;
@@ -66,3 +66,5 @@ export default function devTranslatePlugin(options: DevTranslateOptions): Plugin
     },
   };
 }
+
+export { Languages };

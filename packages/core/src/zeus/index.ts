@@ -1,8 +1,6 @@
 /* eslint-disable */
 
-import { AllTypesProps, ReturnTypes, Ops } from './const.js';
-import fetch, { Response } from 'node-fetch';
-import WebSocket from 'ws';
+import { AllTypesProps, ReturnTypes, Ops } from './const';
 export const HOST = "https://backend.devtranslate.app/graphql"
 
 
@@ -902,10 +900,14 @@ export type ValueTypes = {
 	format?: ValueTypes["Format"] | undefined | null | Variable<any, string>,
 	/** scope translation cache to individual project rather than account wide */
 	projectId?: string | undefined | null | Variable<any, string>,
-	omitCache?: boolean | undefined | null | Variable<any, string>
+	omitCache?: boolean | undefined | null | Variable<any, string>,
+	/** Array of string regex to be used to exclude certain words and phrases */
+	excludePhrases?: Array<string> | undefined | null | Variable<any, string>,
+	/** This is used to add additional exclude per regex */
+	excludeRegex?: Array<string> | undefined | null | Variable<any, string>
 };
 	["ApiMutation"]: AliasType<{
-translate?: [{	translate: ValueTypes["TranslateInput"] | Variable<any, string>},ValueTypes["TranslationResponse"]],
+translate?: [{	translate: ValueTypes["TranslateInput"] | Variable<any, string>,	name?: string | undefined | null | Variable<any, string>},ValueTypes["TranslationResponse"]],
 clearCache?: [{	projectId?: string | undefined | null | Variable<any, string>},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
@@ -944,6 +946,14 @@ clearCache?: [{	projectId?: string | undefined | null | Variable<any, string>},b
 	name?:boolean | `@${string}`,
 	inputSize?:boolean | `@${string}`,
 	consumedTokens?:boolean | `@${string}`,
+	format?:boolean | `@${string}`,
+	formality?:boolean | `@${string}`,
+	context?:boolean | `@${string}`,
+	/** Array of string regex to be used to exclude certain words and phrases */
+	excludePhrases?:boolean | `@${string}`,
+	/** This is used to add additional exclude per regex */
+	excludeRegex?:boolean | `@${string}`,
+	cacheTokens?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["PageInput"]: {
@@ -980,6 +990,8 @@ translations?: [{	page: ValueTypes["PageInput"] | Variable<any, string>},ValueTy
 }>;
 	["AdminQuery"]: AliasType<{
 users?: [{	page?: ValueTypes["PageInput"] | undefined | null | Variable<any, string>},ValueTypes["UsersConnection"]],
+userById?: [{	_id: string | Variable<any, string>},ValueTypes["User"]],
+storedTranslationById?: [{	_id: string | Variable<any, string>},ValueTypes["StoredTranslation"]],
 		__typename?: boolean | `@${string}`
 }>;
 	["AdminMutation"]: AliasType<{
@@ -988,6 +1000,35 @@ userOps?: [{	userId: string | Variable<any, string>},ValueTypes["UserOps"]],
 }>;
 	["UserOps"]: AliasType<{
 changeUserTokens?: [{	tokens: ValueTypes["BigInt"] | Variable<any, string>},boolean | `@${string}`],
+		__typename?: boolean | `@${string}`
+}>;
+	["StripeQuery"]: AliasType<{
+	packages?:ValueTypes["StripePackage"],
+	freePlanTokenLimit?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["StripePackage"]: AliasType<{
+	name?:boolean | `@${string}`,
+	price?:boolean | `@${string}`,
+	tokens?:boolean | `@${string}`,
+	stripeLinkId?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["StripeMutation"]: AliasType<{
+buyProduct?: [{	productId: string | Variable<any, string>,	quantity: number | Variable<any, string>},boolean | `@${string}`],
+		__typename?: boolean | `@${string}`
+}>;
+	["Purchase"]: AliasType<{
+	boughtTokens?:boolean | `@${string}`,
+	tokenPrice?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	_id?:boolean | `@${string}`,
+	user?:ValueTypes["User"],
+		__typename?: boolean | `@${string}`
+}>;
+	["PurchaseConnection"]: AliasType<{
+	items?:ValueTypes["Purchase"],
+	pageInfo?:ValueTypes["PageInfo"],
 		__typename?: boolean | `@${string}`
 }>;
 	["Mutation"]: AliasType<{
@@ -1002,6 +1043,7 @@ createApiKey?: [{	apiKey: ValueTypes["CreateApiKey"] | Variable<any, string>},bo
 revokeApiKey?: [{	_id: string | Variable<any, string>},boolean | `@${string}`],
 	api?:ValueTypes["ApiMutation"],
 	admin?:ValueTypes["AdminMutation"],
+	stripe?:ValueTypes["StripeMutation"],
 changePasswordWhenLogged?: [{	changePasswordData: ValueTypes["ChangePasswordWhenLoggedInput"] | Variable<any, string>},ValueTypes["ChangePasswordWhenLoggedResponse"]],
 editUser?: [{	updatedUser: ValueTypes["UpdateUserInput"] | Variable<any, string>},ValueTypes["EditUserResponse"]],
 integrateSocialAccount?: [{	userData: ValueTypes["SimpleUserInput"] | Variable<any, string>},ValueTypes["IntegrateSocialAccountResponse"]],
@@ -1011,6 +1053,7 @@ integrateSocialAccount?: [{	userData: ValueTypes["SimpleUserInput"] | Variable<a
 	apiKeys?:ValueTypes["ApiKey"],
 	api?:ValueTypes["ApiQuery"],
 	admin?:ValueTypes["AdminQuery"],
+	billingPortalLink?:boolean | `@${string}`,
 	me?:ValueTypes["User"],
 		__typename?: boolean | `@${string}`
 }>;
@@ -1024,11 +1067,14 @@ integrateSocialAccount?: [{	userData: ValueTypes["SimpleUserInput"] | Variable<a
 	avatarUrl?:boolean | `@${string}`,
 translations?: [{	page: ValueTypes["PageInput"] | Variable<any, string>},ValueTypes["StoredTranslationConnection"]],
 	boughtTokens?:boolean | `@${string}`,
+purchases?: [{	page: ValueTypes["PageInput"] | Variable<any, string>},ValueTypes["PurchaseConnection"]],
+	stripeCustomerId?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
 	users?:ValueTypes["UsersQuery"],
 	api?:ValueTypes["ApiQuery"],
+	stripe?:ValueTypes["StripeQuery"],
 		__typename?: boolean | `@${string}`
 }>;
 	["UsersQuery"]: AliasType<{
@@ -1199,10 +1245,14 @@ export type ResolverInputTypes = {
 	format?: ResolverInputTypes["Format"] | undefined | null,
 	/** scope translation cache to individual project rather than account wide */
 	projectId?: string | undefined | null,
-	omitCache?: boolean | undefined | null
+	omitCache?: boolean | undefined | null,
+	/** Array of string regex to be used to exclude certain words and phrases */
+	excludePhrases?: Array<string> | undefined | null,
+	/** This is used to add additional exclude per regex */
+	excludeRegex?: Array<string> | undefined | null
 };
 	["ApiMutation"]: AliasType<{
-translate?: [{	translate: ResolverInputTypes["TranslateInput"]},ResolverInputTypes["TranslationResponse"]],
+translate?: [{	translate: ResolverInputTypes["TranslateInput"],	name?: string | undefined | null},ResolverInputTypes["TranslationResponse"]],
 clearCache?: [{	projectId?: string | undefined | null},boolean | `@${string}`],
 		__typename?: boolean | `@${string}`
 }>;
@@ -1241,6 +1291,14 @@ clearCache?: [{	projectId?: string | undefined | null},boolean | `@${string}`],
 	name?:boolean | `@${string}`,
 	inputSize?:boolean | `@${string}`,
 	consumedTokens?:boolean | `@${string}`,
+	format?:boolean | `@${string}`,
+	formality?:boolean | `@${string}`,
+	context?:boolean | `@${string}`,
+	/** Array of string regex to be used to exclude certain words and phrases */
+	excludePhrases?:boolean | `@${string}`,
+	/** This is used to add additional exclude per regex */
+	excludeRegex?:boolean | `@${string}`,
+	cacheTokens?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["PageInput"]: {
@@ -1277,6 +1335,8 @@ translations?: [{	page: ResolverInputTypes["PageInput"]},ResolverInputTypes["Sto
 }>;
 	["AdminQuery"]: AliasType<{
 users?: [{	page?: ResolverInputTypes["PageInput"] | undefined | null},ResolverInputTypes["UsersConnection"]],
+userById?: [{	_id: string},ResolverInputTypes["User"]],
+storedTranslationById?: [{	_id: string},ResolverInputTypes["StoredTranslation"]],
 		__typename?: boolean | `@${string}`
 }>;
 	["AdminMutation"]: AliasType<{
@@ -1285,6 +1345,35 @@ userOps?: [{	userId: string},ResolverInputTypes["UserOps"]],
 }>;
 	["UserOps"]: AliasType<{
 changeUserTokens?: [{	tokens: ResolverInputTypes["BigInt"]},boolean | `@${string}`],
+		__typename?: boolean | `@${string}`
+}>;
+	["StripeQuery"]: AliasType<{
+	packages?:ResolverInputTypes["StripePackage"],
+	freePlanTokenLimit?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["StripePackage"]: AliasType<{
+	name?:boolean | `@${string}`,
+	price?:boolean | `@${string}`,
+	tokens?:boolean | `@${string}`,
+	stripeLinkId?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["StripeMutation"]: AliasType<{
+buyProduct?: [{	productId: string,	quantity: number},boolean | `@${string}`],
+		__typename?: boolean | `@${string}`
+}>;
+	["Purchase"]: AliasType<{
+	boughtTokens?:boolean | `@${string}`,
+	tokenPrice?:boolean | `@${string}`,
+	createdAt?:boolean | `@${string}`,
+	_id?:boolean | `@${string}`,
+	user?:ResolverInputTypes["User"],
+		__typename?: boolean | `@${string}`
+}>;
+	["PurchaseConnection"]: AliasType<{
+	items?:ResolverInputTypes["Purchase"],
+	pageInfo?:ResolverInputTypes["PageInfo"],
 		__typename?: boolean | `@${string}`
 }>;
 	["Mutation"]: AliasType<{
@@ -1299,6 +1388,7 @@ createApiKey?: [{	apiKey: ResolverInputTypes["CreateApiKey"]},boolean | `@${stri
 revokeApiKey?: [{	_id: string},boolean | `@${string}`],
 	api?:ResolverInputTypes["ApiMutation"],
 	admin?:ResolverInputTypes["AdminMutation"],
+	stripe?:ResolverInputTypes["StripeMutation"],
 changePasswordWhenLogged?: [{	changePasswordData: ResolverInputTypes["ChangePasswordWhenLoggedInput"]},ResolverInputTypes["ChangePasswordWhenLoggedResponse"]],
 editUser?: [{	updatedUser: ResolverInputTypes["UpdateUserInput"]},ResolverInputTypes["EditUserResponse"]],
 integrateSocialAccount?: [{	userData: ResolverInputTypes["SimpleUserInput"]},ResolverInputTypes["IntegrateSocialAccountResponse"]],
@@ -1308,6 +1398,7 @@ integrateSocialAccount?: [{	userData: ResolverInputTypes["SimpleUserInput"]},Res
 	apiKeys?:ResolverInputTypes["ApiKey"],
 	api?:ResolverInputTypes["ApiQuery"],
 	admin?:ResolverInputTypes["AdminQuery"],
+	billingPortalLink?:boolean | `@${string}`,
 	me?:ResolverInputTypes["User"],
 		__typename?: boolean | `@${string}`
 }>;
@@ -1321,11 +1412,14 @@ integrateSocialAccount?: [{	userData: ResolverInputTypes["SimpleUserInput"]},Res
 	avatarUrl?:boolean | `@${string}`,
 translations?: [{	page: ResolverInputTypes["PageInput"]},ResolverInputTypes["StoredTranslationConnection"]],
 	boughtTokens?:boolean | `@${string}`,
+purchases?: [{	page: ResolverInputTypes["PageInput"]},ResolverInputTypes["PurchaseConnection"]],
+	stripeCustomerId?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
 	["Query"]: AliasType<{
 	users?:ResolverInputTypes["UsersQuery"],
 	api?:ResolverInputTypes["ApiQuery"],
+	stripe?:ResolverInputTypes["StripeQuery"],
 		__typename?: boolean | `@${string}`
 }>;
 	["UsersQuery"]: AliasType<{
@@ -1501,7 +1595,11 @@ export type ModelTypes = {
 	format?: ModelTypes["Format"] | undefined | null,
 	/** scope translation cache to individual project rather than account wide */
 	projectId?: string | undefined | null,
-	omitCache?: boolean | undefined | null
+	omitCache?: boolean | undefined | null,
+	/** Array of string regex to be used to exclude certain words and phrases */
+	excludePhrases?: Array<string> | undefined | null,
+	/** This is used to add additional exclude per regex */
+	excludeRegex?: Array<string> | undefined | null
 };
 	["ApiMutation"]: {
 		translate?: ModelTypes["TranslationResponse"] | undefined | null,
@@ -1532,7 +1630,15 @@ export type ModelTypes = {
 	_id: string,
 	name?: string | undefined | null,
 	inputSize: ModelTypes["BigInt"],
-	consumedTokens: ModelTypes["BigInt"]
+	consumedTokens: ModelTypes["BigInt"],
+	format?: ModelTypes["Format"] | undefined | null,
+	formality?: ModelTypes["Formality"] | undefined | null,
+	context?: string | undefined | null,
+	/** Array of string regex to be used to exclude certain words and phrases */
+	excludePhrases?: Array<string> | undefined | null,
+	/** This is used to add additional exclude per regex */
+	excludeRegex?: Array<string> | undefined | null,
+	cacheTokens?: ModelTypes["BigInt"] | undefined | null
 };
 	["PageInput"]: {
 	limit: number,
@@ -1562,13 +1668,40 @@ export type ModelTypes = {
 	cached: ModelTypes["BigInt"]
 };
 	["AdminQuery"]: {
-		users?: ModelTypes["UsersConnection"] | undefined | null
+		users?: ModelTypes["UsersConnection"] | undefined | null,
+	userById?: ModelTypes["User"] | undefined | null,
+	storedTranslationById?: ModelTypes["StoredTranslation"] | undefined | null
 };
 	["AdminMutation"]: {
 		userOps?: ModelTypes["UserOps"] | undefined | null
 };
 	["UserOps"]: {
 		changeUserTokens?: boolean | undefined | null
+};
+	["StripeQuery"]: {
+		packages: Array<ModelTypes["StripePackage"]>,
+	freePlanTokenLimit: number
+};
+	["StripePackage"]: {
+		name: string,
+	price: number,
+	tokens: number,
+	stripeLinkId: string
+};
+	["StripeMutation"]: {
+		/** generates stripe link to buy the product */
+	buyProduct: string
+};
+	["Purchase"]: {
+		boughtTokens: ModelTypes["BigInt"],
+	tokenPrice: number,
+	createdAt: string,
+	_id: string,
+	user: ModelTypes["User"]
+};
+	["PurchaseConnection"]: {
+		items?: Array<ModelTypes["Purchase"]> | undefined | null,
+	pageInfo?: ModelTypes["PageInfo"] | undefined | null
 };
 	["Mutation"]: {
 		/** entry point for Weebhooks. */
@@ -1581,6 +1714,7 @@ export type ModelTypes = {
 	revokeApiKey?: boolean | undefined | null,
 	api?: ModelTypes["ApiMutation"] | undefined | null,
 	admin?: ModelTypes["AdminMutation"] | undefined | null,
+	stripe?: ModelTypes["StripeMutation"] | undefined | null,
 	changePasswordWhenLogged: ModelTypes["ChangePasswordWhenLoggedResponse"],
 	editUser: ModelTypes["EditUserResponse"],
 	integrateSocialAccount: ModelTypes["IntegrateSocialAccountResponse"]
@@ -1589,6 +1723,7 @@ export type ModelTypes = {
 		apiKeys?: Array<ModelTypes["ApiKey"]> | undefined | null,
 	api?: ModelTypes["ApiQuery"] | undefined | null,
 	admin?: ModelTypes["AdminQuery"] | undefined | null,
+	billingPortalLink?: string | undefined | null,
 	me?: ModelTypes["User"] | undefined | null
 };
 	["User"]: {
@@ -1600,11 +1735,14 @@ export type ModelTypes = {
 	fullName?: string | undefined | null,
 	avatarUrl?: string | undefined | null,
 	translations?: ModelTypes["StoredTranslationConnection"] | undefined | null,
-	boughtTokens?: ModelTypes["BigInt"] | undefined | null
+	boughtTokens?: ModelTypes["BigInt"] | undefined | null,
+	purchases: ModelTypes["PurchaseConnection"],
+	stripeCustomerId?: string | undefined | null
 };
 	["Query"]: {
 		users?: ModelTypes["UsersQuery"] | undefined | null,
-	api?: ModelTypes["ApiQuery"] | undefined | null
+	api?: ModelTypes["ApiQuery"] | undefined | null,
+	stripe?: ModelTypes["StripeQuery"] | undefined | null
 };
 	["UsersQuery"]: {
 		user?: ModelTypes["AuthorizedUserQuery"] | undefined | null,
@@ -1764,7 +1902,11 @@ export type GraphQLTypes = {
 	format?: GraphQLTypes["Format"] | undefined | null,
 	/** scope translation cache to individual project rather than account wide */
 	projectId?: string | undefined | null,
-	omitCache?: boolean | undefined | null
+	omitCache?: boolean | undefined | null,
+	/** Array of string regex to be used to exclude certain words and phrases */
+	excludePhrases?: Array<string> | undefined | null,
+	/** This is used to add additional exclude per regex */
+	excludeRegex?: Array<string> | undefined | null
 };
 	["ApiMutation"]: {
 	__typename: "ApiMutation",
@@ -1806,7 +1948,15 @@ export type GraphQLTypes = {
 	_id: string,
 	name?: string | undefined | null,
 	inputSize: GraphQLTypes["BigInt"],
-	consumedTokens: GraphQLTypes["BigInt"]
+	consumedTokens: GraphQLTypes["BigInt"],
+	format?: GraphQLTypes["Format"] | undefined | null,
+	formality?: GraphQLTypes["Formality"] | undefined | null,
+	context?: string | undefined | null,
+	/** Array of string regex to be used to exclude certain words and phrases */
+	excludePhrases?: Array<string> | undefined | null,
+	/** This is used to add additional exclude per regex */
+	excludeRegex?: Array<string> | undefined | null,
+	cacheTokens?: GraphQLTypes["BigInt"] | undefined | null
 };
 	["PageInput"]: {
 		limit: number,
@@ -1842,7 +1992,9 @@ export type GraphQLTypes = {
 };
 	["AdminQuery"]: {
 	__typename: "AdminQuery",
-	users?: GraphQLTypes["UsersConnection"] | undefined | null
+	users?: GraphQLTypes["UsersConnection"] | undefined | null,
+	userById?: GraphQLTypes["User"] | undefined | null,
+	storedTranslationById?: GraphQLTypes["StoredTranslation"] | undefined | null
 };
 	["AdminMutation"]: {
 	__typename: "AdminMutation",
@@ -1851,6 +2003,36 @@ export type GraphQLTypes = {
 	["UserOps"]: {
 	__typename: "UserOps",
 	changeUserTokens?: boolean | undefined | null
+};
+	["StripeQuery"]: {
+	__typename: "StripeQuery",
+	packages: Array<GraphQLTypes["StripePackage"]>,
+	freePlanTokenLimit: number
+};
+	["StripePackage"]: {
+	__typename: "StripePackage",
+	name: string,
+	price: number,
+	tokens: number,
+	stripeLinkId: string
+};
+	["StripeMutation"]: {
+	__typename: "StripeMutation",
+	/** generates stripe link to buy the product */
+	buyProduct: string
+};
+	["Purchase"]: {
+	__typename: "Purchase",
+	boughtTokens: GraphQLTypes["BigInt"],
+	tokenPrice: number,
+	createdAt: string,
+	_id: string,
+	user: GraphQLTypes["User"]
+};
+	["PurchaseConnection"]: {
+	__typename: "PurchaseConnection",
+	items?: Array<GraphQLTypes["Purchase"]> | undefined | null,
+	pageInfo?: GraphQLTypes["PageInfo"] | undefined | null
 };
 	["Mutation"]: {
 	__typename: "Mutation",
@@ -1865,6 +2047,7 @@ export type GraphQLTypes = {
 	revokeApiKey?: boolean | undefined | null,
 	api?: GraphQLTypes["ApiMutation"] | undefined | null,
 	admin?: GraphQLTypes["AdminMutation"] | undefined | null,
+	stripe?: GraphQLTypes["StripeMutation"] | undefined | null,
 	changePasswordWhenLogged: GraphQLTypes["ChangePasswordWhenLoggedResponse"],
 	editUser: GraphQLTypes["EditUserResponse"],
 	integrateSocialAccount: GraphQLTypes["IntegrateSocialAccountResponse"]
@@ -1874,6 +2057,7 @@ export type GraphQLTypes = {
 	apiKeys?: Array<GraphQLTypes["ApiKey"]> | undefined | null,
 	api?: GraphQLTypes["ApiQuery"] | undefined | null,
 	admin?: GraphQLTypes["AdminQuery"] | undefined | null,
+	billingPortalLink?: string | undefined | null,
 	me?: GraphQLTypes["User"] | undefined | null
 };
 	["User"]: {
@@ -1886,12 +2070,15 @@ export type GraphQLTypes = {
 	fullName?: string | undefined | null,
 	avatarUrl?: string | undefined | null,
 	translations?: GraphQLTypes["StoredTranslationConnection"] | undefined | null,
-	boughtTokens?: GraphQLTypes["BigInt"] | undefined | null
+	boughtTokens?: GraphQLTypes["BigInt"] | undefined | null,
+	purchases: GraphQLTypes["PurchaseConnection"],
+	stripeCustomerId?: string | undefined | null
 };
 	["Query"]: {
 	__typename: "Query",
 	users?: GraphQLTypes["UsersQuery"] | undefined | null,
-	api?: GraphQLTypes["ApiQuery"] | undefined | null
+	api?: GraphQLTypes["ApiQuery"] | undefined | null,
+	stripe?: GraphQLTypes["StripeQuery"] | undefined | null
 };
 	["UsersQuery"]: {
 	__typename: "UsersQuery",
@@ -2087,7 +2274,10 @@ export enum Formality {
 }
 export enum Format {
 	json = "json",
-	xml = "xml"
+	xml = "xml",
+	yaml = "yaml",
+	arb = "arb",
+	strings = "strings"
 }
 export enum EditUserError {
 	USERNAME_ALREADY_TAKEN = "USERNAME_ALREADY_TAKEN",

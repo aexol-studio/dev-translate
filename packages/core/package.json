@@ -1,6 +1,6 @@
 {
   "name": "@aexol/dev-translate-core",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": false,
   "main": "./lib/index.js",
   "author": "Aexol, Artur Czemiel",
@@ -12,5 +12,8 @@
   },
   "files": [
     "lib"
-  ]
+  ],
+  "dependencies": {
+    "cross-fetch": "^4.1.0"
+  }
 }

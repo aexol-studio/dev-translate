@@ -204,3 +204,5 @@ export type LangPair = {
   lang: Languages;
   folderName: string;
 };
+
+export { Languages };

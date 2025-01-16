@@ -1,7 +1,7 @@
 import chokidar from 'chokidar';
 import path from 'path';
 import { NextConfig } from 'next';
-import { LangPair, translateLocaleFolder } from '@aexol/dev-translate-core';
+import { LangPair, translateLocaleFolder, Languages } from '@aexol/dev-translate-core';
 
 export type DevTranslateOptions = {
   apiKey: string;
@@ -65,3 +65,5 @@ export function withDevTranslate(nextConfig: NextConfig = {}, options: DevTransl
     },
   };
 }
+
+export { Languages };

@@ -1,6 +1,6 @@
 {
   "name": "@aexol/dev-translate-config",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": false,
   "main": "./lib/index.js",
   "author": "Aexol, Artur Czemiel",

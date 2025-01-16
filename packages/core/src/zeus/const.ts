@@ -36,6 +36,12 @@ export const AllTypesProps: Record<string,any> = {
 	AdminQuery:{
 		users:{
 			page:"PageInput"
+		},
+		userById:{
+
+		},
+		storedTranslationById:{
+
 		}
 	},
 	AdminMutation:{
@@ -46,6 +52,11 @@ export const AllTypesProps: Record<string,any> = {
 	UserOps:{
 		changeUserTokens:{
 			tokens:"BigInt"
+		}
+	},
+	StripeMutation:{
+		buyProduct:{
+
 		}
 	},
 	AuthorizedUserMutation:{
@@ -67,6 +78,9 @@ export const AllTypesProps: Record<string,any> = {
 	},
 	User:{
 		translations:{
+			page:"PageInput"
+		},
+		purchases:{
 			page:"PageInput"
 		}
 	},
@@ -187,7 +201,13 @@ export const ReturnTypes: Record<string,any> = {
 		_id:"String",
 		name:"String",
 		inputSize:"BigInt",
-		consumedTokens:"BigInt"
+		consumedTokens:"BigInt",
+		format:"Format",
+		formality:"Formality",
+		context:"String",
+		excludePhrases:"String",
+		excludeRegex:"String",
+		cacheTokens:"BigInt"
 	},
 	PageInfo:{
 		hasNext:"Boolean",
@@ -211,13 +231,39 @@ export const ReturnTypes: Record<string,any> = {
 		cached:"BigInt"
 	},
 	AdminQuery:{
-		users:"UsersConnection"
+		users:"UsersConnection",
+		userById:"User",
+		storedTranslationById:"StoredTranslation"
 	},
 	AdminMutation:{
 		userOps:"UserOps"
 	},
 	UserOps:{
 		changeUserTokens:"Boolean"
+	},
+	StripeQuery:{
+		packages:"StripePackage",
+		freePlanTokenLimit:"Int"
+	},
+	StripePackage:{
+		name:"String",
+		price:"Float",
+		tokens:"Int",
+		stripeLinkId:"String"
+	},
+	StripeMutation:{
+		buyProduct:"String"
+	},
+	Purchase:{
+		boughtTokens:"BigInt",
+		tokenPrice:"Int",
+		createdAt:"String",
+		_id:"String",
+		user:"User"
+	},
+	PurchaseConnection:{
+		items:"Purchase",
+		pageInfo:"PageInfo"
 	},
 	Mutation:{
 		webhook:"String",
@@ -229,6 +275,7 @@ export const ReturnTypes: Record<string,any> = {
 		revokeApiKey:"Boolean",
 		api:"ApiMutation",
 		admin:"AdminMutation",
+		stripe:"StripeMutation",
 		changePasswordWhenLogged:"ChangePasswordWhenLoggedResponse",
 		editUser:"EditUserResponse",
 		integrateSocialAccount:"IntegrateSocialAccountResponse"
@@ -237,6 +284,7 @@ export const ReturnTypes: Record<string,any> = {
 		apiKeys:"ApiKey",
 		api:"ApiQuery",
 		admin:"AdminQuery",
+		billingPortalLink:"String",
 		me:"User"
 	},
 	User:{
@@ -248,11 +296,14 @@ export const ReturnTypes: Record<string,any> = {
 		fullName:"String",
 		avatarUrl:"String",
 		translations:"StoredTranslationConnection",
-		boughtTokens:"BigInt"
+		boughtTokens:"BigInt",
+		purchases:"PurchaseConnection",
+		stripeCustomerId:"String"
 	},
 	Query:{
 		users:"UsersQuery",
-		api:"ApiQuery"
+		api:"ApiQuery",
+		stripe:"StripeQuery"
 	},
 	UsersQuery:{
 		user:"AuthorizedUserQuery",

@@ -5,7 +5,7 @@
     "main": "lib/index.js",
     "type": "module",
     "scripts": {
-        "zeus": "zeus https://backend.devtranslate.app/graphql ./packages/core/src --ts --n",
+        "zeus": "zeus https://backend.devtranslate.app/graphql ./packages/core/src --ts",
         "build": "npm run build --ws --if-present"
     },
     "author": "GraphQL Editor Centaur Generator",
