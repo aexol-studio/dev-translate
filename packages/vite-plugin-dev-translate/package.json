@@ -1,12 +1,12 @@
 {
-  "name": "@aexol/nextjs-dev-translate-plugin",
+  "name": "@aexol/vite-plugin-dev-translate",
   "version": "0.0.6",
   "private": false,
   "main": "./lib/index.js",
   "author": "Aexol, Artur Czemiel",
   "type": "module",
   "scripts": {
-    "build": "rimraf lib commonjs && tspc -p tsconfig.json && tspc -p tsconfig.commonjs.json",
+    "build": "rimraf lib commonjs && tspc && tspc -p tsconfig.commonjs.json",
     "start": "tspc --watch",
     "lint": "tspc && eslint \"./src/**/*.{ts,js}\" --quiet --fix"
   },
@@ -19,13 +19,13 @@
     "chokidar": "^3.6.0"
   },
   "peerDependencies": {
-    "next": ">=13"
-  },
-  "devDependencies": {
-    "next": "^15.1.4"
+    "vite": ">=5"
   },
   "exports": {
     "import": "./lib/index.js",
     "require": "./commonjs/index.js"
+  },
+  "devDependencies": {
+    "vite": "^6.0.7"
   }
 }

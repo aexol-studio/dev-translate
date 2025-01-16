@@ -37,6 +37,7 @@
         "packages/config",
         "packages/core",
         "packages/nextjs-dev-translate-plugin",
+        "packages/vite-plugin-dev-translate",
         "packages/cli",
         "packages/testground"
     ]
