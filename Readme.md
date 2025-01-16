@@ -87,14 +87,14 @@ Those options are parameters of options param of each plugin.
 ### NextJS
 `@aexol/nextjs-plugin-dev-translate ` is a Vite plugin designed to automatically translate i18n JSON files while Vite is in watch mode. 
 
-## Installation
+#### Installation
 
 To install the plugin, use either npm or yarn:
 
 ```bash
 npm install @aexol/nextjs-plugin-dev-translate --save-dev
 ```
-##### Importing the Plugin
+#### Importing the Plugin
 
 In your Next.js configuration file (`next.config.js` or `next.config.mjs`), import and configure the plugin with the necessary options.
 
@@ -116,7 +116,7 @@ export default withDevTranslate(nextConfig, {
 });
 ```
 
-##### Example
+#### Example
 
 If your project has the following structure:
 
@@ -172,10 +172,7 @@ To install the plugin, you can use npm or yarn:
 npm install @aexol/vite-plugin-dev-translate --save-dev
 ```
 
-
-#### Usage
-
-##### Importing the Plugin
+#### Importing the Plugin
 
 In your `vite.config.js` or `vite.config.ts` file, import the plugin and configure it with the required options.
 
@@ -195,7 +192,7 @@ export default defineConfig({
 });
 ```
 
-##### Example
+#### Example
 
 If your project has the following structure:
 
