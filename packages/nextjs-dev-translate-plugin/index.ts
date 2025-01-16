@@ -19,7 +19,7 @@ const setupFileWatcher = async (opts: {
   const { apiKey, folderName, lang, localeDir } = opts;
   const directoryToWatch = path.join(process.cwd(), localeDir, opts.folderName);
   const translate = async () => {
-    const result = await translateLocaleFolder({
+    await translateLocaleFolder({
       srcLang: {
         folderName,
         lang,
@@ -28,7 +28,6 @@ const setupFileWatcher = async (opts: {
       cwd: process.cwd(),
       localeDir,
     });
-    console.log(JSON.stringify(result, null, 2));
   };
   const watcher = chokidar.watch(directoryToWatch, {
     persistent: true,
