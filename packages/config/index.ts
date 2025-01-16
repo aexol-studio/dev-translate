@@ -48,7 +48,7 @@ export type ProjectOptions = {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const config = (cwd: string) =>
-  new ConfigMaker<ProjectOptions>('dev-translate', {
+  new ConfigMaker<ProjectOptions>('.dev-translate', {
     decoders: {},
     config: {
       environment: {
