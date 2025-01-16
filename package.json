@@ -36,6 +36,7 @@
     "workspaces": [
         "packages/config",
         "packages/core",
+        "packages/nextjs-dev-translate-plugin",
         "packages/cli",
         "packages/testground"
     ]

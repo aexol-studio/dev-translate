@@ -1,0 +1,6 @@
+.env
+/lib
+/commonjs
+node_modules
+.graphql-editor-auth.json
+tsconfig.tsbuildinfo

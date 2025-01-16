@@ -1,0 +1,31 @@
+{
+  "name": "@aexol/nextjs-dev-translate-plugin",
+  "version": "0.0.4",
+  "private": false,
+  "main": "./lib/index.js",
+  "author": "Aexol, Artur Czemiel",
+  "type": "module",
+  "scripts": {
+    "build": "tspc && tspc -p tsconfig.commonjs.json",
+    "start": "tspc --watch",
+    "lint": "tspc && eslint \"./src/**/*.{ts,js}\" --quiet --fix"
+  },
+  "files": [
+    "lib",
+    "commonjs"
+  ],
+  "dependencies": {
+    "@aexol/dev-translate-core": "^0.0.4",
+    "chokidar": "^3.6.0"
+  },
+  "peerDependencies": {
+    "next": ">=13"
+  },
+  "devDependencies": {
+    "next": "^15.1.4"
+  },
+  "exports": {
+    "import": "./lib/index.js",
+    "require": "./commonjs/index.js"
+  }
+}
