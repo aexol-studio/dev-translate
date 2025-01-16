@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "@aexol/dev-translate-core": "^0.0.7",
-    "chokidar": "^3.a6.0"
+    "chokidar": "^3.6.0"
   },
   "peerDependencies": {
     "next": ">=13"
