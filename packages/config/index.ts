@@ -40,10 +40,16 @@ export type LangPair = {
 };
 
 export type ProjectOptions = {
+  // name of folder with files from input language
   inputLanguageFolderName: string;
+  // input language language code
   inputLanguage: string;
+  // your devtranslate.app api key
   apiKey: string;
+  // folder where you store locale folders with language names
   localeDir: string;
+  // ai context for translations
+  context?: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types

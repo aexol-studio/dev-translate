@@ -132,11 +132,13 @@ export const translateLocaleFolder = async ({
   apiKey,
   cwd,
   localeDir,
+  context,
 }: {
   cwd: string;
   localeDir: string;
   apiKey: string;
   srcLang: LangPair;
+  context?: string;
 }) => {
   const { localePath, localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({ cwd, localeDir, srcLang });
   const translateChain = await Chain('https://backend.devtranslate.app/graphql', {
@@ -165,6 +167,7 @@ export const translateLocaleFolder = async ({
                     content: srcFileContent,
                     inputLanguage: srcLang.lang,
                     languages: [outputLang.lang],
+                    context,
                   },
                 },
                 {

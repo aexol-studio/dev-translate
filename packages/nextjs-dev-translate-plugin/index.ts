@@ -8,15 +8,11 @@ export type DevTranslateOptions = {
   folderName: string;
   lang: LangPair['lang'];
   localeDir: string;
+  context?: string;
 };
 
-const setupFileWatcher = async (opts: {
-  apiKey: string;
-  folderName: string;
-  lang: LangPair['lang'];
-  localeDir: string;
-}) => {
-  const { apiKey, folderName, lang, localeDir } = opts;
+const setupFileWatcher = async (opts: DevTranslateOptions) => {
+  const { apiKey, folderName, lang, localeDir, context } = opts;
   const directoryToWatch = path.join(process.cwd(), localeDir, opts.folderName);
   const translate = async () => {
     await translateLocaleFolder({
@@ -25,6 +21,7 @@ const setupFileWatcher = async (opts: {
         lang,
       },
       apiKey,
+      context,
       cwd: process.cwd(),
       localeDir,
     });
@@ -50,6 +47,10 @@ const setupFileWatcher = async (opts: {
 
 // Plugin function to be used in next.config.js
 export function withDevTranslate(nextConfig: NextConfig = {}, options: DevTranslateOptions): NextConfig {
+  const env = process.env.NODE_ENV;
+  if (env !== 'development') {
+    return nextConfig;
+  }
   setupFileWatcher(options);
   return {
     ...nextConfig,

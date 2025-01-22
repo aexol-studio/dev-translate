@@ -8,15 +8,11 @@ export type DevTranslateOptions = {
   folderName: string;
   lang: LangPair['lang'];
   localeDir: string;
+  context?: string;
 };
 
-const setupFileWatcher = async (opts: {
-  apiKey: string;
-  folderName: string;
-  lang: LangPair['lang'];
-  localeDir: string;
-}) => {
-  const { apiKey, folderName, lang, localeDir } = opts;
+const setupFileWatcher = async (opts: DevTranslateOptions) => {
+  const { apiKey, folderName, lang, localeDir, context } = opts;
   const directoryToWatch = path.join(process.cwd(), localeDir, opts.folderName);
   const translate = async () => {
     await translateLocaleFolder({
@@ -27,6 +23,7 @@ const setupFileWatcher = async (opts: {
       apiKey,
       cwd: process.cwd(),
       localeDir,
+      context,
     });
   };
   const watcher = chokidar.watch(directoryToWatch, {

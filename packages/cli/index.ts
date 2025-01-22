@@ -15,7 +15,8 @@ const getConf = async () => {
   const localeDir = await config.getValueOrThrow('localeDir', { saveOnInput: true });
   const folderName = await config.getValueOrThrow('inputLanguageFolderName', { saveOnInput: true });
   const lang = (await config.getValueOrThrow('inputLanguage', { saveOnInput: true })) as LangPair['lang'];
-  return { apiKey, localeDir, folderName, lang };
+  const context = await config.getValue('context', { saveOnInput: true });
+  return { apiKey, localeDir, folderName, lang, context };
 };
 
 program
@@ -41,7 +42,7 @@ program
   .description('translate i18 json files')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   .action(async (options) => {
-    const { apiKey, folderName, lang, localeDir } = await getConf();
+    const { apiKey, folderName, lang, localeDir, context } = await getConf();
     const result = await translateLocaleFolder({
       srcLang: {
         folderName,
@@ -50,6 +51,7 @@ program
       apiKey,
       cwd: process.cwd(),
       localeDir,
+      context,
     });
     console.log(
       chalk.green(
