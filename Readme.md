@@ -33,7 +33,8 @@ Interactive command will ask you for the paths and will create a `.dev-translate
     "apiKey": "YOUR_API_KEY",
     "localeDir": "locales",
     "inputLanguageFolderName": "en",
-    "inputLanguage": "ENUS"
+    "inputLanguage": "ENUS",
+    "context": "User Interface of a web app used to SEO"
 }
 ```
 
@@ -83,16 +84,20 @@ Those options are parameters of options param of each plugin.
 #### `localeDir`
 - **Type:** `string`
 - **Description:** The directory path relative to the project root where the locale files are stored.
+- 
+#### `context`
+- **Type:** `string`
+- **Description:** AI Context for better translations. Tell the translator engine what those translations are about
 
-### NextJS
-`@aexol/nextjs-plugin-dev-translate ` is a Vite plugin designed to automatically translate i18n JSON files while Vite is in watch mode. 
+### NextJSa
+`@aexol/nextjs-dev-translate-plugin ` is a Vite plugin designed to automatically translate i18n JSON files while Vite is in watch mode. 
 
 #### Installation
 
 To install the plugin, use either npm or yarn:
 
 ```bash
-npm install @aexol/nextjs-plugin-dev-translate --save-dev
+npm install @aexol/nextjs-dev-translate-plugin --save-dev
 ```
 #### Importing the Plugin
 
