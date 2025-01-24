@@ -1,6 +1,5 @@
 # Dev Translate
 
-
 Translate your JSON i18 folders with:
 - CLI command
 - best file translator in the world
@@ -21,6 +20,8 @@ $ npm i @aexol/dev-translate
 ```
 
 ## How it works
+
+![Dev translate](./devtranslateapp.gif)
 
 ```sh
 $ dev-translate translate
@@ -242,14 +243,6 @@ This will enable the plugin to automatically watch and translate the JSON files 
 ## License
 
 This project is licensed under the MIT License.
-
-## Support
-
-If you encounter issues or have questions, please feel free to reach out via the project's issue tracker on [GitHub](https://github.com/aexol/vite-plugin-dev-translate/issues).
-
-## Beta
-
-CLI is the part of beta stage of new dev-translate and it is not yet on https://devtranslate.app. Contact support at support@devtranslate.app for early access.
 
 
 ## Test ground and development
