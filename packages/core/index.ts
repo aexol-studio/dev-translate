@@ -2,6 +2,7 @@
 import { Chain, Languages } from '@/src/zeus/index.js';
 import { readdirSync, writeFileSync, readFileSync, mkdirSync } from 'node:fs';
 import * as path from 'node:path';
+import PQueue from 'p-queue';
 
 const langMap: Record<Languages, string[]> = {
   BG: ['bg'],
@@ -140,8 +141,9 @@ export const translateLocaleFolder = async ({
   srcLang: LangPair;
   context?: string;
 }) => {
+  const queue = new PQueue({ concurrency: 4 });
   const { localePath, localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({ cwd, localeDir, srcLang });
-  const translateChain = await Chain('https://backend.devtranslate.app/graphql', {
+  const translateChain = Chain('https://backend.devtranslate.app/graphql', {
     headers: {
       'api-key': apiKey,
       'Content-Type': 'application/json',
@@ -159,28 +161,31 @@ export const translateLocaleFolder = async ({
       await Promise.all(
         localeSrcFiles.map(async (srcFilePath) => {
           const srcFileContent = readFileSync(path.join(srcLangPath, srcFilePath), 'utf-8');
-          const translatedContent = await translateChain('mutation')({
-            api: {
-              translate: [
-                {
-                  translate: {
-                    content: srcFileContent,
-                    inputLanguage: srcLang.lang,
-                    languages: [outputLang.lang],
-                    context,
+
+          const translatedContent = await queue.add(() =>
+            translateChain('mutation')({
+              api: {
+                translate: [
+                  {
+                    translate: {
+                      content: srcFileContent,
+                      inputLanguage: srcLang.lang,
+                      languages: [outputLang.lang],
+                      context,
+                    },
                   },
-                },
-                {
-                  results: {
-                    result: true,
-                    language: true,
-                    consumedTokens: true,
+                  {
+                    results: {
+                      result: true,
+                      language: true,
+                      consumedTokens: true,
+                    },
                   },
-                },
-              ],
-            },
-          });
-          const result = translatedContent.api?.translate?.results?.at(0);
+                ],
+              },
+            }),
+          );
+          const result = translatedContent?.api?.translate?.results?.at(0);
           if (result) {
             results.push(result);
             writeFileSync(path.join(outPath, srcFilePath), JSON.stringify(JSON.parse(result.result), null, 4));

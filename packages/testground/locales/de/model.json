@@ -24,7 +24,7 @@
         "createdAt": "Erstellt am",
         "updatedAt": "Aktualisiert am",
         "draft_version": "Entwurf",
-        "draft_version_yes": "Draft",
+        "draft_version_yes": "Entwurf",
         "draft_version_no": "Online"
     },
     "edit": {
@@ -53,14 +53,14 @@
     "newVariantModal": {
         "trigger": "Neue Variante",
         "exists": "Es gibt bereits eine Variante mit diesen Einstellungen, bitte bearbeiten Sie diese, anstatt eine neue Variante zu erstellen.",
-        "translationError": "Der Inhalt kann nicht übersetzt werden. Bitte überprüfen Sie Ihren Übersetzungs-API-Schlüssel oder führen Sie die Variantenerstellung ohne ausgewählte Ergebnissprache durch, um den ursprünglichen Inhalt zu kopieren.",
+        "translationError": "Inhalt kann nicht übersetzt werden. Bitte überprüfen Sie Ihren Übersetzungs-API-Schlüssel oder führen Sie die Variantenerstellung ohne ausgewählte Ergebnissprache durch, um den ursprünglichen Inhalt zu kopieren.",
         "error": "Beim Erstellen der Variante ist ein Fehler aufgetreten.",
         "success": "Die Variante des Dokuments \"{{slug}}\" wurde erfolgreich erstellt.",
         "header": "Variante erstellen",
         "tabs": {
             "selectVersion": {
                 "title": "Version auswählen",
-                "label": "Select version"
+                "label": "Version auswählen"
             },
             "newVersion": {
                 "versionCheckbox": "Version verwenden",
@@ -69,7 +69,7 @@
                 "versionVisibleFrom": "Version sichtbar von",
                 "versionVisibleTo": "Version sichtbar für",
                 "copyData": "Daten der aktuellen Variante kopieren",
-                "languagePlaceholder": "Wählen Sie die Ergebnissprache",
+                "languagePlaceholder": "Ergebnissprache auswählen",
                 "languageLabel": "Wählen Sie eine Sprache, in die Sie den Inhalt übersetzen möchten",
                 "formalityPlaceholder": "Wählen Sie den Formalitätstyp",
                 "formalityLabel": "Wählen Sie eine Formalität, die Sie an den Übersetzer weitergeben möchten",
@@ -214,15 +214,15 @@
             "generateContentModal": {
                 "title": "Inhalt generieren",
                 "contentDescription": "Beschreibung des Inhalts",
-                "keywords": "Keywords",
+                "keywords": "Schlüsselwörter",
                 "languageLabel": "Sprache",
-                "languagePlaceholder": "Select result language",
+                "languagePlaceholder": "Wählen Sie die Ergebnissprache",
                 "generate": "Erzeugen Sie",
-                "triggerTooltip": "Generate content",
+                "triggerTooltip": "Inhalt generieren",
                 "loading": "Inhalte generieren. Das kann eine Weile dauern.",
                 "placeholders": {
                     "blog": "Z.B. Blogbeitrag über die Nutzung von KI zur SEO-Optimierung",
-                    "product": "Z.B. Produktbeschreibung der fettfreien Friteuse mit Schwerpunkt auf Gesundheit",
+                    "product": "Z.B. Produktbeschreibung der fettfreien Fritteuse mit Schwerpunkt auf Gesundheit",
                     "trip": "Z.B. Beschreibung der Skireise in die Schweiz"
                 },
                 "error": "Beim Generieren des Inhalts ist ein Fehler aufgetreten."
@@ -230,9 +230,9 @@
         },
         "chars_zero": "{{count}} Zeichen",
         "chars_one": "{{count}} Zeichen",
-        "chars_two": "{{count}} char",
-        "chars_many": "{{count}} chars",
-        "chars_few": "{{count}} chars",
-        "chars_other": "{{count}} chars"
+        "chars_two": "{{count}} Zeichen",
+        "chars_many": "{{count}} Zeichen",
+        "chars_few": "{{count}} Zeichen",
+        "chars_other": "{{count}} Zeichen"
     }
 }
