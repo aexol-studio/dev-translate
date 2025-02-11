@@ -1,0 +1,16 @@
+{
+    "search": "búsqueda",
+    "editModel": "Editar modelo",
+    "createModelModal": {
+        "trigger": "Crear <0>{{model}}</0>",
+        "header": "Crear un nuevo {{model}}",
+        "existsError": "\"{{model}}\" con slug \"{{slug}}\" ya existe. Por favor, añade variantes al modelo existente en lugar de crear uno nuevo."
+    },
+    "duplicateDocumentModelModal": {
+        "trigger": "Documento duplicado",
+        "header": "Documento duplicado de slug: {{slug}}",
+        "existsError": "\"{{model}}\" con slug \"{{slug}}\" ya existe. Por favor, elija otro slug al duplicar",
+        "inputPlaceholder": "nuevo slug"
+    },
+    "chars_zero": "{{count}} caracteres"
+}

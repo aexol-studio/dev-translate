@@ -1,0 +1,26 @@
+{
+    "title": "Filtros globales",
+    "success": "Filtros globales editados con éxito.",
+    "paramName": "Nombre del parámetro",
+    "optionValue": "Valor de la opción",
+    "addOption": "Añadir opción",
+    "addGlobalFilter": "Añadir filtro global",
+    "default": "por defecto",
+    "duplicateContent": "Duplicar documentos",
+    "duplicate": {
+        "from": "Tomar de",
+        "to": "Crear documentos en",
+        "version": "Asignar versión",
+        "sure": "¿Realmente quieres duplicar documentos?",
+        "selectModel": "Seleccionar modelo",
+        "translate": "Traducir documentos",
+        "langIn": "Al idioma",
+        "success": "Duplicación correcta"
+    },
+    "validation": {
+        "emptyParam": "El nombre del filtro no debe estar vacío",
+        "uniqueParam": "El nombre del filtro \"{{param}}\" debe ser único",
+        "emptyOption": "El filtro \"{{param}}\" no debe contener una opción vacía",
+        "uniqueOption": "La opción \"{{option}}\" del filtro \"{{param}}\" debe ser única"
+    }
+}

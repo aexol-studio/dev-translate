@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
-import { clearAccountCache, LangPair, predictLocaleFolder, translateLocaleFolder } from '@aexol/dev-translate-core';
+import {
+  clearAccountCache,
+  LangPair,
+  LogLevels,
+  predictLocaleFolder,
+  translateLocaleFolder,
+} from '@aexol/dev-translate-core';
 // import { watch } from 'chokidar';
 import chalk from 'chalk';
 import { config as cfg } from '@aexol/dev-translate-config';
@@ -52,6 +58,7 @@ program
       cwd: process.cwd(),
       localeDir,
       context,
+      logLevel: LogLevels.debug,
     });
     console.log(
       chalk.green(

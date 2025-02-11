@@ -11,9 +11,12 @@ export type DevTranslateOptions = {
 };
 
 export const watch = async (opts: DevTranslateOptions) => {
+  let isTranslating = false;
   const { apiKey, folderName, lang, localeDir, context } = opts;
   const directoryToWatch = path.join(process.cwd(), localeDir, opts.folderName);
   const translate = async () => {
+    if (isTranslating) return;
+    isTranslating = true;
     try {
       await translateLocaleFolder({
         srcLang: {
@@ -27,6 +30,8 @@ export const watch = async (opts: DevTranslateOptions) => {
       });
     } catch (error) {
       console.log(error);
+    } finally {
+      isTranslating = false;
     }
   };
   const watcher = chokidar.watch(directoryToWatch, {

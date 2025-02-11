@@ -1,0 +1,9 @@
+{
+    "title": "Gérer les versions des documents",
+    "name": "Nom de la version",
+    "from": "Visible à partir de",
+    "to": "Visible jusqu'à",
+    "new": "Créer une nouvelle version",
+    "remove": "Supprimer une version",
+    "edit": "Modifier la version"
+}

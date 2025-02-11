@@ -1,0 +1,26 @@
+{
+    "title": "Filtres globaux",
+    "success": "Les filtres globaux ont été édités avec succès.",
+    "paramName": "Nom du paramètre",
+    "optionValue": "Valeur de l'option",
+    "addOption": "Ajouter une option",
+    "addGlobalFilter": "Ajouter un filtre global",
+    "default": "par défaut",
+    "duplicateContent": "Documents en double",
+    "duplicate": {
+        "from": "Prendre à partir de",
+        "to": "Créer des documents en",
+        "version": "Attribuer une version",
+        "sure": "Voulez-vous vraiment dupliquer des documents ?",
+        "selectModel": "Sélectionner un modèle",
+        "translate": "Traduire les documents",
+        "langIn": "Vers la langue",
+        "success": "Duplication réussie"
+    },
+    "validation": {
+        "emptyParam": "Le nom du filtre ne doit pas être vide",
+        "uniqueParam": "Le nom du filtre \"{{param}}\" doit être unique",
+        "emptyOption": "Le filtre \"{{param}}\" ne doit pas contenir d'option vide",
+        "uniqueOption": "L'option \"{{option}}\" du filtre \"{{param}}\" doit être unique"
+    }
+}
