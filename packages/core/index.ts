@@ -82,16 +82,19 @@ const getLocalePaths = ({
   cwd,
   localeDir,
   logLevel = LogLevels.info,
+  fileNameFilter,
 }: {
   cwd: string;
   localeDir: string;
   srcLang: LangPair;
   logLevel?: LogLevels;
+  fileNameFilter?: string;
 }) => {
   const localePath = path.join(cwd, localeDir);
   innerLogger(logLevel)('Locale path:', localePath)(LogLevels.debug);
   const srcLangPath = path.join(localePath, srcLang.folderName);
-  const localeSrcFiles = readdirSync(srcLangPath).filter((f) => f.endsWith('.json'));
+  let localeSrcFiles = readdirSync(srcLangPath).filter((f) => f.endsWith('.json'));
+  if (fileNameFilter) localeSrcFiles = localeSrcFiles.filter((lsf) => path.parse(lsf).base === fileNameFilter);
   const outLangs = getOutputLanguages(localePath, srcLang.folderName);
   innerLogger(logLevel)(
     `found the following output locale folders: ${outLangs.map((ol) => `folder: ${ol.folderName}, languageCode:${ol.lang}`).join('; ')}`,
@@ -165,6 +168,7 @@ export const translateLocaleFolder = async ({
   localeDir,
   context,
   logLevel = LogLevels.info,
+  fileNameFilter,
 }: {
   cwd: string;
   localeDir: string;
@@ -172,10 +176,17 @@ export const translateLocaleFolder = async ({
   srcLang: LangPair;
   context?: string;
   logLevel?: LogLevels;
+  fileNameFilter?: string;
 }) => {
   let activeExecutions = 0;
   const queue = new PQueue({ concurrency: 1 });
-  const { localePath, localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({ cwd, localeDir, srcLang, logLevel });
+  const { localePath, localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({
+    cwd,
+    localeDir,
+    srcLang,
+    logLevel,
+    fileNameFilter,
+  });
   const translateChain = Chain('https://backend.devtranslate.app/graphql', {
     headers: {
       'api-key': apiKey,

@@ -1,6 +1,8 @@
 {
     "search": "recherche",
     "editModel": "Modifier le modèle",
+    "removeModel": "Supprimer le modèle",
+    "addToModel": "Ajouter au modèle",
     "createModelModal": {
         "trigger": "Créer <0>{{model}}</0>",
         "header": "Créer un nouveau {{model}}",

@@ -10,6 +10,7 @@ import {
 // import { watch } from 'chokidar';
 import chalk from 'chalk';
 import { config as cfg } from '@aexol/dev-translate-config';
+import { watch } from '@aexol/dev-translate-watch';
 
 const program = new Command();
 
@@ -46,9 +47,19 @@ program
 program
   .command('translate')
   .description('translate i18 json files')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  .option('-w --watch', 'watch mode', false)
   .action(async (options) => {
     const { apiKey, folderName, lang, localeDir, context } = await getConf();
+    console.log(options);
+    if (options.watch) {
+      return watch({
+        apiKey,
+        folderName,
+        lang,
+        localeDir,
+        context,
+      });
+    }
     const result = await translateLocaleFolder({
       srcLang: {
         folderName,

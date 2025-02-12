@@ -14,7 +14,7 @@ export const watch = async (opts: DevTranslateOptions) => {
   let isTranslating = false;
   const { apiKey, folderName, lang, localeDir, context } = opts;
   const directoryToWatch = path.join(process.cwd(), localeDir, opts.folderName);
-  const translate = async () => {
+  const translate = async ({ fileNameFilter }: { fileNameFilter?: string }) => {
     if (isTranslating) return;
     isTranslating = true;
     try {
@@ -27,6 +27,7 @@ export const watch = async (opts: DevTranslateOptions) => {
         cwd: process.cwd(),
         localeDir,
         context,
+        fileNameFilter,
       });
     } catch (error) {
       console.log(error);
@@ -37,14 +38,18 @@ export const watch = async (opts: DevTranslateOptions) => {
   const watcher = chokidar.watch(directoryToWatch, {
     persistent: true,
   });
-  watcher.on('change', () => {
-    translate();
+  console.log('Running translations for all languages');
+  translate({});
+  watcher.on('change', (fileChanged) => {
+    const fileNameFilter = path.parse(fileChanged).base;
+    console.log(`${fileNameFilter} file changed. Running translations for all languages`);
+    translate({ fileNameFilter });
   });
   watcher.on('add', () => {
-    translate();
+    //noop
   });
   watcher.on('unlink', () => {
-    translate();
+    //noop
   });
   console.log(`Watching for file changes in ${directoryToWatch}`);
   return watcher;

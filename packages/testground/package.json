@@ -1,12 +1,13 @@
 {
   "name": "@aexol/testground-dev-translate",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "main": "./lib/index.js",
   "author": "Aexol, Artur Czemiel",
   "type": "module",
   "scripts": {
     "start": "node ../cli/lib/index.js -- translate",
+    "watch": "npx dev-translate translate --watch",
     "predict": "node ../cli/lib/index.js -- predict",
     "clear": "node ../cli/lib/index.js -- clear"
   },
@@ -14,6 +15,6 @@
     "lib"
   ],
   "dependencies": {
-    "@aexol/dev-translate": "^0.1.5"
+    "@aexol/dev-translate": "^0.1.6"
   }
 }
