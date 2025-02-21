@@ -6,7 +6,7 @@ import PQueue from 'p-queue';
 
 export type BackendProps = Pick<
   ModelTypes['TranslateInput'],
-  'context' | 'excludePhrases' | 'excludeRegex' | 'formality'
+  'context' | 'excludePhrases' | 'excludeRegex' | 'formality' | 'excludeDotNotationKeys' | 'projectId'
 >;
 
 enum LogLevels {
@@ -171,12 +171,9 @@ export const translateLocaleFolder = async ({
   apiKey,
   cwd,
   localeDir,
-  context,
-  logLevel = LogLevels.info,
   fileNameFilter,
-  excludePhrases,
-  excludeRegex,
-  formality,
+  logLevel = LogLevels.info,
+  ...backendProps
 }: {
   cwd: string;
   localeDir: string;
@@ -222,13 +219,10 @@ export const translateLocaleFolder = async ({
                 translate: [
                   {
                     translate: {
+                      ...backendProps,
                       content: srcFileContent,
                       inputLanguage: srcLang.lang,
                       languages: [outputLang.lang],
-                      context,
-                      excludePhrases,
-                      excludeRegex,
-                      formality,
                     },
                   },
                   {

@@ -124,6 +124,7 @@ export const AllTypesProps: Record<string,any> = {
 	ChangePasswordWithTokenError: "enum" as const,
 	SquashAccountsError: "enum" as const,
 	IntegrateSocialAccountError: "enum" as const,
+	DeleteAccountError: "enum" as const,
 	GenerateOAuthTokenError: "enum" as const,
 	UpdateUserInput:{
 
@@ -278,7 +279,8 @@ export const ReturnTypes: Record<string,any> = {
 		stripe:"StripeMutation",
 		changePasswordWhenLogged:"ChangePasswordWhenLoggedResponse",
 		editUser:"EditUserResponse",
-		integrateSocialAccount:"IntegrateSocialAccountResponse"
+		integrateSocialAccount:"IntegrateSocialAccountResponse",
+		deleteAccount:"DeleteAccountResponse"
 	},
 	AuthorizedUserQuery:{
 		apiKeys:"ApiKey",
@@ -346,6 +348,10 @@ export const ReturnTypes: Record<string,any> = {
 	IntegrateSocialAccountResponse:{
 		result:"Boolean",
 		hasError:"IntegrateSocialAccountError"
+	},
+	DeleteAccountResponse:{
+		result:"Boolean",
+		hasError:"DeleteAccountError"
 	},
 	GenerateOAuthTokenResponse:{
 		result:"String",

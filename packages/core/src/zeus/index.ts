@@ -904,7 +904,9 @@ export type ValueTypes = {
 	/** Array of string regex to be used to exclude certain words and phrases */
 	excludePhrases?: Array<string> | undefined | null | Variable<any, string>,
 	/** This is used to add additional exclude per regex */
-	excludeRegex?: Array<string> | undefined | null | Variable<any, string>
+	excludeRegex?: Array<string> | undefined | null | Variable<any, string>,
+	/** This is used to ignore keys in json, you need to use dot notation for example person.age, for array values you can also use dot notation so for people.status it will exclude status key from every value of people array */
+	excludeDotNotationKeys?: Array<string> | undefined | null | Variable<any, string>
 };
 	["ApiMutation"]: AliasType<{
 translate?: [{	translate: ValueTypes["TranslateInput"] | Variable<any, string>,	name?: string | undefined | null | Variable<any, string>},ValueTypes["TranslationResponse"]],
@@ -1047,6 +1049,7 @@ revokeApiKey?: [{	_id: string | Variable<any, string>},boolean | `@${string}`],
 changePasswordWhenLogged?: [{	changePasswordData: ValueTypes["ChangePasswordWhenLoggedInput"] | Variable<any, string>},ValueTypes["ChangePasswordWhenLoggedResponse"]],
 editUser?: [{	updatedUser: ValueTypes["UpdateUserInput"] | Variable<any, string>},ValueTypes["EditUserResponse"]],
 integrateSocialAccount?: [{	userData: ValueTypes["SimpleUserInput"] | Variable<any, string>},ValueTypes["IntegrateSocialAccountResponse"]],
+	deleteAccount?:ValueTypes["DeleteAccountResponse"],
 		__typename?: boolean | `@${string}`
 }>;
 	["AuthorizedUserQuery"]: AliasType<{
@@ -1135,6 +1138,12 @@ generateOAuthToken?: [{	tokenData: ValueTypes["GenerateOAuthTokenInput"] | Varia
 	["SquashAccountsError"]:SquashAccountsError;
 	["IntegrateSocialAccountError"]:IntegrateSocialAccountError;
 	["IntegrateSocialAccountResponse"]: AliasType<{
+	result?:boolean | `@${string}`,
+	hasError?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["DeleteAccountError"]:DeleteAccountError;
+	["DeleteAccountResponse"]: AliasType<{
 	result?:boolean | `@${string}`,
 	hasError?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
@@ -1249,7 +1258,9 @@ export type ResolverInputTypes = {
 	/** Array of string regex to be used to exclude certain words and phrases */
 	excludePhrases?: Array<string> | undefined | null,
 	/** This is used to add additional exclude per regex */
-	excludeRegex?: Array<string> | undefined | null
+	excludeRegex?: Array<string> | undefined | null,
+	/** This is used to ignore keys in json, you need to use dot notation for example person.age, for array values you can also use dot notation so for people.status it will exclude status key from every value of people array */
+	excludeDotNotationKeys?: Array<string> | undefined | null
 };
 	["ApiMutation"]: AliasType<{
 translate?: [{	translate: ResolverInputTypes["TranslateInput"],	name?: string | undefined | null},ResolverInputTypes["TranslationResponse"]],
@@ -1392,6 +1403,7 @@ revokeApiKey?: [{	_id: string},boolean | `@${string}`],
 changePasswordWhenLogged?: [{	changePasswordData: ResolverInputTypes["ChangePasswordWhenLoggedInput"]},ResolverInputTypes["ChangePasswordWhenLoggedResponse"]],
 editUser?: [{	updatedUser: ResolverInputTypes["UpdateUserInput"]},ResolverInputTypes["EditUserResponse"]],
 integrateSocialAccount?: [{	userData: ResolverInputTypes["SimpleUserInput"]},ResolverInputTypes["IntegrateSocialAccountResponse"]],
+	deleteAccount?:ResolverInputTypes["DeleteAccountResponse"],
 		__typename?: boolean | `@${string}`
 }>;
 	["AuthorizedUserQuery"]: AliasType<{
@@ -1480,6 +1492,12 @@ generateOAuthToken?: [{	tokenData: ResolverInputTypes["GenerateOAuthTokenInput"]
 	["SquashAccountsError"]:SquashAccountsError;
 	["IntegrateSocialAccountError"]:IntegrateSocialAccountError;
 	["IntegrateSocialAccountResponse"]: AliasType<{
+	result?:boolean | `@${string}`,
+	hasError?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
+	["DeleteAccountError"]:DeleteAccountError;
+	["DeleteAccountResponse"]: AliasType<{
 	result?:boolean | `@${string}`,
 	hasError?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
@@ -1599,7 +1617,9 @@ export type ModelTypes = {
 	/** Array of string regex to be used to exclude certain words and phrases */
 	excludePhrases?: Array<string> | undefined | null,
 	/** This is used to add additional exclude per regex */
-	excludeRegex?: Array<string> | undefined | null
+	excludeRegex?: Array<string> | undefined | null,
+	/** This is used to ignore keys in json, you need to use dot notation for example person.age, for array values you can also use dot notation so for people.status it will exclude status key from every value of people array */
+	excludeDotNotationKeys?: Array<string> | undefined | null
 };
 	["ApiMutation"]: {
 		translate?: ModelTypes["TranslationResponse"] | undefined | null,
@@ -1717,7 +1737,8 @@ export type ModelTypes = {
 	stripe?: ModelTypes["StripeMutation"] | undefined | null,
 	changePasswordWhenLogged: ModelTypes["ChangePasswordWhenLoggedResponse"],
 	editUser: ModelTypes["EditUserResponse"],
-	integrateSocialAccount: ModelTypes["IntegrateSocialAccountResponse"]
+	integrateSocialAccount: ModelTypes["IntegrateSocialAccountResponse"],
+	deleteAccount: ModelTypes["DeleteAccountResponse"]
 };
 	["AuthorizedUserQuery"]: {
 		apiKeys?: Array<ModelTypes["ApiKey"]> | undefined | null,
@@ -1796,6 +1817,11 @@ export type ModelTypes = {
 	["IntegrateSocialAccountResponse"]: {
 		result?: boolean | undefined | null,
 	hasError?: ModelTypes["IntegrateSocialAccountError"] | undefined | null
+};
+	["DeleteAccountError"]:DeleteAccountError;
+	["DeleteAccountResponse"]: {
+		result?: boolean | undefined | null,
+	hasError?: ModelTypes["DeleteAccountError"] | undefined | null
 };
 	["GenerateOAuthTokenError"]:GenerateOAuthTokenError;
 	["GenerateOAuthTokenResponse"]: {
@@ -1906,7 +1932,9 @@ export type GraphQLTypes = {
 	/** Array of string regex to be used to exclude certain words and phrases */
 	excludePhrases?: Array<string> | undefined | null,
 	/** This is used to add additional exclude per regex */
-	excludeRegex?: Array<string> | undefined | null
+	excludeRegex?: Array<string> | undefined | null,
+	/** This is used to ignore keys in json, you need to use dot notation for example person.age, for array values you can also use dot notation so for people.status it will exclude status key from every value of people array */
+	excludeDotNotationKeys?: Array<string> | undefined | null
 };
 	["ApiMutation"]: {
 	__typename: "ApiMutation",
@@ -2050,7 +2078,8 @@ export type GraphQLTypes = {
 	stripe?: GraphQLTypes["StripeMutation"] | undefined | null,
 	changePasswordWhenLogged: GraphQLTypes["ChangePasswordWhenLoggedResponse"],
 	editUser: GraphQLTypes["EditUserResponse"],
-	integrateSocialAccount: GraphQLTypes["IntegrateSocialAccountResponse"]
+	integrateSocialAccount: GraphQLTypes["IntegrateSocialAccountResponse"],
+	deleteAccount: GraphQLTypes["DeleteAccountResponse"]
 };
 	["AuthorizedUserQuery"]: {
 	__typename: "AuthorizedUserQuery",
@@ -2141,6 +2170,12 @@ export type GraphQLTypes = {
 	__typename: "IntegrateSocialAccountResponse",
 	result?: boolean | undefined | null,
 	hasError?: GraphQLTypes["IntegrateSocialAccountError"] | undefined | null
+};
+	["DeleteAccountError"]: DeleteAccountError;
+	["DeleteAccountResponse"]: {
+	__typename: "DeleteAccountResponse",
+	result?: boolean | undefined | null,
+	hasError?: GraphQLTypes["DeleteAccountError"] | undefined | null
 };
 	["GenerateOAuthTokenError"]: GenerateOAuthTokenError;
 	["GenerateOAuthTokenResponse"]: {
@@ -2277,7 +2312,8 @@ export enum Format {
 	xml = "xml",
 	yaml = "yaml",
 	arb = "arb",
-	strings = "strings"
+	strings = "strings",
+	markdown = "markdown"
 }
 export enum EditUserError {
 	USERNAME_ALREADY_TAKEN = "USERNAME_ALREADY_TAKEN",
@@ -2308,6 +2344,10 @@ export enum IntegrateSocialAccountError {
 	INCORRECT_PASSWORD = "INCORRECT_PASSWORD",
 	CANNOT_FIND_USER = "CANNOT_FIND_USER",
 	YOUR_ACCOUNT_DOES_NOT_HAVE_CONFIRMED_EMAIL = "YOUR_ACCOUNT_DOES_NOT_HAVE_CONFIRMED_EMAIL"
+}
+export enum DeleteAccountError {
+	CANNOT_FIND_USER = "CANNOT_FIND_USER",
+	CANNOT_DELETE_ALL_ELEMENTS = "CANNOT_DELETE_ALL_ELEMENTS"
 }
 export enum GenerateOAuthTokenError {
 	TOKEN_NOT_GENERATED = "TOKEN_NOT_GENERATED",
@@ -2357,6 +2397,7 @@ type ZEUS_VARIABLES = {
 	["ChangePasswordWithTokenError"]: ValueTypes["ChangePasswordWithTokenError"];
 	["SquashAccountsError"]: ValueTypes["SquashAccountsError"];
 	["IntegrateSocialAccountError"]: ValueTypes["IntegrateSocialAccountError"];
+	["DeleteAccountError"]: ValueTypes["DeleteAccountError"];
 	["GenerateOAuthTokenError"]: ValueTypes["GenerateOAuthTokenError"];
 	["UpdateUserInput"]: ValueTypes["UpdateUserInput"];
 	["GenerateOAuthTokenInput"]: ValueTypes["GenerateOAuthTokenInput"];
