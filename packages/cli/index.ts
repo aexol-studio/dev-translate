@@ -23,9 +23,7 @@ const getConf = async () => {
   const folderName = await config.getValueOrThrow('inputLanguageFolderName', { saveOnInput: true });
   const lang = (await config.getValueOrThrow('inputLanguage', { saveOnInput: true })) as LangPair['lang'];
   const context = await config.getValue('context', { saveOnInput: true });
-  const formality = await config.getValue('formality', { saveOnInput: true });
-  const excludePhrases = await config.getValue('excludePhrases', { saveOnInput: true });
-  const excludeRegex = await config.getValue('excludeRegex', { saveOnInput: true });
+  const { excludePhrases, excludeRegex, formality } = await config.get();
   return { apiKey, localeDir, folderName, lang, context, formality, excludePhrases, excludeRegex };
 };
 
