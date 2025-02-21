@@ -14,7 +14,7 @@
     "lib"
   ],
   "dependencies": {
-    "@aexol/dev-translate-core": "^0.1.9",
+    "@aexol/dev-translate-core": "^0.2.0",
     "config-maker": "^0.0.6"
   }
 }

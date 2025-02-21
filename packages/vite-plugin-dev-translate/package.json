@@ -15,7 +15,7 @@
     "commonjs"
   ],
   "dependencies": {
-    "@aexol/dev-translate-watch": "^0.1.9"
+    "@aexol/dev-translate-watch": "^0.2.0"
   },
   "peerDependencies": {
     "vite": ">=5"
