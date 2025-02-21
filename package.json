@@ -34,8 +34,8 @@
         "url": "https://github.com/aexol-studio/axolotl"
     },
     "workspaces": [
-        "packages/config",
         "packages/core",
+        "packages/config",
         "packages/watch",
         "packages/nextjs-dev-translate-plugin",
         "packages/vite-plugin-dev-translate",
