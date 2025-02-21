@@ -23,7 +23,10 @@ const getConf = async () => {
   const folderName = await config.getValueOrThrow('inputLanguageFolderName', { saveOnInput: true });
   const lang = (await config.getValueOrThrow('inputLanguage', { saveOnInput: true })) as LangPair['lang'];
   const context = await config.getValue('context', { saveOnInput: true });
-  return { apiKey, localeDir, folderName, lang, context };
+  const formality = await config.getValue('formality', { saveOnInput: true });
+  const excludePhrases = await config.getValue('excludePhrases', { saveOnInput: true });
+  const excludeRegex = await config.getValue('excludeRegex', { saveOnInput: true });
+  return { apiKey, localeDir, folderName, lang, context, formality, excludePhrases, excludeRegex };
 };
 
 program
@@ -49,18 +52,19 @@ program
   .description('translate i18 json files')
   .option('-w --watch', 'watch mode', false)
   .action(async (options) => {
-    const { apiKey, folderName, lang, localeDir, context } = await getConf();
+    const { apiKey, folderName, lang, localeDir, ...backendProps } = await getConf();
     console.log(options);
     if (options.watch) {
       return watch({
+        ...backendProps,
         apiKey,
         folderName,
         lang,
         localeDir,
-        context,
       });
     }
     const result = await translateLocaleFolder({
+      ...backendProps,
       srcLang: {
         folderName,
         lang,
@@ -68,7 +72,6 @@ program
       apiKey,
       cwd: process.cwd(),
       localeDir,
-      context,
       logLevel: LogLevels.debug,
     });
     console.log(

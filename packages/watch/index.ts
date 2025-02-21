@@ -1,24 +1,24 @@
 import chokidar from 'chokidar';
 import path from 'path';
-import { LangPair, translateLocaleFolder, Languages } from '@aexol/dev-translate-core';
+import { LangPair, translateLocaleFolder, Languages, BackendProps } from '@aexol/dev-translate-core';
 
-export type DevTranslateOptions = {
+export type DevTranslateOptions = BackendProps & {
   apiKey: string;
   folderName: string;
   lang: LangPair['lang'];
   localeDir: string;
-  context?: string;
 };
 
 export const watch = async (opts: DevTranslateOptions) => {
   let isTranslating = false;
-  const { apiKey, folderName, lang, localeDir, context } = opts;
+  const { apiKey, folderName, lang, localeDir, ...backendProps } = opts;
   const directoryToWatch = path.join(process.cwd(), localeDir, opts.folderName);
   const translate = async ({ fileNameFilter }: { fileNameFilter?: string }) => {
     if (isTranslating) return;
     isTranslating = true;
     try {
       await translateLocaleFolder({
+        ...backendProps,
         srcLang: {
           folderName,
           lang,
@@ -26,7 +26,6 @@ export const watch = async (opts: DevTranslateOptions) => {
         apiKey,
         cwd: process.cwd(),
         localeDir,
-        context,
         fileNameFilter,
       });
     } catch (error) {

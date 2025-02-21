@@ -1,8 +1,13 @@
 // ten skrypt to początek nowego CLI do devTranslatea
-import { Chain, Languages } from '@/src/zeus/index.js';
+import { Chain, Languages, ModelTypes } from '@/src/zeus/index.js';
 import { readdirSync, writeFileSync, readFileSync, mkdirSync } from 'node:fs';
 import * as path from 'node:path';
 import PQueue from 'p-queue';
+
+export type BackendProps = Pick<
+  ModelTypes['TranslateInput'],
+  'context' | 'excludePhrases' | 'excludeRegex' | 'formality'
+>;
 
 enum LogLevels {
   info = 0,
@@ -169,15 +174,17 @@ export const translateLocaleFolder = async ({
   context,
   logLevel = LogLevels.info,
   fileNameFilter,
+  excludePhrases,
+  excludeRegex,
+  formality,
 }: {
   cwd: string;
   localeDir: string;
   apiKey: string;
   srcLang: LangPair;
-  context?: string;
   logLevel?: LogLevels;
   fileNameFilter?: string;
-}) => {
+} & BackendProps) => {
   let activeExecutions = 0;
   const queue = new PQueue({ concurrency: 1 });
   const { localePath, localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({
@@ -219,6 +226,9 @@ export const translateLocaleFolder = async ({
                       inputLanguage: srcLang.lang,
                       languages: [outputLang.lang],
                       context,
+                      excludePhrases,
+                      excludeRegex,
+                      formality,
                     },
                   },
                   {

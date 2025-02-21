@@ -1,45 +1,11 @@
 import { ConfigMaker } from 'config-maker';
 import { readdirSync } from 'fs';
 import * as path from 'path';
-enum Languages {
-  ENUS = 'ENUS',
-  ENGB = 'ENGB',
-  CS = 'CS',
-  RU = 'RU',
-  ET = 'ET',
-  ES = 'ES',
-  ZH = 'ZH',
-  SK = 'SK',
-  SL = 'SL',
-  IT = 'IT',
-  JA = 'JA',
-  ID = 'ID',
-  SV = 'SV',
-  KO = 'KO',
-  TR = 'TR',
-  PTBR = 'PTBR',
-  PTPT = 'PTPT',
-  EL = 'EL',
-  DA = 'DA',
-  FR = 'FR',
-  BG = 'BG',
-  LT = 'LT',
-  DE = 'DE',
-  LV = 'LV',
-  NB = 'NB',
-  NL = 'NL',
-  PL = 'PL',
-  FI = 'FI',
-  UK = 'UK',
-  RO = 'RO',
-  HU = 'HU',
-}
-export type LangPair = {
-  lang: Languages;
-  folderName: string;
-};
+import { BackendProps, Languages, LangPair } from '@aexol/dev-translate-core';
 
-export type ProjectOptions = {
+export { LangPair };
+
+export type ProjectOptions = BackendProps & {
   // name of folder with files from input language
   inputLanguageFolderName: string;
   // input language language code
@@ -48,8 +14,6 @@ export type ProjectOptions = {
   apiKey: string;
   // folder where you store locale folders with language names
   localeDir: string;
-  // ai context for translations
-  context?: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
