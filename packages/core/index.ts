@@ -6,7 +6,14 @@ import PQueue from 'p-queue';
 
 export type BackendProps = Pick<
   ModelTypes['TranslateInput'],
-  'context' | 'excludePhrases' | 'excludeRegex' | 'formality' | 'excludeDotNotationKeys' | 'projectId'
+  | 'context'
+  | 'excludePhrases'
+  | 'excludeRegex'
+  | 'formality'
+  | 'excludeDotNotationKeys'
+  | 'projectId'
+  | 'omitCache'
+  | 'includeRegex'
 >;
 
 enum LogLevels {

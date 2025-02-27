@@ -1,6 +1,6 @@
 {
   "name": "@aexol/nextjs-dev-translate-plugin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": false,
   "main": "./lib/index.js",
   "author": "Aexol, Artur Czemiel",
@@ -15,7 +15,7 @@
     "commonjs"
   ],
   "dependencies": {
-    "@aexol/dev-translate-watch": "^0.2.0"
+    "@aexol/dev-translate-watch": "^0.3.0"
   },
   "peerDependencies": {
     "next": ">=13"

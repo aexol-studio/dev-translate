@@ -1,6 +1,6 @@
 {
     "title": "Verwalten von Dokumentenversionen",
-    "name": "Versionsname",
+    "name": "Name der Version",
     "from": "Sichtbar ab",
     "to": "Sichtbar bis",
     "new": "Eine neue Version erstellen",

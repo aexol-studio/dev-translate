@@ -906,7 +906,8 @@ export type ValueTypes = {
 	/** This is used to add additional exclude per regex */
 	excludeRegex?: Array<string> | undefined | null | Variable<any, string>,
 	/** This is used to ignore keys in json, you need to use dot notation for example person.age, for array values you can also use dot notation so for people.status it will exclude status key from every value of people array */
-	excludeDotNotationKeys?: Array<string> | undefined | null | Variable<any, string>
+	excludeDotNotationKeys?: Array<string> | undefined | null | Variable<any, string>,
+	includeRegex?: Array<string> | undefined | null | Variable<any, string>
 };
 	["ApiMutation"]: AliasType<{
 translate?: [{	translate: ValueTypes["TranslateInput"] | Variable<any, string>,	name?: string | undefined | null | Variable<any, string>},ValueTypes["TranslationResponse"]],
@@ -1260,7 +1261,8 @@ export type ResolverInputTypes = {
 	/** This is used to add additional exclude per regex */
 	excludeRegex?: Array<string> | undefined | null,
 	/** This is used to ignore keys in json, you need to use dot notation for example person.age, for array values you can also use dot notation so for people.status it will exclude status key from every value of people array */
-	excludeDotNotationKeys?: Array<string> | undefined | null
+	excludeDotNotationKeys?: Array<string> | undefined | null,
+	includeRegex?: Array<string> | undefined | null
 };
 	["ApiMutation"]: AliasType<{
 translate?: [{	translate: ResolverInputTypes["TranslateInput"],	name?: string | undefined | null},ResolverInputTypes["TranslationResponse"]],
@@ -1619,7 +1621,8 @@ export type ModelTypes = {
 	/** This is used to add additional exclude per regex */
 	excludeRegex?: Array<string> | undefined | null,
 	/** This is used to ignore keys in json, you need to use dot notation for example person.age, for array values you can also use dot notation so for people.status it will exclude status key from every value of people array */
-	excludeDotNotationKeys?: Array<string> | undefined | null
+	excludeDotNotationKeys?: Array<string> | undefined | null,
+	includeRegex?: Array<string> | undefined | null
 };
 	["ApiMutation"]: {
 		translate?: ModelTypes["TranslationResponse"] | undefined | null,
@@ -1934,7 +1937,8 @@ export type GraphQLTypes = {
 	/** This is used to add additional exclude per regex */
 	excludeRegex?: Array<string> | undefined | null,
 	/** This is used to ignore keys in json, you need to use dot notation for example person.age, for array values you can also use dot notation so for people.status it will exclude status key from every value of people array */
-	excludeDotNotationKeys?: Array<string> | undefined | null
+	excludeDotNotationKeys?: Array<string> | undefined | null,
+	includeRegex?: Array<string> | undefined | null
 };
 	["ApiMutation"]: {
 	__typename: "ApiMutation",

@@ -3,6 +3,7 @@
     "editModel": "Edytuj model",
     "removeModel": "Usuń model",
     "addToModel": "Dodaj do modelu",
+    "testInclusions": "[EE this_should_be_included=\"to jest powitanie\" ]to jest tekst[/EE]",
     "createModelModal": {
         "trigger": "Utwórz <0>{{model}}</0>",
         "header": "Utworzenie nowego {{model}}",

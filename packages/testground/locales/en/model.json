@@ -3,6 +3,8 @@
     "editModel": "Edit model",
     "removeModel": "Remove model",
     "addToModel": "Add to model",
+    "testInclusions": "[EE alt=\"this is a greeting\"]this is text[/EE]",
+    "testInclusions": "[EE this_should_be_included=\"this is a greeting\" ]this is text[/EE]",
     "createModelModal": {
         "trigger": "Create <0>{{model}}</0>",
         "header": "Create a new {{model}}",
