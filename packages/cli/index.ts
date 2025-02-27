@@ -51,7 +51,6 @@ program
   .option('-w --watch', 'watch mode', false)
   .action(async (options) => {
     const { apiKey, folderName, lang, localeDir, ...backendProps } = await getConf();
-    console.log(options);
     if (options.watch) {
       return watch({
         ...backendProps,

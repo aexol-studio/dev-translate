@@ -4,6 +4,8 @@ import { readdirSync, writeFileSync, readFileSync, mkdirSync } from 'node:fs';
 import * as path from 'node:path';
 import PQueue from 'p-queue';
 
+const DEV_TRANSLATE_HOST = process.env.OVERRIDE_DEV_TRANSLATE_HOST || 'https://backend.devtranslate.app/graphql';
+
 export type BackendProps = Pick<
   ModelTypes['TranslateInput'],
   | 'context'
@@ -133,7 +135,7 @@ export const predictLocaleFolder = async ({
   logLevel?: LogLevels;
 }) => {
   const { localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({ cwd, localeDir, srcLang, logLevel });
-  const translateChain = await Chain('https://backend.devtranslate.app/graphql', {
+  const translateChain = await Chain(DEV_TRANSLATE_HOST, {
     headers: {
       'api-key': apiKey,
       'Content-Type': 'application/json',
@@ -198,7 +200,7 @@ export const translateLocaleFolder = async ({
     logLevel,
     fileNameFilter,
   });
-  const translateChain = Chain('https://backend.devtranslate.app/graphql', {
+  const translateChain = Chain(DEV_TRANSLATE_HOST, {
     headers: {
       'api-key': apiKey,
       'Content-Type': 'application/json',
@@ -267,7 +269,7 @@ export const clearAccountCache = async ({
   apiKey: string;
   logLevel?: LogLevels;
 }) => {
-  const translateChain = await Chain('https://backend.devtranslate.app/graphql', {
+  const translateChain = await Chain(DEV_TRANSLATE_HOST, {
     headers: {
       'api-key': apiKey,
       'Content-Type': 'application/json',
