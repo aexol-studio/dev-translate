@@ -127,13 +127,14 @@ export const predictLocaleFolder = async ({
   cwd,
   localeDir,
   logLevel = LogLevels.info,
+  ...backendProps
 }: {
   cwd: string;
   localeDir: string;
   apiKey: string;
   srcLang: LangPair;
   logLevel?: LogLevels;
-}) => {
+} & BackendProps) => {
   const { localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({ cwd, localeDir, srcLang, logLevel });
   const translateChain = await Chain(DEV_TRANSLATE_HOST, {
     headers: {
@@ -153,6 +154,7 @@ export const predictLocaleFolder = async ({
           predictTranslationCost: [
             {
               translate: {
+                ...backendProps,
                 content: srcFileContent,
                 inputLanguage: srcLang.lang,
                 languages: outLangs.map((ol) => ol.lang),
