@@ -43,8 +43,9 @@ program
   .description('predict token consumption i18 json files')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   .action(async (options) => {
-    const { apiKey, folderName, lang, localeDir } = await getConf();
+    const { apiKey, folderName, lang, localeDir, ...backendProps } = await getConf();
     await predictLocaleFolder({
+      ...backendProps,
       srcLang: {
         folderName,
         lang,
