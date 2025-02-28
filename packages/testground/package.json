@@ -1,6 +1,6 @@
 {
   "name": "@aexol/testground-dev-translate",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "private": true,
   "main": "./lib/index.js",
   "author": "Aexol, Artur Czemiel",
@@ -15,6 +15,6 @@
     "lib"
   ],
   "dependencies": {
-    "@aexol/dev-translate": "^0.3.2"
+    "@aexol/dev-translate": "^0.3.3"
   }
 }
