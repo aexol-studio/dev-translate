@@ -23,7 +23,8 @@ const getConf = async () => {
   const folderName = await config.getValueOrThrow('inputLanguageFolderName', { saveOnInput: true });
   const lang = (await config.getValueOrThrow('inputLanguage', { saveOnInput: true })) as LangPair['lang'];
   const context = await config.getValue('context', { saveOnInput: true });
-  const { excludePhrases, excludeRegex, formality, includeRegex, excludeDotNotationKeys } = await config.get();
+  const { excludePhrases, excludeRegex, formality, includeRegex, excludeDotNotationKeys, omitCache } =
+    await config.get();
   return {
     apiKey,
     localeDir,
@@ -35,6 +36,7 @@ const getConf = async () => {
     excludeRegex,
     includeRegex,
     excludeDotNotationKeys,
+    omitCache,
   };
 };
 

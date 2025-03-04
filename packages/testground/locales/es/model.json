@@ -15,5 +15,8 @@
         "existsError": "\"{{model}}\" con slug \"{{slug}}\" ya existe. Por favor, elija otro slug al duplicar",
         "inputPlaceholder": "nuevo slug"
     },
-    "chars_zero": "{{count}} caracteres"
+    "chars_zero": "{{count}} caracteres",
+    "excluded": "MAIN NAME",
+    "excluded2": "MAIN NAME",
+    "excluded3": "MAIN NAME"
 }

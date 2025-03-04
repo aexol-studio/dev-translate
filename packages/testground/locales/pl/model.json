@@ -15,5 +15,8 @@
         "existsError": "\"{{model}}\" ze slugiem \"{{slug}}\" już istnieje. Wybierz inny slug podczas duplikowania",
         "inputPlaceholder": "nowy slug"
     },
-    "chars_zero": "{{count}} znaków"
+    "chars_zero": "{{count}} znaków",
+    "excluded": "MAIN NAME",
+    "excluded2": "MAIN NAME",
+    "excluded3": "MAIN NAME"
 }
