@@ -1,10 +1,12 @@
 // ten skrypt to początek nowego CLI do devTranslatea
 import { Chain, Languages, ModelTypes } from '@/src/zeus/index.js';
-import { readdirSync, writeFileSync, readFileSync, mkdirSync } from 'node:fs';
+import { readdirSync, writeFileSync, readFileSync, mkdirSync, statSync, existsSync } from 'node:fs';
 import * as path from 'node:path';
 import PQueue from 'p-queue';
 
 const DEV_TRANSLATE_HOST = process.env.OVERRIDE_DEV_TRANSLATE_HOST || 'https://backend.devtranslate.app/graphql';
+const TIMESTAMP_FILE = '.dev-translate.timestamp.json';
+const timestampFilePath = path.join(process.cwd(), TIMESTAMP_FILE);
 
 export type BackendProps = Pick<
   ModelTypes['TranslateInput'],
@@ -97,17 +99,26 @@ const getLocalePaths = ({
   localeDir,
   logLevel = LogLevels.info,
   fileNameFilter,
+  lastTranslationTimeStamp,
 }: {
   cwd: string;
   localeDir: string;
   srcLang: LangPair;
   logLevel?: LogLevels;
   fileNameFilter?: string;
+  lastTranslationTimeStamp?: number;
 }) => {
   const localePath = path.join(cwd, localeDir);
   innerLogger(logLevel)('Locale path:', localePath)(LogLevels.debug);
   const srcLangPath = path.join(localePath, srcLang.folderName);
-  let localeSrcFiles = readdirSync(srcLangPath).filter((f) => f.endsWith('.json'));
+  let localeSrcFiles = readdirSync(srcLangPath)
+    .filter((f) => f.endsWith('.json'))
+    .filter((lsf) => {
+      if (lastTranslationTimeStamp) {
+        return statSync(path.join(srcLangPath, lsf)).mtimeMs > lastTranslationTimeStamp;
+      }
+      return true;
+    });
   if (fileNameFilter) localeSrcFiles = localeSrcFiles.filter((lsf) => path.parse(lsf).base === fileNameFilter);
   const outLangs = getOutputLanguages(localePath, srcLang.folderName);
   innerLogger(logLevel)(
@@ -135,7 +146,16 @@ export const predictLocaleFolder = async ({
   srcLang: LangPair;
   logLevel?: LogLevels;
 } & BackendProps) => {
-  const { localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({ cwd, localeDir, srcLang, logLevel });
+  const writeExists = existsSync(timestampFilePath);
+  const { localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({
+    cwd,
+    localeDir,
+    srcLang,
+    logLevel,
+    lastTranslationTimeStamp: writeExists
+      ? (JSON.parse(readFileSync(timestampFilePath, 'utf-8')).timestamp as number)
+      : undefined,
+  });
   const translateChain = await Chain(DEV_TRANSLATE_HOST, {
     headers: {
       'api-key': apiKey,
@@ -195,11 +215,15 @@ export const translateLocaleFolder = async ({
 } & BackendProps) => {
   let activeExecutions = 0;
   const queue = new PQueue({ concurrency: 1 });
+  const writeExists = existsSync(timestampFilePath);
   const { localePath, localeSrcFiles, outLangs, srcLangPath } = getLocalePaths({
     cwd,
     localeDir,
     srcLang,
     logLevel,
+    lastTranslationTimeStamp: writeExists
+      ? (JSON.parse(readFileSync(timestampFilePath, 'utf-8')).timestamp as number)
+      : undefined,
     fileNameFilter,
   });
   const translateChain = Chain(DEV_TRANSLATE_HOST, {
@@ -261,6 +285,7 @@ export const translateLocaleFolder = async ({
   innerLogger(logLevel)(
     `All translations consumed ${results.reduce((a, b) => a + (b.consumedTokens as number), 0)} tokens`,
   )(LogLevels.info);
+  writeFileSync(path.join(process.cwd(), TIMESTAMP_FILE), JSON.stringify({ timestamp: new Date().valueOf() }));
   return results;
 };
 
