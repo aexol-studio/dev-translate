@@ -62,6 +62,29 @@ describe('DevTranslateClient Integration', { timeout: 30000 }, () => {
     assert.ok(firstResult.consumedTokens >= 0, 'consumedTokens should be >= 0');
   });
 
+  it('translateStrings returns array with expected structure', async () => {
+    const inputContent = ['hello', 'world'];
+    const results = await client.translateStrings({
+      content: inputContent,
+      languages: [Languages.PL],
+    });
+
+    assert.ok(Array.isArray(results), 'results should be an array');
+    assert.ok(results.length >= 1, 'should have at least one result');
+
+    const firstResult = results[0];
+    assert.equal(firstResult.language, Languages.PL, 'language should match requested language');
+    assert.ok(Array.isArray(firstResult.translations), 'translations should be an array');
+    assert.equal(firstResult.translations.length, inputContent.length, 'translations length should match input length');
+
+    for (const translation of firstResult.translations) {
+      assert.equal(typeof translation, 'string', 'each translation should be a string');
+    }
+
+    assert.equal(typeof firstResult.consumedTokens, 'number', 'consumedTokens should be a number');
+    assert.ok(firstResult.consumedTokens >= 0, 'consumedTokens should be >= 0');
+  });
+
   if (TEST_PROJECT_ID) {
     it('clearCache with projectId returns true', async () => {
       const result = await client.clearCache(TEST_PROJECT_ID);

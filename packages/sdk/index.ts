@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { Chain, HOST, ModelTypes, Languages } from './src/zeus/index.js';
 import { LogLevels, BackendProps, LangPair } from '@aexol/dev-translate-core';
 
@@ -29,6 +30,20 @@ export interface TranslationResult {
   language: Languages;
   consumedTokens: number;
 }
+
+/**
+ * Input for translating an array of strings
+ */
+export type TranslateStringsInput = Omit<TranslateInput, 'content'> & { content: string[] };
+
+/**
+ * Result for translating an array of strings per language
+ */
+export type TranslateStringsResult = {
+  language: Languages;
+  translations: string[];
+  consumedTokens: number;
+};
 
 /**
  * Prediction response for translation cost
@@ -138,6 +153,56 @@ export class DevTranslateClient {
     });
 
     return response.api?.clearCache ?? false;
+  }
+
+  /**
+   * Translate an array of strings to specified languages
+   * @param input Translation input with content array and target languages
+   * @returns Array of results per language, each containing translations array
+   */
+  async translateStrings(input: TranslateStringsInput): Promise<TranslateStringsResult[]> {
+    // Generate fake IDs for each string, preserving order
+    const ids = input.content.map(() => randomUUID());
+
+    // Build contentMap object: { [id]: input.content[i] }
+    const contentMap: Record<string, string> = {};
+    for (let i = 0; i < ids.length; i++) {
+      contentMap[ids[i]] = input.content[i];
+    }
+
+    // Call existing translate with JSON stringified content
+    const results = await this.translate({
+      ...input,
+      content: JSON.stringify(contentMap),
+    });
+
+    // Transform results to TranslateStringsResult format
+    return results.map((result) => {
+      let parsed: Record<string, unknown> = {};
+      try {
+        parsed = JSON.parse(result.result ?? '{}') as Record<string, unknown>;
+      } catch {
+        // If parsing fails, use empty object
+      }
+
+      // Map IDs back to translations in original order
+      const translations = ids.map((id) => {
+        const value = parsed[id];
+        if (typeof value === 'string') {
+          return value;
+        }
+        if (value == null) {
+          return '';
+        }
+        return String(value);
+      });
+
+      return {
+        language: result.language,
+        translations,
+        consumedTokens: result.consumedTokens,
+      };
+    });
   }
 }
 
