@@ -40,7 +40,8 @@
     "packages/nextjs-dev-translate-plugin",
     "packages/vite-plugin-dev-translate",
     "packages/cli",
-    "packages/testground",
-    "packages/sdk"
+    "packages/sdk",
+    "packages/dynamite",
+    "packages/testground"
   ]
 }

@@ -1,0 +1,55 @@
+{
+  "name": "@aexol/dynamite",
+  "version": "0.3.7",
+  "private": false,
+  "description": "React i18n library with build-time string extraction and SSR support",
+  "author": "Aexol, Artur Czemiel",
+  "license": "ISC",
+  "type": "module",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "rimraf lib commonjs && tspc && tspc -p tsconfig.commonjs.json",
+    "start": "tspc --watch",
+    "lint": "tspc && eslint \"./src/**/*.{ts,tsx}\" --quiet --fix"
+  },
+  "bin": {
+    "dynamite": "./bin/dynamite.js"
+  },
+  "files": [
+    "lib",
+    "commonjs",
+    "bin"
+  ],
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./commonjs/index.js",
+      "types": "./lib/index.d.ts"
+    },
+    "./server": {
+      "import": "./lib/src/server.js",
+      "require": "./commonjs/src/server.js",
+      "types": "./lib/src/server.d.ts"
+    },
+    "./cli": {
+      "import": "./lib/src/cli.js",
+      "require": "./commonjs/src/cli.js"
+    }
+  },
+  "dependencies": {
+    "@aexol/dev-translate-core": "^0.3.6",
+    "commander": "^11.0.0",
+    "glob": "^10.3.10"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "react": "^18.2.0",
+    "rimraf": "^5.0.5",
+    "typescript": "5.5"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  }
+}
