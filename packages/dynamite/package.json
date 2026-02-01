@@ -1,6 +1,6 @@
 {
   "name": "@aexol/dynamite",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "private": false,
   "description": "React i18n library with build-time string extraction and SSR support",
   "author": "Aexol, Artur Czemiel",
