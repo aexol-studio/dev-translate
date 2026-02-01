@@ -36,14 +36,18 @@ program
   .command('extract')
   .description('Extract translation strings from source files')
   .option('-s, --src <paths...>', 'Source directories to scan', ['./src'])
-  .option('-o, --output <path>', 'Output JSON file for extracted strings', './locales/source.json')
+  .option('-o, --output <path>', 'Output JSON file (default: {localesDir}/{sourceLocale}.json)')
   .option('-e, --extensions <exts...>', 'File extensions to scan', ['ts', 'tsx', 'js', 'jsx'])
   .option('-c, --config <path>', 'Config file path', CONFIG_FILE)
   .action(async (options) => {
     const config = loadConfig(options.config);
     const srcDirs = config?.srcDirs ?? options.src;
     const extensions = config?.extensions ?? options.extensions;
-    const outputPath = path.resolve(options.output);
+    const localesDir = config?.localesDir ?? './locales';
+    const sourceLocale = config?.sourceLocale ?? 'en';
+    const outputPath = options.output
+      ? path.resolve(options.output)
+      : path.resolve(path.join(localesDir, `${sourceLocale}.json`));
 
     console.log(`Scanning directories: ${srcDirs.join(', ')}`);
     console.log(`Looking for extensions: ${extensions.join(', ')}`);
