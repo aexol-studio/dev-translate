@@ -1,6 +1,6 @@
 {
   "name": "@aexol/sdk",
-  "version": "0.3.6",
+  "version": "0.4.1",
   "private": false,
   "main": "./lib/index.js",
   "author": "Aexol, Artur Czemiel",
