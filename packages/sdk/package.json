@@ -1,0 +1,20 @@
+{
+  "name": "@aexol/sdk",
+  "version": "0.3.6",
+  "private": false,
+  "main": "./lib/index.js",
+  "author": "Aexol, Artur Czemiel",
+  "type": "module",
+  "scripts": {
+    "build": "tspc",
+    "start": "tspc --watch",
+    "lint": "tspc && eslint \"./src/**/*.{ts,js}\" --quiet --fix",
+    "test": "npm run build --workspace @aexol/dev-translate-core && npm run build && node --test"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@aexol/dev-translate-core": "0.3.6"
+  }
+}

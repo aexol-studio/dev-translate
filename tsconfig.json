@@ -11,10 +11,13 @@
       "path": "./packages/config"
     },
     {
+      "path": "./packages/testground"
+    },
+    {
       "path": "./packages/dynamite"
     },
     {
-      "path": "./packages/testground"
+      "path": "./packages/sdk"
     }
   ]
 }
