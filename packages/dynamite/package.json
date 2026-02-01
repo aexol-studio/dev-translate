@@ -1,6 +1,6 @@
 {
   "name": "@aexol/dynamite",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "private": false,
   "description": "React i18n library with build-time string extraction and SSR support",
   "author": "Aexol, Artur Czemiel",
@@ -32,6 +32,11 @@
       "import": "./lib/src/server.js",
       "require": "./commonjs/src/server.js",
       "types": "./lib/src/server.d.ts"
+    },
+    "./extractor": {
+      "import": "./lib/src/extractor.js",
+      "require": "./commonjs/src/extractor.js",
+      "types": "./lib/src/extractor.d.ts"
     },
     "./cli": {
       "import": "./lib/src/cli.js",
