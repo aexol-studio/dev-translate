@@ -1,8 +1,11 @@
 .env
-lib
+/lib
 node_modules
 commonjs
 *.tsbuildinfo
 # Next.js build output
 .next/
 .source/
+
+# Don't ignore docs lib folder
+!packages/docs/lib/
