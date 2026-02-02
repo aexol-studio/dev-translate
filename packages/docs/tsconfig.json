@@ -19,8 +19,7 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@/.source": ["./.source/index.ts"],
-      "fumadocs-mdx:collections/*": ["./.source/*"]
+      "@/.source": ["./.source/index.ts"]
     },
     "target": "ES2017"
   },
