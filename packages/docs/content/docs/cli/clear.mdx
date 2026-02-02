@@ -1,0 +1,110 @@
+---
+title: clear
+description: Clear the translation cache
+---
+
+# clear
+
+Clear the translation cache for your account.
+
+## Usage
+
+```bash
+dev-translate clear
+```
+
+## Purpose
+
+Use this command when you need to:
+
+- Force re-translation of all content
+- Fix incorrect cached translations
+- Start fresh after significant source changes
+
+## Output
+
+```bash
+$ dev-translate clear
+
+Clearing translation cache...
+✓ Cache cleared successfully
+
+Next translation will process all files as new.
+```
+
+## How Caching Works
+
+dev-translate caches translations server-side based on:
+
+- Source text content
+- Source language
+- Target language
+- Translation options (formality, context, etc.)
+
+When you translate the same text again, it returns the cached result for free.
+
+## When to Clear Cache
+
+### Changed Context
+
+If you update the context in your configuration:
+
+```json title=".dev-translate.json"
+{
+  "context": "Medical application (was: E-commerce)"
+}
+```
+
+Clear the cache to get translations with the new context:
+
+```bash
+dev-translate clear
+dev-translate translate
+```
+
+### Changed Formality
+
+If you change the formality level:
+
+```json title=".dev-translate.json"
+{
+  "formality": "more" // was: "default"
+}
+```
+
+### Incorrect Translations
+
+If you notice incorrect translations and want fresh ones:
+
+```bash
+dev-translate clear
+dev-translate translate
+```
+
+<Callout type="warn">
+  Clearing the cache means your next translation will be charged for all content, not just changes.
+</Callout>
+
+## Selective Re-translation
+
+Instead of clearing the entire cache, you can force re-translation of specific files by:
+
+1. Modifying the source file (add a space, then remove it)
+2. Deleting the target language files
+3. Running translate again
+
+This is more cost-effective than clearing the entire cache.
+
+## API Reference
+
+The clear command calls the GraphQL API:
+
+```graphql
+mutation {
+  api {
+    clearCache
+  }
+}
+```
+
+This clears all cached translations associated with your API key.

@@ -1,0 +1,221 @@
+---
+title: Configuration
+description: Configure dev-translate for your project
+---
+
+# Configuration
+
+dev-translate uses a `.dev-translate.json` file for configuration. This file is created automatically on first run or you can create it manually.
+
+## Configuration File
+
+### Basic Configuration
+
+```json title=".dev-translate.json"
+{
+  "apiKey": "your-api-key",
+  "localeDir": "./locales",
+  "inputLanguageFolderName": "en",
+  "inputLanguage": "ENGB"
+}
+```
+
+### Full Configuration
+
+```json title=".dev-translate.json"
+{
+  "apiKey": "your-api-key",
+  "localeDir": "./locales",
+  "inputLanguageFolderName": "en",
+  "inputLanguage": "ENGB",
+  "context": "E-commerce website for fashion products",
+  "excludePhrases": ["BrandName", "ProductX"],
+  "excludeRegex": "^_",
+  "includeRegex": ".*",
+  "formality": "default",
+  "excludeDotNotationKeys": ["metadata.internal"],
+  "projectId": "my-project",
+  "omitCache": false
+}
+```
+
+## Configuration Options
+
+### Required Options
+
+| Option                    | Type     | Description                                       |
+| ------------------------- | -------- | ------------------------------------------------- |
+| `apiKey`                  | `string` | Your API key from devtranslate.app                |
+| `localeDir`               | `string` | Path to your locale files directory               |
+| `inputLanguageFolderName` | `string` | Name of the source language folder (e.g., `"en"`) |
+| `inputLanguage`           | `string` | Source language code (e.g., `"ENGB"`)             |
+
+### Optional Options
+
+| Option                   | Type       | Default     | Description                                                   |
+| ------------------------ | ---------- | ----------- | ------------------------------------------------------------- |
+| `context`                | `string`   | -           | Context for better translations (e.g., "Medical application") |
+| `excludePhrases`         | `string[]` | `[]`        | Phrases to exclude from translation                           |
+| `excludeRegex`           | `string`   | -           | Regex pattern to exclude keys                                 |
+| `includeRegex`           | `string`   | -           | Regex pattern to include keys                                 |
+| `formality`              | `string`   | `"default"` | Translation formality level                                   |
+| `excludeDotNotationKeys` | `string[]` | `[]`        | Dot notation keys to exclude                                  |
+| `projectId`              | `string`   | -           | Project identifier for organization                           |
+| `omitCache`              | `boolean`  | `false`     | Skip cache for fresh translations                             |
+
+## Environment Variables
+
+### API Key
+
+You can use an environment variable instead of storing the API key in the config file:
+
+```bash
+export DEV_TRANSLATE_API_KEY=your-api-key
+```
+
+The environment variable takes precedence over the config file.
+
+### Override API Endpoint
+
+For development purposes, you can override the API endpoint:
+
+```bash
+export OVERRIDE_DEV_TRANSLATE_HOST=http://localhost:4000/graphql
+```
+
+## Language Codes
+
+Use these codes for the `inputLanguage` option:
+
+| Code   | Language     | Code   | Language              |
+| ------ | ------------ | ------ | --------------------- |
+| `BG`   | Bulgarian    | `NB`   | Norwegian             |
+| `CS`   | Czech        | `NL`   | Dutch                 |
+| `DA`   | Danish       | `PL`   | Polish                |
+| `DE`   | German       | `PTBR` | Portuguese (Brazil)   |
+| `EL`   | Greek        | `PTPT` | Portuguese (Portugal) |
+| `ENGB` | English (UK) | `RO`   | Romanian              |
+| `ENUS` | English (US) | `RU`   | Russian               |
+| `ES`   | Spanish      | `SK`   | Slovak                |
+| `ET`   | Estonian     | `SL`   | Slovenian             |
+| `FI`   | Finnish      | `SV`   | Swedish               |
+| `FR`   | French       | `TR`   | Turkish               |
+| `HU`   | Hungarian    | `UK`   | Ukrainian             |
+| `ID`   | Indonesian   | `ZH`   | Chinese               |
+| `IT`   | Italian      | `JA`   | Japanese              |
+| `KO`   | Korean       | `LT`   | Lithuanian            |
+| `LV`   | Latvian      |        |                       |
+
+## Formality Levels
+
+The `formality` option controls the tone of translations:
+
+| Value           | Description                                       |
+| --------------- | ------------------------------------------------- |
+| `"default"`     | Use the default formality for the target language |
+| `"more"`        | More formal translations                          |
+| `"less"`        | Less formal translations                          |
+| `"prefer_more"` | Prefer formal when available                      |
+| `"prefer_less"` | Prefer informal when available                    |
+
+## Filtering Translations
+
+### Exclude Phrases
+
+Keep specific phrases untranslated (useful for brand names):
+
+```json
+{
+  "excludePhrases": ["BrandName", "ProductX", "CompanyInc"]
+}
+```
+
+### Exclude by Regex
+
+Exclude keys matching a pattern:
+
+```json
+{
+  "excludeRegex": "^_" // Excludes keys starting with underscore
+}
+```
+
+### Include by Regex
+
+Only include keys matching a pattern:
+
+```json
+{
+  "includeRegex": "^ui\\." // Only translate keys starting with "ui."
+}
+```
+
+### Exclude Dot Notation Keys
+
+Exclude nested keys using dot notation:
+
+```json
+{
+  "excludeDotNotationKeys": ["metadata.internal", "debug.messages"]
+}
+```
+
+## Context for Better Translations
+
+Provide context to improve translation quality:
+
+```json
+{
+  "context": "A medical application for doctors and patients. Use formal medical terminology."
+}
+```
+
+Good context examples:
+
+- "E-commerce website selling outdoor equipment"
+- "Children's educational game, use simple language"
+- "Legal document management system, use formal legal terminology"
+- "Casual social media app for teenagers"
+
+## Timestamp File
+
+dev-translate creates a `.dev-translate.timestamp.json` file to track when files were last translated:
+
+```json title=".dev-translate.timestamp.json"
+{
+  "timestamp": 1704067200000
+}
+```
+
+This enables incremental translation - only files modified after the timestamp are translated.
+
+<Callout type="info">
+  Add `.dev-translate.timestamp.json` to your `.gitignore` if you want each developer to manage their own translation
+  state.
+</Callout>
+
+## TypeScript Types
+
+Full TypeScript types are available:
+
+```typescript
+import type { ProjectOptions, BackendProps } from '@aexol/dev-translate-core';
+
+type ProjectOptions = BackendProps & {
+  inputLanguageFolderName: string;
+  inputLanguage: string;
+  apiKey: string;
+  localeDir: string;
+};
+
+type BackendProps = {
+  context?: string;
+  excludePhrases?: string[];
+  excludeRegex?: string;
+  includeRegex?: string;
+  formality?: Formality;
+  excludeDotNotationKeys?: string[];
+  projectId?: string;
+  omitCache?: boolean;
+};
+```

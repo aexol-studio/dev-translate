@@ -1,0 +1,266 @@
+---
+title: Client Components
+description: Using Dynamite in client components
+---
+
+# Client Components
+
+Use the `useDynamite()` hook in client components for translations.
+
+## Provider Setup
+
+First, wrap your app with `DynamiteProvider`:
+
+```tsx title="app/[locale]/layout.tsx"
+import { DynamiteProvider } from '@aexol/dynamite';
+import { loadTranslations } from '@aexol/dynamite/server';
+
+export default function LocaleLayout({ children, params }: { children: React.ReactNode; params: { locale: string } }) {
+  const translations = loadTranslations(params.locale, {
+    localesDir: './locales',
+    defaultLocale: 'en',
+  });
+
+  return (
+    <DynamiteProvider locale={params.locale} translations={translations}>
+      {children}
+    </DynamiteProvider>
+  );
+}
+```
+
+## useDynamite Hook
+
+Use the hook in any client component:
+
+```tsx title="components/welcome.tsx"
+'use client';
+
+import { useDynamite } from '@aexol/dynamite';
+
+export function Welcome() {
+  const { t } = useDynamite();
+
+  return (
+    <div>
+      <h1>{t('Welcome to our app')}</h1>
+      <p>{t('Get started by exploring the features below')}</p>
+    </div>
+  );
+}
+```
+
+## Hook Return Value
+
+```typescript
+const { t, locale } = useDynamite();
+
+// t: Translation function
+// locale: Current locale string
+```
+
+## Translation Function
+
+The `t()` function:
+
+- Takes the source string as argument
+- Returns the translated string for current locale
+- Falls back to the source string if translation not found
+
+```tsx
+const { t } = useDynamite();
+
+// Basic usage
+t('Hello'); // Returns "Hallo" in German locale
+
+// Long strings work too
+t('This is a longer sentence that will be translated');
+
+// Fallback if not found
+t('New untranslated string'); // Returns original string
+```
+
+## Real-World Examples
+
+### Navigation Component
+
+```tsx title="components/nav.tsx"
+'use client';
+
+import { useDynamite } from '@aexol/dynamite';
+import Link from 'next/link';
+
+export function Navigation() {
+  const { t } = useDynamite();
+
+  return (
+    <nav>
+      <Link href="/">{t('Home')}</Link>
+      <Link href="/about">{t('About')}</Link>
+      <Link href="/products">{t('Products')}</Link>
+      <Link href="/contact">{t('Contact')}</Link>
+    </nav>
+  );
+}
+```
+
+### Form Component
+
+```tsx title="components/login-form.tsx"
+'use client';
+
+import { useDynamite } from '@aexol/dynamite';
+
+export function LoginForm() {
+  const { t } = useDynamite();
+
+  return (
+    <form>
+      <h2>{t('Sign in to your account')}</h2>
+
+      <label>
+        {t('Email address')}
+        <input type="email" placeholder={t('Enter your email')} />
+      </label>
+
+      <label>
+        {t('Password')}
+        <input type="password" placeholder={t('Enter your password')} />
+      </label>
+
+      <button type="submit">{t('Sign in')}</button>
+
+      <p>
+        {t("Don't have an account?")} <a href="/signup">{t('Sign up')}</a>
+      </p>
+    </form>
+  );
+}
+```
+
+### Error Messages
+
+```tsx title="components/error-boundary.tsx"
+'use client';
+
+import { useDynamite } from '@aexol/dynamite';
+
+export function ErrorMessage({ error }: { error: string }) {
+  const { t } = useDynamite();
+
+  const messages: Record<string, string> = {
+    AUTH_FAILED: t('Authentication failed. Please try again.'),
+    NETWORK_ERROR: t('Network error. Check your connection.'),
+    NOT_FOUND: t('The requested resource was not found.'),
+  };
+
+  return (
+    <div className="error">
+      <h3>{t('Error')}</h3>
+      <p>{messages[error] || t('An unexpected error occurred.')}</p>
+    </div>
+  );
+}
+```
+
+### Conditional Content
+
+```tsx title="components/greeting.tsx"
+'use client';
+
+import { useDynamite } from '@aexol/dynamite';
+
+export function Greeting({ userName }: { userName?: string }) {
+  const { t } = useDynamite();
+
+  if (userName) {
+    // Note: For dynamic content, you might need interpolation
+    // which requires a different approach
+    return (
+      <h1>
+        {t('Welcome back')}, {userName}!
+      </h1>
+    );
+  }
+
+  return <h1>{t('Welcome, guest')}</h1>;
+}
+```
+
+## Accessing Current Locale
+
+```tsx
+'use client';
+
+import { useDynamite } from '@aexol/dynamite';
+
+export function LanguageIndicator() {
+  const { locale } = useDynamite();
+
+  return <span>Current language: {locale}</span>;
+}
+```
+
+## Best Practices
+
+### Use Full Sentences
+
+```tsx
+// Good - full sentences translate better
+t('Please enter your email address');
+
+// Avoid - fragments may not translate well
+t('Please enter your') + ' ' + t('email address');
+```
+
+### Keep Strings Static
+
+```tsx
+// Good - static strings can be extracted
+t('Welcome to our app');
+
+// Bad - dynamic strings cannot be extracted
+t(`Welcome to ${appName}`);
+```
+
+### Consistent Capitalization
+
+```tsx
+// Pick one style and be consistent
+t('Sign in'); // Sentence case
+t('SIGN IN'); // Different key, needs separate translation
+```
+
+## Limitations
+
+### No String Interpolation
+
+Dynamite uses strings as keys, so dynamic content needs workarounds:
+
+```tsx
+// Instead of interpolation:
+// t(`Hello ${name}`)  // Won't work
+
+// Use composition:
+<>
+  {t('Hello')}, {name}!
+</>
+```
+
+### No Plural Forms
+
+For pluralization, handle it in your code:
+
+```tsx
+const { t } = useDynamite();
+
+function ItemCount({ count }: { count: number }) {
+  if (count === 0) return <span>{t('No items')}</span>;
+  if (count === 1) return <span>{t('1 item')}</span>;
+  return (
+    <span>
+      {count} {t('items')}
+    </span>
+  );
+}
+```

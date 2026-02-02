@@ -1,0 +1,307 @@
+---
+title: Server Components
+description: Using Dynamite with React Server Components and SSR
+---
+
+# Server Components
+
+Dynamite fully supports React Server Components (RSC) and Server-Side Rendering (SSR).
+
+## Server Utilities
+
+Import from `@aexol/dynamite/server`:
+
+```typescript
+import { getDynamite, getDynamiteSync, loadTranslations } from '@aexol/dynamite/server';
+```
+
+## getDynamite (Async)
+
+For async server components:
+
+```tsx title="app/[locale]/page.tsx"
+import { getDynamite } from '@aexol/dynamite/server';
+
+export default async function Page({ params }: { params: { locale: string } }) {
+  const { t } = await getDynamite(params.locale, {
+    localesDir: './locales',
+    defaultLocale: 'en',
+  });
+
+  return (
+    <main>
+      <h1>{t('Welcome to our app')}</h1>
+      <p>{t('This page is server-rendered')}</p>
+    </main>
+  );
+}
+```
+
+## getDynamiteSync (Sync)
+
+For synchronous usage:
+
+```tsx title="app/[locale]/about/page.tsx"
+import { getDynamiteSync } from '@aexol/dynamite/server';
+
+export default function AboutPage({ params }: { params: { locale: string } }) {
+  const { t } = getDynamiteSync(params.locale, {
+    localesDir: './locales',
+    defaultLocale: 'en',
+  });
+
+  return (
+    <main>
+      <h1>{t('About Us')}</h1>
+      <p>{t('Learn more about our company')}</p>
+    </main>
+  );
+}
+```
+
+## loadTranslations
+
+Load translations for the provider:
+
+```tsx title="app/[locale]/layout.tsx"
+import { DynamiteProvider } from '@aexol/dynamite';
+import { loadTranslations } from '@aexol/dynamite/server';
+
+export default function LocaleLayout({ children, params }: { children: React.ReactNode; params: { locale: string } }) {
+  const translations = loadTranslations(params.locale, {
+    localesDir: './locales',
+    defaultLocale: 'en',
+  });
+
+  return (
+    <DynamiteProvider locale={params.locale} translations={translations}>
+      {children}
+    </DynamiteProvider>
+  );
+}
+```
+
+## Configuration Options
+
+All server functions accept these options:
+
+```typescript
+type ServerOptions = {
+  localesDir: string; // Path to locale JSON files
+  defaultLocale: string; // Fallback locale
+};
+```
+
+## Complete Next.js App Router Example
+
+### Directory Structure
+
+```
+app/
+├── [locale]/
+│   ├── layout.tsx      # Provider setup
+│   ├── page.tsx        # Server component
+│   └── client/
+│       └── page.tsx    # Client component page
+└── layout.tsx          # Root layout
+locales/
+├── en.json
+├── de.json
+└── fr.json
+```
+
+### Root Layout
+
+```tsx title="app/layout.tsx"
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return children;
+}
+```
+
+### Locale Layout with Provider
+
+```tsx title="app/[locale]/layout.tsx"
+import { DynamiteProvider } from '@aexol/dynamite';
+import { loadTranslations } from '@aexol/dynamite/server';
+
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'de' }, { locale: 'fr' }];
+}
+
+export default function LocaleLayout({ children, params }: { children: React.ReactNode; params: { locale: string } }) {
+  const translations = loadTranslations(params.locale, {
+    localesDir: './locales',
+    defaultLocale: 'en',
+  });
+
+  return (
+    <html lang={params.locale}>
+      <body>
+        <DynamiteProvider locale={params.locale} translations={translations}>
+          {children}
+        </DynamiteProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+### Server Component Page
+
+```tsx title="app/[locale]/page.tsx"
+import { getDynamite } from '@aexol/dynamite/server';
+import { ClientSection } from './client-section';
+
+export default async function HomePage({ params }: { params: { locale: string } }) {
+  const { t } = await getDynamite(params.locale, {
+    localesDir: './locales',
+    defaultLocale: 'en',
+  });
+
+  return (
+    <main>
+      {/* Server-rendered content */}
+      <h1>{t('Welcome to our app')}</h1>
+      <p>{t('This content is server-rendered for SEO')}</p>
+
+      {/* Client component (uses provider) */}
+      <ClientSection />
+    </main>
+  );
+}
+```
+
+### Client Component
+
+```tsx title="app/[locale]/client-section.tsx"
+'use client';
+
+import { useDynamite } from '@aexol/dynamite';
+
+export function ClientSection() {
+  const { t } = useDynamite();
+
+  return (
+    <section>
+      <h2>{t('Interactive Features')}</h2>
+      <button onClick={() => alert(t('Button clicked!'))}>{t('Click me')}</button>
+    </section>
+  );
+}
+```
+
+## Mixing Server and Client Components
+
+```tsx title="app/[locale]/products/page.tsx"
+import { getDynamite } from '@aexol/dynamite/server';
+import { AddToCart } from './add-to-cart';
+
+export default async function ProductsPage({ params }: { params: { locale: string } }) {
+  const { t } = await getDynamite(params.locale, {
+    localesDir: './locales',
+    defaultLocale: 'en',
+  });
+
+  const products = await fetchProducts();
+
+  return (
+    <main>
+      <h1>{t('Our Products')}</h1>
+
+      <div className="grid">
+        {products.map((product) => (
+          <div key={product.id}>
+            {/* Server-rendered */}
+            <h2>{product.name}</h2>
+            <p>{product.description}</p>
+            <span>
+              {t('Price')}: ${product.price}
+            </span>
+
+            {/* Client component for interactivity */}
+            <AddToCart productId={product.id} />
+          </div>
+        ))}
+      </div>
+    </main>
+  );
+}
+```
+
+```tsx title="app/[locale]/products/add-to-cart.tsx"
+'use client';
+
+import { useDynamite } from '@aexol/dynamite';
+import { useState } from 'react';
+
+export function AddToCart({ productId }: { productId: string }) {
+  const { t } = useDynamite();
+  const [added, setAdded] = useState(false);
+
+  const handleAdd = () => {
+    // Add to cart logic
+    setAdded(true);
+  };
+
+  if (added) {
+    return <span>{t('Added to cart!')}</span>;
+  }
+
+  return <button onClick={handleAdd}>{t('Add to cart')}</button>;
+}
+```
+
+## SEO Benefits
+
+Using server components for initial content provides:
+
+1. **Fully rendered HTML** - Search engines see translated content
+2. **Fast initial load** - No JavaScript needed for first paint
+3. **Proper lang attribute** - Set on the `<html>` tag
+
+```tsx
+<html lang={params.locale}>  {/* "en", "de", "fr", etc. */}
+```
+
+## Best Practices
+
+### Prefer Server Components for Static Content
+
+```tsx
+// Server component - better for SEO and performance
+import { getDynamite } from '@aexol/dynamite/server';
+
+export default async function Footer({ locale }: { locale: string }) {
+  const { t } = await getDynamite(locale, { ... });
+  return <footer>{t('Copyright 2024')}</footer>;
+}
+```
+
+### Use Client Components for Interactivity
+
+```tsx
+// Client component - for interactive elements
+'use client';
+import { useDynamite } from '@aexol/dynamite';
+
+export function SearchBox() {
+  const { t } = useDynamite();
+  return <input placeholder={t('Search...')} />;
+}
+```
+
+### Cache Translations
+
+React's caching handles most cases, but for custom caching:
+
+```tsx
+import { cache } from 'react';
+import { loadTranslations } from '@aexol/dynamite/server';
+
+const getTranslations = cache((locale: string) => {
+  return loadTranslations(locale, {
+    localesDir: './locales',
+    defaultLocale: 'en',
+  });
+});
+```

@@ -1,0 +1,349 @@
+---
+title: Dynamite CLI
+description: CLI commands for extracting and translating strings
+---
+
+# Dynamite CLI
+
+Dynamite includes CLI commands for extracting translation strings and translating them.
+
+## Commands
+
+| Command              | Description                     |
+| -------------------- | ------------------------------- |
+| `dynamite init`      | Create configuration file       |
+| `dynamite extract`   | Extract `t()` calls from source |
+| `dynamite translate` | Translate to target locales     |
+
+## init
+
+Create a `.dynamite.json` configuration file:
+
+```bash
+npx dynamite init
+```
+
+### Output
+
+```json title=".dynamite.json"
+{
+  "localesDir": "./locales",
+  "defaultLocale": "en",
+  "sourceLocale": "en",
+  "inputLanguage": "ENGB",
+  "targetLocales": ["de", "fr", "es"],
+  "srcDirs": ["./src"],
+  "include": ["**/*.tsx", "**/*.ts"],
+  "exclude": ["node_modules/**"]
+}
+```
+
+### Configuration Options
+
+| Option          | Type        | Description                           |
+| --------------- | ----------- | ------------------------------------- |
+| `localesDir`    | `string`    | Where to store translation JSON files |
+| `defaultLocale` | `string`    | Default/fallback locale               |
+| `sourceLocale`  | `string`    | Source language code                  |
+| `inputLanguage` | `Languages` | API language code (e.g., `"ENGB"`)    |
+| `targetLocales` | `string[]`  | Target locales to translate to        |
+| `apiKey`        | `string`    | API key (optional, can use env var)   |
+| `srcDirs`       | `string[]`  | Directories to scan for `t()` calls   |
+| `include`       | `string[]`  | Glob patterns to include              |
+| `exclude`       | `string[]`  | Glob patterns to exclude              |
+
+---
+
+## extract
+
+Extract all `t()` function calls from your source code:
+
+```bash
+npx dynamite extract
+```
+
+### How It Works
+
+1. Scans all files matching `include` patterns in `srcDirs`
+2. Parses TypeScript/JavaScript using the TypeScript compiler
+3. Finds all `t('string')` calls
+4. Creates/updates the source locale JSON file
+
+### Example
+
+**Source code:**
+
+```tsx title="src/components/header.tsx"
+import { useDynamite } from '@aexol/dynamite';
+
+export function Header() {
+  const { t } = useDynamite();
+  return (
+    <header>
+      <h1>{t('Welcome')}</h1>
+      <nav>
+        <a href="/">{t('Home')}</a>
+        <a href="/about">{t('About')}</a>
+      </nav>
+    </header>
+  );
+}
+```
+
+**After extraction:**
+
+```json title="locales/en.json"
+{
+  "Welcome": "Welcome",
+  "Home": "Home",
+  "About": "About"
+}
+```
+
+### Incremental Extraction
+
+Running extract again adds new strings without removing existing ones:
+
+```tsx
+// New code added
+<footer>{t('Contact us')}</footer>
+```
+
+```bash
+npx dynamite extract
+```
+
+```json title="locales/en.json"
+{
+  "Welcome": "Welcome",
+  "Home": "Home",
+  "About": "About",
+  "Contact us": "Contact us"
+}
+```
+
+### What Gets Extracted
+
+**Extracted:**
+
+```tsx
+t('Hello'); // ✓ Static string
+t('Hello world'); // ✓ String with spaces
+t('Double quotes'); // ✓ Double quotes
+t("It's working"); // ✓ Escaped quotes
+```
+
+**Not extracted:**
+
+```tsx
+t(variable); // ✗ Variable
+t(`Template ${string}`); // ✗ Template literal with expressions
+t('Hello' + 'World'); // ✗ Concatenation
+```
+
+---
+
+## translate
+
+Translate extracted strings to target locales:
+
+```bash
+npx dynamite translate
+```
+
+### Prerequisites
+
+- API key set via `apiKey` in config or `DEV_TRANSLATE_API_KEY` env var
+- Source locale file exists (run `extract` first)
+
+### How It Works
+
+1. Reads source locale JSON from `localesDir`
+2. Sends to dev-translate API
+3. Creates/updates target locale JSON files
+
+### Example
+
+**Before:**
+
+```
+locales/
+└── en.json
+```
+
+**After:**
+
+```
+locales/
+├── en.json
+├── de.json
+├── fr.json
+└── es.json
+```
+
+**Source (en.json):**
+
+```json
+{
+  "Welcome": "Welcome",
+  "Home": "Home",
+  "About": "About"
+}
+```
+
+**Translated (de.json):**
+
+```json
+{
+  "Welcome": "Willkommen",
+  "Home": "Startseite",
+  "About": "Über uns"
+}
+```
+
+### Incremental Translation
+
+Only new/changed strings are translated:
+
+```bash
+# Add new string to code
+# Run extract
+npx dynamite extract
+
+# Only new strings are translated
+npx dynamite translate
+```
+
+---
+
+## Full Workflow
+
+### Development Workflow
+
+```bash
+# 1. Write code with t() calls
+# 2. Extract strings
+npx dynamite extract
+
+# 3. Translate
+npx dynamite translate
+
+# 4. Test your app
+npm run dev
+```
+
+### npm Scripts
+
+```json title="package.json"
+{
+  "scripts": {
+    "i18n:init": "dynamite init",
+    "i18n:extract": "dynamite extract",
+    "i18n:translate": "dynamite translate",
+    "i18n": "dynamite extract && dynamite translate",
+    "prebuild": "npm run i18n"
+  }
+}
+```
+
+### CI/CD Integration
+
+```yaml title=".github/workflows/i18n.yml"
+name: Internationalization
+
+on:
+  push:
+    paths:
+      - 'src/**/*.tsx'
+      - 'src/**/*.ts'
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Extract strings
+        run: npx dynamite extract
+
+      - name: Translate
+        run: npx dynamite translate
+        env:
+          DEV_TRANSLATE_API_KEY: ${{ secrets.DEV_TRANSLATE_API_KEY }}
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add locales/
+          git commit -m "chore: update translations" || exit 0
+          git push
+```
+
+## Programmatic Usage
+
+You can also use the extraction functions programmatically:
+
+```typescript
+import { extractStrings, extractStringsFromSource } from '@aexol/dynamite';
+
+// Extract from directories
+const strings = await extractStrings({
+  srcDirs: ['./src'],
+  include: ['**/*.tsx'],
+  exclude: ['node_modules/**'],
+});
+
+console.log(strings); // ['Welcome', 'Home', 'About']
+
+// Extract from source code string
+const sourceStrings = extractStringsFromSource(`
+  const { t } = useDynamite();
+  return <h1>{t('Hello')}</h1>;
+`);
+
+console.log(sourceStrings); // ['Hello']
+```
+
+## Troubleshooting
+
+### No Strings Extracted
+
+1. Check your `include` patterns match your files
+2. Ensure `srcDirs` points to correct directories
+3. Verify you're using `t('string')` syntax
+
+```bash
+# Debug: check what files are being scanned
+npx dynamite extract --verbose
+```
+
+### Translation Fails
+
+1. Check API key is set
+2. Verify source locale file exists
+3. Check network connectivity
+
+```bash
+# Verify API key
+echo $DEV_TRANSLATE_API_KEY
+
+# Check source file
+cat locales/en.json
+```
+
+### Missing Translations
+
+If a string appears in code but not in translations:
+
+1. Ensure it uses static string: `t('Hello')` not `t(variable)`
+2. Run extract again: `npx dynamite extract`
+3. Check the source locale file was updated
+4. Run translate: `npx dynamite translate`

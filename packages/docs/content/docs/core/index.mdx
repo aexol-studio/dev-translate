@@ -1,0 +1,125 @@
+---
+title: Core Library
+description: Core translation logic and GraphQL API client
+---
+
+# Core Library
+
+The `@aexol/dev-translate-core` package provides the core translation logic and GraphQL API client used by the CLI and framework plugins.
+
+## Installation
+
+```bash
+npm install @aexol/dev-translate-core
+```
+
+## Overview
+
+The core package exports:
+
+- Translation functions for locale folders
+- Prediction functions for token estimation
+- Cache management functions
+- TypeScript types for configuration
+- Language enum with all supported languages
+
+## Quick Start
+
+```typescript
+import { translateLocaleFolder, predictLocaleFolder, clearAccountCache, Languages } from '@aexol/dev-translate-core';
+
+// Translate locale files
+await translateLocaleFolder({
+  apiKey: 'your-api-key',
+  localeDir: './locales',
+  inputLanguageFolderName: 'en',
+  inputLanguage: Languages.ENGB,
+});
+
+// Predict translation costs
+const prediction = await predictLocaleFolder({
+  apiKey: 'your-api-key',
+  localeDir: './locales',
+  inputLanguageFolderName: 'en',
+  inputLanguage: Languages.ENGB,
+});
+
+// Clear cache
+await clearAccountCache({
+  apiKey: 'your-api-key',
+});
+```
+
+## Use Cases
+
+### Custom Build Scripts
+
+Integrate translation into your custom build process:
+
+```typescript
+import { translateLocaleFolder, Languages } from '@aexol/dev-translate-core';
+
+async function build() {
+  console.log('Building...');
+
+  // Translate before build
+  await translateLocaleFolder({
+    apiKey: process.env.DEV_TRANSLATE_API_KEY!,
+    localeDir: './locales',
+    inputLanguageFolderName: 'en',
+    inputLanguage: Languages.ENGB,
+    context: 'E-commerce website',
+  });
+
+  // Continue with build
+  // ...
+}
+```
+
+### Pre-commit Hooks
+
+Translate on commit with husky:
+
+```typescript title="scripts/translate.ts"
+import { translateLocaleFolder, Languages } from '@aexol/dev-translate-core';
+
+translateLocaleFolder({
+  apiKey: process.env.DEV_TRANSLATE_API_KEY!,
+  localeDir: './locales',
+  inputLanguageFolderName: 'en',
+  inputLanguage: Languages.ENGB,
+}).catch(console.error);
+```
+
+### Cost Estimation
+
+Check costs before translating:
+
+```typescript
+import { predictLocaleFolder, Languages } from '@aexol/dev-translate-core';
+
+const result = await predictLocaleFolder({
+  apiKey: process.env.DEV_TRANSLATE_API_KEY!,
+  localeDir: './locales',
+  inputLanguageFolderName: 'en',
+  inputLanguage: Languages.ENGB,
+});
+
+console.log(`Estimated tokens: ${result.cost}`);
+console.log(`Cached tokens: ${result.cached}`);
+```
+
+## API Endpoint
+
+The core library communicates with:
+
+```
+https://backend.devtranslate.app/graphql
+```
+
+You can override this with the `OVERRIDE_DEV_TRANSLATE_HOST` environment variable for development.
+
+## Next Steps
+
+- [Functions Reference](/docs/core/functions) - All available functions
+- [Types Reference](/docs/core/types) - TypeScript type definitions

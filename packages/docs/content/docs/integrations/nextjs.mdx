@@ -1,0 +1,252 @@
+---
+title: Next.js Plugin
+description: Next.js plugin for automatic translation
+---
+
+# Next.js Plugin
+
+The `@aexol/nextjs-dev-translate-plugin` package provides automatic translation during Next.js development.
+
+## Installation
+
+```bash
+npm install -D @aexol/nextjs-dev-translate-plugin
+```
+
+## Setup
+
+```javascript title="next.config.mjs"
+import { withDevTranslate, Languages } from '@aexol/nextjs-dev-translate-plugin';
+
+const nextConfig = {
+  // Your Next.js config
+};
+
+export default withDevTranslate(nextConfig, {
+  apiKey: process.env.DEV_TRANSLATE_API_KEY,
+  folderName: 'en',
+  lang: Languages.ENGB,
+  localeDir: './locales',
+});
+```
+
+## Configuration Options
+
+### Required Options
+
+| Option       | Type        | Description                 |
+| ------------ | ----------- | --------------------------- |
+| `apiKey`     | `string`    | Your API key                |
+| `folderName` | `string`    | Source language folder name |
+| `lang`       | `Languages` | Source language             |
+| `localeDir`  | `string`    | Path to locale directory    |
+
+### Optional Options
+
+| Option                   | Type        | Default     | Description           |
+| ------------------------ | ----------- | ----------- | --------------------- |
+| `context`                | `string`    | -           | Translation context   |
+| `excludePhrases`         | `string[]`  | `[]`        | Phrases to exclude    |
+| `excludeRegex`           | `string`    | -           | Regex to exclude keys |
+| `includeRegex`           | `string`    | -           | Regex to include keys |
+| `formality`              | `Formality` | `'default'` | Formality level       |
+| `excludeDotNotationKeys` | `string[]`  | `[]`        | Keys to exclude       |
+| `projectId`              | `string`    | -           | Project ID            |
+| `omitCache`              | `boolean`   | `false`     | Skip cache            |
+
+## Full Example
+
+```javascript title="next.config.mjs"
+import { withDevTranslate, Languages } from '@aexol/nextjs-dev-translate-plugin';
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  i18n: {
+    locales: ['en', 'de', 'fr', 'ja'],
+    defaultLocale: 'en',
+  },
+};
+
+export default withDevTranslate(nextConfig, {
+  apiKey: process.env.DEV_TRANSLATE_API_KEY,
+  folderName: 'en',
+  lang: Languages.ENGB,
+  localeDir: './public/locales',
+  context: 'E-commerce website',
+  excludePhrases: ['BrandName'],
+});
+```
+
+## Environment Variables
+
+Add your API key to `.env.local`:
+
+```bash title=".env.local"
+DEV_TRANSLATE_API_KEY=your-api-key
+```
+
+<Callout type="info">Next.js automatically loads `.env.local` for local development.</Callout>
+
+## How It Works
+
+1. **Development only** - Plugin checks `NODE_ENV !== 'production'`
+2. **On dev server start** - Initializes file watcher
+3. **On file change** - Translates changed source files
+4. **Fast refresh** - Translations available immediately
+
+## With next-intl
+
+```javascript title="next.config.mjs"
+import { withDevTranslate, Languages } from '@aexol/nextjs-dev-translate-plugin';
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin();
+
+const nextConfig = {};
+
+// Chain the plugins
+export default withDevTranslate(withNextIntl(nextConfig), {
+  apiKey: process.env.DEV_TRANSLATE_API_KEY,
+  folderName: 'en',
+  lang: Languages.ENGB,
+  localeDir: './messages',
+});
+```
+
+```
+messages/
+├── en.json
+├── de.json
+├── fr.json
+└── ja.json
+```
+
+<Callout type="warn">
+  For next-intl with single-file locales, ensure your folder structure matches what dev-translate expects (folder per
+  language).
+</Callout>
+
+## With next-i18next
+
+```javascript title="next.config.mjs"
+import { withDevTranslate, Languages } from '@aexol/nextjs-dev-translate-plugin';
+
+const nextConfig = {
+  i18n: {
+    locales: ['en', 'de', 'fr'],
+    defaultLocale: 'en',
+  },
+};
+
+export default withDevTranslate(nextConfig, {
+  apiKey: process.env.DEV_TRANSLATE_API_KEY,
+  folderName: 'en',
+  lang: Languages.ENGB,
+  localeDir: './public/locales',
+});
+```
+
+```
+public/locales/
+├── en/
+│   ├── common.json
+│   └── home.json
+├── de/
+│   ├── common.json
+│   └── home.json
+└── fr/
+    ├── common.json
+    └── home.json
+```
+
+## App Router with Server Components
+
+For App Router with server components, consider using [Dynamite](/docs/dynamite) instead for better RSC support.
+
+If using the plugin with App Router:
+
+```javascript title="next.config.mjs"
+import { withDevTranslate, Languages } from '@aexol/nextjs-dev-translate-plugin';
+
+const nextConfig = {
+  experimental: {
+    // Your experimental features
+  },
+};
+
+export default withDevTranslate(nextConfig, {
+  apiKey: process.env.DEV_TRANSLATE_API_KEY,
+  folderName: 'en',
+  lang: Languages.ENGB,
+  localeDir: './locales',
+});
+```
+
+## Production Builds
+
+The plugin only runs in development. For production:
+
+```json title="package.json"
+{
+  "scripts": {
+    "prebuild": "dev-translate translate",
+    "build": "next build"
+  }
+}
+```
+
+Or in CI/CD:
+
+```yaml title=".github/workflows/build.yml"
+- name: Translate
+  run: npx dev-translate translate
+  env:
+    DEV_TRANSLATE_API_KEY: ${{ secrets.DEV_TRANSLATE_API_KEY }}
+
+- name: Build
+  run: npm run build
+```
+
+## Troubleshooting
+
+### Plugin Not Running
+
+Verify development mode:
+
+```bash
+NODE_ENV=development npm run dev
+```
+
+### API Key Issues
+
+Check environment variable is set:
+
+```javascript title="next.config.mjs"
+console.log('API Key:', process.env.DEV_TRANSLATE_API_KEY ? 'Set' : 'Missing');
+
+export default withDevTranslate(nextConfig, {
+  apiKey: process.env.DEV_TRANSLATE_API_KEY,
+  // ...
+});
+```
+
+### TypeScript Support
+
+The plugin is fully typed. For TypeScript configs:
+
+```typescript title="next.config.ts"
+import type { NextConfig } from 'next';
+import { withDevTranslate, Languages } from '@aexol/nextjs-dev-translate-plugin';
+
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
+};
+
+export default withDevTranslate(nextConfig, {
+  apiKey: process.env.DEV_TRANSLATE_API_KEY!,
+  folderName: 'en',
+  lang: Languages.ENGB,
+  localeDir: './locales',
+});
+```

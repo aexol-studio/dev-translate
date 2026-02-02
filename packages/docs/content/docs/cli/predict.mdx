@@ -1,0 +1,106 @@
+---
+title: predict
+description: Predict token consumption before translation
+---
+
+# predict
+
+Predict the token consumption for translating your locale files without actually performing the translation.
+
+## Usage
+
+```bash
+dev-translate predict
+```
+
+## Purpose
+
+Use this command to:
+
+- Estimate costs before translating
+- Check what will be translated
+- Identify cached vs. new translations
+
+## Output
+
+```bash
+$ dev-translate predict
+
+Predicting translation costs...
+
+common.json:
+  Total tokens: 500
+  Cached: 200 (40%)
+  New: 300 (60%)
+
+errors.json:
+  Total tokens: 150
+  Cached: 150 (100%)
+  New: 0 (0%)
+
+─────────────────────────
+Total:
+  Tokens to translate: 300
+  Cached tokens: 350
+  Estimated cost: $0.015
+```
+
+## How It Works
+
+1. Reads your configuration from `.dev-translate.json`
+2. Scans all JSON files in the source language folder
+3. Sends content to the prediction API
+4. Returns token counts and cache status
+
+## Cached Translations
+
+dev-translate caches translations server-side. The predict command shows:
+
+- **Total tokens**: All tokens in your source files
+- **Cached**: Tokens that won't be re-translated (already in cache)
+- **New**: Tokens that will be translated and charged
+
+<Callout type="info">Cached translations are free. Only new translations consume tokens.</Callout>
+
+## Use Cases
+
+### Before Large Updates
+
+```bash
+# Check costs before translating
+dev-translate predict
+
+# If acceptable, proceed
+dev-translate translate
+```
+
+### Budget Planning
+
+```bash
+# Run weekly to track translation growth
+dev-translate predict >> translation-costs.log
+```
+
+### CI/CD Cost Alerts
+
+```yaml title=".github/workflows/translate.yml"
+- name: Check translation costs
+  run: |
+    COST=$(dev-translate predict | grep "Estimated cost" | awk '{print $3}')
+    if (( $(echo "$COST > 10.00" | bc -l) )); then
+      echo "Warning: Translation cost exceeds $10"
+      exit 1
+    fi
+```
+
+## Forcing Fresh Predictions
+
+To get a prediction ignoring the cache:
+
+```json title=".dev-translate.json"
+{
+  "omitCache": true
+}
+```
+
+This shows the full cost as if nothing was cached.

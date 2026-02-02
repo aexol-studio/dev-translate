@@ -1,0 +1,4 @@
+{
+  "title": "Dynamite",
+  "pages": ["index", "setup", "client-components", "server-components", "cli"]
+}

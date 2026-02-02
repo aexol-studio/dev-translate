@@ -3,3 +3,6 @@ lib
 node_modules
 commonjs
 *.tsbuildinfo
+# Next.js build output
+.next/
+.source/

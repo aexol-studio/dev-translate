@@ -1,0 +1,276 @@
+---
+title: Functions
+description: Core library function reference
+---
+
+# Functions Reference
+
+All functions exported by `@aexol/dev-translate-core`.
+
+## translateLocaleFolder
+
+Translate all JSON files in a locale directory.
+
+```typescript
+import { translateLocaleFolder } from '@aexol/dev-translate-core';
+
+await translateLocaleFolder(options);
+```
+
+### Parameters
+
+```typescript
+type TranslateOptions = {
+  // Required
+  apiKey: string;
+  localeDir: string;
+  inputLanguageFolderName: string;
+  inputLanguage: Languages;
+
+  // Optional
+  context?: string;
+  excludePhrases?: string[];
+  excludeRegex?: string;
+  includeRegex?: string;
+  formality?: Formality;
+  excludeDotNotationKeys?: string[];
+  projectId?: string;
+  omitCache?: boolean;
+};
+```
+
+### Returns
+
+```typescript
+Promise<void>;
+```
+
+### Example
+
+```typescript
+import { translateLocaleFolder, Languages } from '@aexol/dev-translate-core';
+
+await translateLocaleFolder({
+  apiKey: 'your-api-key',
+  localeDir: './locales',
+  inputLanguageFolderName: 'en',
+  inputLanguage: Languages.ENGB,
+  context: 'Medical application for healthcare professionals',
+  excludePhrases: ['MedTech', 'HealthCo'],
+  formality: 'more',
+});
+```
+
+---
+
+## predictLocaleFolder
+
+Predict token consumption for translating locale files.
+
+```typescript
+import { predictLocaleFolder } from '@aexol/dev-translate-core';
+
+const result = await predictLocaleFolder(options);
+```
+
+### Parameters
+
+Same as `translateLocaleFolder`.
+
+### Returns
+
+```typescript
+Promise<{
+  cost: number; // Tokens that will be translated
+  cached: number; // Tokens already cached (free)
+}>;
+```
+
+### Example
+
+```typescript
+import { predictLocaleFolder, Languages } from '@aexol/dev-translate-core';
+
+const result = await predictLocaleFolder({
+  apiKey: 'your-api-key',
+  localeDir: './locales',
+  inputLanguageFolderName: 'en',
+  inputLanguage: Languages.ENGB,
+});
+
+console.log(`New tokens: ${result.cost}`);
+console.log(`Cached tokens: ${result.cached}`);
+console.log(`Total: ${result.cost + result.cached}`);
+```
+
+---
+
+## clearAccountCache
+
+Clear the translation cache for your account.
+
+```typescript
+import { clearAccountCache } from '@aexol/dev-translate-core';
+
+await clearAccountCache(options);
+```
+
+### Parameters
+
+```typescript
+type ClearCacheOptions = {
+  apiKey: string;
+};
+```
+
+### Returns
+
+```typescript
+Promise<void>;
+```
+
+### Example
+
+```typescript
+import { clearAccountCache } from '@aexol/dev-translate-core';
+
+await clearAccountCache({
+  apiKey: 'your-api-key',
+});
+
+console.log('Cache cleared!');
+```
+
+---
+
+## getOutputLanguages
+
+Get the list of output language folders with their language mappings.
+
+```typescript
+import { getOutputLanguages } from '@aexol/dev-translate-core';
+
+const languages = await getOutputLanguages(options);
+```
+
+### Parameters
+
+```typescript
+type GetLanguagesOptions = {
+  localeDir: string;
+  inputLanguageFolderName: string;
+};
+```
+
+### Returns
+
+```typescript
+Promise<LangPair[]>;
+
+type LangPair = {
+  lang: Languages; // Language enum value
+  folderName: string; // Folder name in locale directory
+};
+```
+
+### Example
+
+```typescript
+import { getOutputLanguages } from '@aexol/dev-translate-core';
+
+const languages = await getOutputLanguages({
+  localeDir: './locales',
+  inputLanguageFolderName: 'en',
+});
+
+// Result:
+// [
+//   { lang: 'DE', folderName: 'de' },
+//   { lang: 'FR', folderName: 'fr' },
+//   { lang: 'JA', folderName: 'ja' },
+// ]
+
+for (const { lang, folderName } of languages) {
+  console.log(`${folderName} -> ${lang}`);
+}
+```
+
+---
+
+## Languages
+
+Enum of all supported languages.
+
+```typescript
+import { Languages } from '@aexol/dev-translate-core';
+
+console.log(Languages.ENGB); // 'ENGB'
+console.log(Languages.DE); // 'DE'
+console.log(Languages.FR); // 'FR'
+```
+
+### Available Languages
+
+```typescript
+enum Languages {
+  BG = 'BG', // Bulgarian
+  CS = 'CS', // Czech
+  DA = 'DA', // Danish
+  DE = 'DE', // German
+  EL = 'EL', // Greek
+  ENGB = 'ENGB', // English (UK)
+  ENUS = 'ENUS', // English (US)
+  ES = 'ES', // Spanish
+  ET = 'ET', // Estonian
+  FI = 'FI', // Finnish
+  FR = 'FR', // French
+  HU = 'HU', // Hungarian
+  ID = 'ID', // Indonesian
+  IT = 'IT', // Italian
+  JA = 'JA', // Japanese
+  KO = 'KO', // Korean
+  LT = 'LT', // Lithuanian
+  LV = 'LV', // Latvian
+  NB = 'NB', // Norwegian
+  NL = 'NL', // Dutch
+  PL = 'PL', // Polish
+  PTBR = 'PTBR', // Portuguese (Brazil)
+  PTPT = 'PTPT', // Portuguese (Portugal)
+  RO = 'RO', // Romanian
+  RU = 'RU', // Russian
+  SK = 'SK', // Slovak
+  SL = 'SL', // Slovenian
+  SV = 'SV', // Swedish
+  TR = 'TR', // Turkish
+  UK = 'UK', // Ukrainian
+  ZH = 'ZH', // Chinese
+}
+```
+
+---
+
+## LogLevels
+
+Enum for controlling logging verbosity.
+
+```typescript
+import { LogLevels } from '@aexol/dev-translate-core';
+
+// Usage with translation options
+await translateLocaleFolder({
+  // ... options
+  logLevel: LogLevels.DEBUG,
+});
+```
+
+### Available Levels
+
+```typescript
+enum LogLevels {
+  SILENT = 'silent',
+  ERROR = 'error',
+  WARN = 'warn',
+  INFO = 'info',
+  DEBUG = 'debug',
+}
+```

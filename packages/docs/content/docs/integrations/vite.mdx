@@ -1,0 +1,212 @@
+---
+title: Vite Plugin
+description: Vite plugin for automatic translation
+---
+
+# Vite Plugin
+
+The `@aexol/vite-plugin-dev-translate` package provides automatic translation during Vite development.
+
+## Installation
+
+```bash
+npm install -D @aexol/vite-plugin-dev-translate
+```
+
+## Setup
+
+```typescript title="vite.config.ts"
+import { defineConfig } from 'vite';
+import devTranslate from '@aexol/vite-plugin-dev-translate';
+import { Languages } from '@aexol/vite-plugin-dev-translate';
+
+export default defineConfig({
+  plugins: [
+    devTranslate({
+      apiKey: process.env.DEV_TRANSLATE_API_KEY!,
+      folderName: 'en',
+      lang: Languages.ENGB,
+      localeDir: './locales',
+    }),
+  ],
+});
+```
+
+## Configuration Options
+
+### Required Options
+
+| Option       | Type        | Description                 |
+| ------------ | ----------- | --------------------------- |
+| `apiKey`     | `string`    | Your API key                |
+| `folderName` | `string`    | Source language folder name |
+| `lang`       | `Languages` | Source language             |
+| `localeDir`  | `string`    | Path to locale directory    |
+
+### Optional Options
+
+| Option                   | Type        | Default     | Description           |
+| ------------------------ | ----------- | ----------- | --------------------- |
+| `context`                | `string`    | -           | Translation context   |
+| `excludePhrases`         | `string[]`  | `[]`        | Phrases to exclude    |
+| `excludeRegex`           | `string`    | -           | Regex to exclude keys |
+| `includeRegex`           | `string`    | -           | Regex to include keys |
+| `formality`              | `Formality` | `'default'` | Formality level       |
+| `excludeDotNotationKeys` | `string[]`  | `[]`        | Keys to exclude       |
+| `projectId`              | `string`    | -           | Project ID            |
+| `omitCache`              | `boolean`   | `false`     | Skip cache            |
+
+## Full Example
+
+```typescript title="vite.config.ts"
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import devTranslate from '@aexol/vite-plugin-dev-translate';
+import { Languages } from '@aexol/vite-plugin-dev-translate';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    devTranslate({
+      apiKey: process.env.DEV_TRANSLATE_API_KEY!,
+      folderName: 'en',
+      lang: Languages.ENGB,
+      localeDir: './src/locales',
+      context: 'E-commerce website for fashion products',
+      excludePhrases: ['BrandName'],
+      formality: 'default',
+    }),
+  ],
+});
+```
+
+## Environment Variables
+
+Store your API key in `.env`:
+
+```bash title=".env"
+DEV_TRANSLATE_API_KEY=your-api-key
+```
+
+<Callout type="warn">Add `.env` to your `.gitignore` to avoid committing your API key.</Callout>
+
+## How It Works
+
+1. **On dev server start** - Plugin initializes the file watcher
+2. **On file change** - Detects changes in source locale folder
+3. **Automatic translation** - Translates changed files
+4. **Hot reload** - Your app receives the new translations
+
+```
+[vite] dev-translate: Watching ./src/locales/en for changes...
+[vite] dev-translate: common.json changed, translating...
+[vite] dev-translate: ✓ Translated to de, fr, ja
+```
+
+## Production Builds
+
+The plugin only runs in development mode. For production:
+
+1. Run translations before build with CLI
+2. Commit translated files to version control
+3. Build as normal
+
+```bash
+# Pre-build script
+dev-translate translate
+vite build
+```
+
+## With React i18n Libraries
+
+### react-i18next
+
+```typescript title="vite.config.ts"
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import devTranslate from '@aexol/vite-plugin-dev-translate';
+import { Languages } from '@aexol/vite-plugin-dev-translate';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    devTranslate({
+      apiKey: process.env.DEV_TRANSLATE_API_KEY!,
+      folderName: 'en',
+      lang: Languages.ENGB,
+      localeDir: './public/locales',
+    }),
+  ],
+});
+```
+
+```
+public/locales/
+├── en/
+│   └── translation.json
+├── de/
+├── fr/
+└── ja/
+```
+
+### react-intl
+
+```typescript title="vite.config.ts"
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import devTranslate from '@aexol/vite-plugin-dev-translate';
+import { Languages } from '@aexol/vite-plugin-dev-translate';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    devTranslate({
+      apiKey: process.env.DEV_TRANSLATE_API_KEY!,
+      folderName: 'en',
+      lang: Languages.ENGB,
+      localeDir: './src/lang',
+    }),
+  ],
+});
+```
+
+## Troubleshooting
+
+### Plugin Not Watching
+
+Ensure your locale directory exists and contains the source language folder:
+
+```bash
+mkdir -p ./locales/en
+echo '{"hello": "Hello"}' > ./locales/en/common.json
+```
+
+### API Key Not Found
+
+Check that your `.env` file is loaded:
+
+```typescript title="vite.config.ts"
+import { defineConfig, loadEnv } from 'vite';
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+
+  return {
+    plugins: [
+      devTranslate({
+        apiKey: env.DEV_TRANSLATE_API_KEY,
+        // ...
+      }),
+    ],
+  };
+});
+```
+
+### Translations Not Updating
+
+Clear the cache and restart:
+
+```bash
+dev-translate clear
+npm run dev
+```

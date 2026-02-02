@@ -1,0 +1,113 @@
+---
+title: Dynamite Overview
+description: React i18n library with build-time string extraction
+---
+
+# Dynamite
+
+**Dynamite** (`@aexol/dynamite`) is a React internationalization library with build-time string extraction and full support for Server Components (RSC) and Server-Side Rendering (SSR).
+
+## Why Dynamite?
+
+Traditional i18n workflows require:
+
+1. Writing translations in JSON files
+2. Using keys in your code (`t('home.welcome')`)
+3. Keeping JSON and code in sync
+
+Dynamite simplifies this:
+
+1. Write strings directly in code (`t('Welcome to our app')`)
+2. Extract strings automatically
+3. Translate via API
+
+## Features
+
+- **Build-time extraction** - Extract `t()` calls from source code
+- **No key management** - Use actual strings as keys
+- **React hooks** - `useDynamite()` for client components
+- **Server support** - `getDynamite()` for RSC/SSR
+- **Type-safe** - Full TypeScript support
+- **CLI tools** - Extract and translate commands
+
+## Quick Example
+
+```tsx title="page.tsx"
+'use client';
+import { useDynamite } from '@aexol/dynamite';
+
+export default function Page() {
+  const { t } = useDynamite();
+
+  return (
+    <div>
+      <h1>{t('Welcome to our app')}</h1>
+      <p>{t('Get started by signing in')}</p>
+    </div>
+  );
+}
+```
+
+After extraction, your source locale file:
+
+```json title="locales/en.json"
+{
+  "Welcome to our app": "Welcome to our app",
+  "Get started by signing in": "Get started by signing in"
+}
+```
+
+After translation:
+
+```json title="locales/de.json"
+{
+  "Welcome to our app": "Willkommen in unserer App",
+  "Get started by signing in": "Melden Sie sich an, um loszulegen"
+}
+```
+
+## Packages
+
+| Export                   | Description                    |
+| ------------------------ | ------------------------------ |
+| `@aexol/dynamite`        | Client hooks and provider      |
+| `@aexol/dynamite/server` | Server utilities               |
+| `@aexol/dynamite` (CLI)  | Extract and translate commands |
+
+## Architecture
+
+```
+┌─────────────────────────────────────────┐
+│         Your React Code              │
+│    t('Hello') t('Welcome')          │
+└───────────────────┬─────────────────────┘
+                    │
+        dynamite extract
+                    │
+                    ▼
+┌─────────────────────────────────────────┐
+│         locales/en.json              │
+│    {"Hello": "Hello", ...}          │
+└───────────────────┬─────────────────────┘
+                    │
+       dynamite translate
+                    │
+                    ▼
+┌─────────────────────────────────────────┐
+│    locales/de.json, fr.json, ...    │
+│    {"Hello": "Hallo", ...}          │
+└─────────────────────────────────────────┘
+```
+
+## Next Steps
+
+<Cards>
+  <Card title="Setup" href="/docs/dynamite/setup" description="Installation and configuration" />
+  <Card
+    title="Client Components"
+    href="/docs/dynamite/client-components"
+    description="Using hooks in client components"
+  />
+  <Card title="Server Components" href="/docs/dynamite/server-components" description="RSC and SSR support" />
+  <Card title="CLI Commands" href="/docs/dynamite/cli" description="Extract and translate commands" />
+</Cards>

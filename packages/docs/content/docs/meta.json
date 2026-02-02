@@ -1,0 +1,16 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "getting-started",
+    "configuration",
+    "---CLI---",
+    "cli",
+    "---Core---",
+    "core",
+    "---Integrations---",
+    "integrations",
+    "---Dynamite---",
+    "dynamite"
+  ]
+}

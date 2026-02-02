@@ -1,0 +1,141 @@
+---
+title: CLI Overview
+description: Command-line interface for dev-translate
+---
+
+# CLI Overview
+
+The `@aexol/dev-translate` CLI provides commands to translate, predict costs, and manage your translation cache.
+
+## Installation
+
+```bash
+# Global installation
+npm install -g @aexol/dev-translate
+
+# Or as a dev dependency
+npm install -D @aexol/dev-translate
+```
+
+## Commands
+
+| Command                            | Description               |
+| ---------------------------------- | ------------------------- |
+| [`translate`](/docs/cli/translate) | Translate locale files    |
+| [`predict`](/docs/cli/predict)     | Predict token consumption |
+| [`clear`](/docs/cli/clear)         | Clear account cache       |
+
+## Basic Usage
+
+```bash
+# Translate all locale files
+dev-translate translate
+
+# Watch mode - translate on file changes
+dev-translate translate -w
+
+# Predict translation costs
+dev-translate predict
+
+# Clear translation cache
+dev-translate clear
+```
+
+## First Run
+
+On first run, the CLI will prompt you to configure your project:
+
+```bash
+$ dev-translate translate
+
+? Enter your API key: ********
+? Enter the locale directory path: ./locales
+? Enter the source language folder name: en
+? Select the source language: ENGB
+
+Configuration saved to .dev-translate.json
+Translating...
+```
+
+## Configuration
+
+The CLI uses a `.dev-translate.json` configuration file. See [Configuration](/docs/configuration) for all options.
+
+```json title=".dev-translate.json"
+{
+  "apiKey": "your-api-key",
+  "localeDir": "./locales",
+  "inputLanguageFolderName": "en",
+  "inputLanguage": "ENGB"
+}
+```
+
+## Environment Variables
+
+You can also use environment variables:
+
+```bash
+export DEV_TRANSLATE_API_KEY=your-api-key
+dev-translate translate
+```
+
+## Using with npm scripts
+
+Add to your `package.json`:
+
+```json title="package.json"
+{
+  "scripts": {
+    "translate": "dev-translate translate",
+    "translate:watch": "dev-translate translate -w",
+    "translate:predict": "dev-translate predict"
+  }
+}
+```
+
+Then run:
+
+```bash
+npm run translate
+npm run translate:watch
+npm run translate:predict
+```
+
+## CI/CD Integration
+
+Example GitHub Actions workflow:
+
+```yaml title=".github/workflows/translate.yml"
+name: Translate
+
+on:
+  push:
+    paths:
+      - 'locales/en/**'
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dev-translate
+        run: npm install -g @aexol/dev-translate
+
+      - name: Translate
+        run: dev-translate translate
+        env:
+          DEV_TRANSLATE_API_KEY: ${{ secrets.DEV_TRANSLATE_API_KEY }}
+
+      - name: Commit translations
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add locales/
+          git commit -m "chore: update translations" || exit 0
+          git push
+```

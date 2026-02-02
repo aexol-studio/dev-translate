@@ -42,6 +42,7 @@
     "packages/cli",
     "packages/sdk",
     "packages/dynamite",
-    "packages/testground"
+    "packages/testground",
+    "packages/docs"
   ]
 }

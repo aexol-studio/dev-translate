@@ -1,0 +1,184 @@
+---
+title: Setup
+description: Install and configure Dynamite
+---
+
+# Setup
+
+Get started with Dynamite in your React project.
+
+## Installation
+
+```bash
+npm install @aexol/dynamite
+```
+
+## Initialize Configuration
+
+Run the init command to create a configuration file:
+
+```bash
+npx dynamite init
+```
+
+This creates `.dynamite.json`:
+
+```json title=".dynamite.json"
+{
+  "localesDir": "./locales",
+  "defaultLocale": "en",
+  "sourceLocale": "en",
+  "inputLanguage": "ENGB",
+  "targetLocales": ["de", "fr", "es"],
+  "srcDirs": ["./src"],
+  "include": ["**/*.tsx", "**/*.ts"],
+  "exclude": ["node_modules/**"]
+}
+```
+
+## Configuration Options
+
+| Option          | Type        | Description                                |
+| --------------- | ----------- | ------------------------------------------ |
+| `localesDir`    | `string`    | Directory for translation JSON files       |
+| `defaultLocale` | `string`    | Default locale code                        |
+| `sourceLocale`  | `string`    | Source language locale code                |
+| `inputLanguage` | `Languages` | Source language for API (e.g., `"ENGB"`)   |
+| `targetLocales` | `string[]`  | Target locale codes to translate to        |
+| `apiKey`        | `string`    | API key (or use env var)                   |
+| `srcDirs`       | `string[]`  | Source directories to scan for `t()` calls |
+| `include`       | `string[]`  | Glob patterns to include                   |
+| `exclude`       | `string[]`  | Glob patterns to exclude                   |
+
+## Environment Variables
+
+Set your API key via environment variable:
+
+```bash title=".env.local"
+DEV_TRANSLATE_API_KEY=your-api-key
+```
+
+## Project Structure
+
+Recommended structure:
+
+```
+your-project/
+├── .dynamite.json
+├── locales/
+│   ├── en.json      # Source (extracted)
+│   ├── de.json      # Translated
+│   ├── fr.json      # Translated
+│   └── es.json      # Translated
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   └── components/
+└── package.json
+```
+
+## Workflow Overview
+
+### 1. Write Code with `t()` Calls
+
+```tsx title="src/app/page.tsx"
+'use client';
+import { useDynamite } from '@aexol/dynamite';
+
+export default function Page() {
+  const { t } = useDynamite();
+  return <h1>{t('Hello world')}</h1>;
+}
+```
+
+### 2. Extract Strings
+
+```bash
+npx dynamite extract
+```
+
+Creates/updates `locales/en.json`:
+
+```json
+{
+  "Hello world": "Hello world"
+}
+```
+
+### 3. Translate
+
+```bash
+npx dynamite translate
+```
+
+Creates translated files:
+
+```json title="locales/de.json"
+{
+  "Hello world": "Hallo Welt"
+}
+```
+
+### 4. Set Up Provider (Client Components)
+
+```tsx title="src/app/layout.tsx"
+import { DynamiteProvider } from '@aexol/dynamite';
+import { loadTranslations } from '@aexol/dynamite/server';
+
+export default function RootLayout({ children, params }: { children: React.ReactNode; params: { locale: string } }) {
+  const translations = loadTranslations(params.locale, {
+    localesDir: './locales',
+    defaultLocale: 'en',
+  });
+
+  return (
+    <html lang={params.locale}>
+      <body>
+        <DynamiteProvider locale={params.locale} translations={translations}>
+          {children}
+        </DynamiteProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+## npm Scripts
+
+Add to your `package.json`:
+
+```json title="package.json"
+{
+  "scripts": {
+    "i18n:extract": "dynamite extract",
+    "i18n:translate": "dynamite translate",
+    "i18n": "dynamite extract && dynamite translate"
+  }
+}
+```
+
+## TypeScript Support
+
+Dynamite is fully typed. No additional setup required.
+
+```typescript
+import { useDynamite } from '@aexol/dynamite';
+import type { DynamiteConfig } from '@aexol/dynamite';
+
+// Config type for advanced usage
+const config: DynamiteConfig = {
+  localesDir: './locales',
+  defaultLocale: 'en',
+  sourceLocale: 'en',
+  inputLanguage: 'ENGB',
+  targetLocales: ['de', 'fr'],
+  srcDirs: ['./src'],
+};
+```
+
+## Next Steps
+
+- [Client Components](/docs/dynamite/client-components) - Using `useDynamite()` hook
+- [Server Components](/docs/dynamite/server-components) - RSC and SSR usage
+- [CLI Commands](/docs/dynamite/cli) - Extract and translate commands

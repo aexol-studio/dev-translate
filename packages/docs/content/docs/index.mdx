@@ -1,0 +1,81 @@
+---
+title: Introduction
+description: AI-powered i18n JSON translation tool with CLI and framework plugins
+---
+
+# Welcome to dev-translate
+
+**dev-translate** is an AI-powered internationalization (i18n) tool that automatically translates your JSON locale files. It works with your existing i18n setup and integrates seamlessly with popular frameworks.
+
+## Why dev-translate?
+
+Translating your application to multiple languages is time-consuming and expensive. dev-translate uses AI to:
+
+- **Automatically translate** your JSON locale files to 30+ languages
+- **Preserve context** with smart translation that understands your application
+- **Save costs** with incremental translation - only translate what changed
+- **Integrate seamlessly** with Vite, Next.js, or any build tool via CLI
+
+## How It Works
+
+1. **Configure** - Set up your source language and API key
+2. **Organize** - Put your source translations in a locale folder (e.g., `/locales/en/`)
+3. **Translate** - Run the CLI or use a framework plugin
+4. **Deploy** - Your translations are ready in all target language folders
+
+```
+locales/
+├── en/           # Source language (you write this)
+│   ├── common.json
+│   └── auth.json
+├── de/           # Auto-generated
+│   ├── common.json
+│   └── auth.json
+├── fr/           # Auto-generated
+│   ├── common.json
+│   └── auth.json
+└── es/           # Auto-generated
+    ├── common.json
+    └── auth.json
+```
+
+## Packages
+
+| Package                                                           | Description                                   |
+| ----------------------------------------------------------------- | --------------------------------------------- |
+| [`@aexol/dev-translate`](/docs/cli)                               | CLI tool for translating locale files         |
+| [`@aexol/dev-translate-core`](/docs/core)                         | Core translation logic and API client         |
+| [`@aexol/vite-plugin-dev-translate`](/docs/integrations/vite)     | Vite plugin                                   |
+| [`@aexol/nextjs-dev-translate-plugin`](/docs/integrations/nextjs) | Next.js plugin                                |
+| [`@aexol/dynamite`](/docs/dynamite)                               | React i18n library with build-time extraction |
+
+## Supported Languages
+
+dev-translate supports 30+ languages:
+
+| Code   | Language     | Code   | Language              |
+| ------ | ------------ | ------ | --------------------- |
+| `BG`   | Bulgarian    | `NB`   | Norwegian             |
+| `CS`   | Czech        | `NL`   | Dutch                 |
+| `DA`   | Danish       | `PL`   | Polish                |
+| `DE`   | German       | `PTBR` | Portuguese (Brazil)   |
+| `EL`   | Greek        | `PTPT` | Portuguese (Portugal) |
+| `ENGB` | English (UK) | `RO`   | Romanian              |
+| `ENUS` | English (US) | `RU`   | Russian               |
+| `ES`   | Spanish      | `SK`   | Slovak                |
+| `ET`   | Estonian     | `SL`   | Slovenian             |
+| `FI`   | Finnish      | `SV`   | Swedish               |
+| `FR`   | French       | `TR`   | Turkish               |
+| `HU`   | Hungarian    | `UK`   | Ukrainian             |
+| `ID`   | Indonesian   | `ZH`   | Chinese               |
+| `IT`   | Italian      | `JA`   | Japanese              |
+| `KO`   | Korean       | `LT`   | Lithuanian            |
+| `LV`   | Latvian      |        |                       |
+
+## Next Steps
+
+<Cards>
+  <Card title="Getting Started" href="/docs/getting-started" description="Set up dev-translate in 5 minutes" />
+  <Card title="Configuration" href="/docs/configuration" description="Configure translation options" />
+  <Card title="CLI Reference" href="/docs/cli" description="Learn CLI commands" />
+</Cards>

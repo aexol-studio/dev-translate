@@ -1,0 +1,264 @@
+---
+title: Types
+description: TypeScript type definitions
+---
+
+# Types Reference
+
+All TypeScript types exported by `@aexol/dev-translate-core`.
+
+## ProjectOptions
+
+Full configuration type for translation operations.
+
+```typescript
+import type { ProjectOptions } from '@aexol/dev-translate-core';
+
+type ProjectOptions = BackendProps & {
+  inputLanguageFolderName: string;
+  inputLanguage: string;
+  apiKey: string;
+  localeDir: string;
+};
+```
+
+### Properties
+
+| Property                  | Type     | Required | Description                 |
+| ------------------------- | -------- | -------- | --------------------------- |
+| `apiKey`                  | `string` | Yes      | API key for authentication  |
+| `localeDir`               | `string` | Yes      | Path to locale directory    |
+| `inputLanguageFolderName` | `string` | Yes      | Source language folder name |
+| `inputLanguage`           | `string` | Yes      | Source language code        |
+| Plus all `BackendProps`   |          |          | See below                   |
+
+---
+
+## BackendProps
+
+Optional configuration for translation behavior.
+
+```typescript
+import type { BackendProps } from '@aexol/dev-translate-core';
+
+type BackendProps = {
+  context?: string;
+  excludePhrases?: string[];
+  excludeRegex?: string;
+  includeRegex?: string;
+  formality?: Formality;
+  excludeDotNotationKeys?: string[];
+  projectId?: string;
+  omitCache?: boolean;
+};
+```
+
+### Properties
+
+| Property                 | Type        | Default     | Description                       |
+| ------------------------ | ----------- | ----------- | --------------------------------- |
+| `context`                | `string`    | -           | Context for better translations   |
+| `excludePhrases`         | `string[]`  | `[]`        | Phrases to keep untranslated      |
+| `excludeRegex`           | `string`    | -           | Regex to exclude keys             |
+| `includeRegex`           | `string`    | -           | Regex to include keys only        |
+| `formality`              | `Formality` | `'default'` | Translation formality             |
+| `excludeDotNotationKeys` | `string[]`  | `[]`        | Nested keys to exclude            |
+| `projectId`              | `string`    | -           | Project identifier                |
+| `omitCache`              | `boolean`   | `false`     | Skip cache for fresh translations |
+
+### Example
+
+```typescript
+import type { BackendProps } from '@aexol/dev-translate-core';
+
+const options: BackendProps = {
+  context: 'E-commerce website for fashion products',
+  excludePhrases: ['BrandName', 'ProductX'],
+  excludeRegex: '^_',
+  formality: 'more',
+  excludeDotNotationKeys: ['metadata.internal'],
+};
+```
+
+---
+
+## LangPair
+
+Represents a language and its folder name mapping.
+
+```typescript
+import type { LangPair } from '@aexol/dev-translate-core';
+
+type LangPair = {
+  lang: Languages;
+  folderName: string;
+};
+```
+
+### Properties
+
+| Property     | Type        | Description                                    |
+| ------------ | ----------- | ---------------------------------------------- |
+| `lang`       | `Languages` | Language enum value (e.g., `'DE'`)             |
+| `folderName` | `string`    | Folder name in locale directory (e.g., `'de'`) |
+
+### Example
+
+```typescript
+import type { LangPair } from '@aexol/dev-translate-core';
+import { Languages } from '@aexol/dev-translate-core';
+
+const german: LangPair = {
+  lang: Languages.DE,
+  folderName: 'de',
+};
+
+const portuguese: LangPair = {
+  lang: Languages.PTBR,
+  folderName: 'pt-BR',
+};
+```
+
+---
+
+## Languages
+
+Enum of all supported language codes.
+
+```typescript
+import { Languages } from '@aexol/dev-translate-core';
+
+// Type usage
+type MyConfig = {
+  sourceLanguage: Languages;
+  targetLanguages: Languages[];
+};
+
+const config: MyConfig = {
+  sourceLanguage: Languages.ENGB,
+  targetLanguages: [Languages.DE, Languages.FR, Languages.JA],
+};
+```
+
+### Values
+
+```typescript
+enum Languages {
+  BG = 'BG',
+  CS = 'CS',
+  DA = 'DA',
+  DE = 'DE',
+  EL = 'EL',
+  ENGB = 'ENGB',
+  ENUS = 'ENUS',
+  ES = 'ES',
+  ET = 'ET',
+  FI = 'FI',
+  FR = 'FR',
+  HU = 'HU',
+  ID = 'ID',
+  IT = 'IT',
+  JA = 'JA',
+  KO = 'KO',
+  LT = 'LT',
+  LV = 'LV',
+  NB = 'NB',
+  NL = 'NL',
+  PL = 'PL',
+  PTBR = 'PTBR',
+  PTPT = 'PTPT',
+  RO = 'RO',
+  RU = 'RU',
+  SK = 'SK',
+  SL = 'SL',
+  SV = 'SV',
+  TR = 'TR',
+  UK = 'UK',
+  ZH = 'ZH',
+}
+```
+
+---
+
+## Formality
+
+Type for formality level options.
+
+```typescript
+type Formality = 'default' | 'more' | 'less' | 'prefer_more' | 'prefer_less';
+```
+
+### Values
+
+| Value           | Description                      |
+| --------------- | -------------------------------- |
+| `'default'`     | Use language's default formality |
+| `'more'`        | More formal translations         |
+| `'less'`        | Less formal translations         |
+| `'prefer_more'` | Prefer formal when available     |
+| `'prefer_less'` | Prefer informal when available   |
+
+### Example
+
+```typescript
+import type { Formality } from '@aexol/dev-translate-core';
+
+const formality: Formality = 'more';
+
+// In options
+const options = {
+  // ...
+  formality: 'more' as Formality,
+};
+```
+
+---
+
+## Usage with TypeScript
+
+### Strict Typing
+
+```typescript
+import { translateLocaleFolder, Languages, type ProjectOptions, type BackendProps } from '@aexol/dev-translate-core';
+
+// Type-safe configuration
+const backendOptions: BackendProps = {
+  context: 'My app context',
+  formality: 'more',
+};
+
+const fullOptions: ProjectOptions = {
+  apiKey: process.env.DEV_TRANSLATE_API_KEY!,
+  localeDir: './locales',
+  inputLanguageFolderName: 'en',
+  inputLanguage: Languages.ENGB,
+  ...backendOptions,
+};
+
+await translateLocaleFolder(fullOptions);
+```
+
+### Generic Configuration Builder
+
+```typescript
+import type { ProjectOptions, BackendProps } from '@aexol/dev-translate-core';
+import { Languages } from '@aexol/dev-translate-core';
+
+function createConfig(overrides?: Partial<BackendProps>): ProjectOptions {
+  return {
+    apiKey: process.env.DEV_TRANSLATE_API_KEY!,
+    localeDir: './locales',
+    inputLanguageFolderName: 'en',
+    inputLanguage: Languages.ENGB,
+    ...overrides,
+  };
+}
+
+// Usage
+const defaultConfig = createConfig();
+const formalConfig = createConfig({ formality: 'more' });
+const medicalConfig = createConfig({
+  context: 'Medical application',
+  formality: 'more',
+});
+```

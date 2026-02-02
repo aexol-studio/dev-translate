@@ -1,0 +1,164 @@
+---
+title: Getting Started
+description: Set up dev-translate in your project in 5 minutes
+---
+
+# Getting Started
+
+Get up and running with dev-translate in minutes.
+
+## Prerequisites
+
+- Node.js 18 or later
+- A project with JSON locale files
+- An API key from [devtranslate.app](https://devtranslate.app)
+
+## Installation
+
+### Global Installation (Recommended)
+
+```bash
+npm install -g @aexol/dev-translate
+```
+
+Or with other package managers:
+
+```bash
+# Yarn
+yarn global add @aexol/dev-translate
+
+# pnpm
+pnpm add -g @aexol/dev-translate
+```
+
+### Local Installation
+
+You can also install it as a dev dependency:
+
+```bash
+npm install -D @aexol/dev-translate
+```
+
+## Quick Start
+
+### 1. Set Up Your Locale Structure
+
+Organize your locale files in a folder structure like this:
+
+```
+locales/
+├── en/              # Your source language
+│   ├── common.json
+│   └── errors.json
+├── de/              # Target languages (folders only)
+├── fr/
+└── es/
+```
+
+### 2. Create Source Translations
+
+Add your source language translations:
+
+```json title="locales/en/common.json"
+{
+  "welcome": "Welcome to our app",
+  "login": "Sign in",
+  "logout": "Sign out",
+  "settings": "Settings"
+}
+```
+
+### 3. Run Translation
+
+Navigate to your project and run:
+
+```bash
+dev-translate translate
+```
+
+On first run, you'll be prompted to configure:
+
+```
+? Enter your API key: ********
+? Enter the locale directory path: ./locales
+? Enter the source language folder name: en
+? Select the source language: ENGB
+```
+
+This creates a `.dev-translate.json` configuration file.
+
+### 4. Check Results
+
+Your translated files are now ready:
+
+```json title="locales/de/common.json"
+{
+  "welcome": "Willkommen in unserer App",
+  "login": "Anmelden",
+  "logout": "Abmelden",
+  "settings": "Einstellungen"
+}
+```
+
+## Using Environment Variables
+
+For CI/CD or team environments, use an environment variable for the API key:
+
+```bash
+export DEV_TRANSLATE_API_KEY=your-api-key
+dev-translate translate
+```
+
+## Watch Mode
+
+For development, use watch mode to automatically translate when files change:
+
+```bash
+dev-translate translate -w
+```
+
+## Framework Integration
+
+Instead of using the CLI, you can integrate directly with your build tool:
+
+### Vite
+
+```typescript title="vite.config.ts"
+import { defineConfig } from 'vite';
+import devTranslate from '@aexol/vite-plugin-dev-translate';
+import { Languages } from '@aexol/vite-plugin-dev-translate';
+
+export default defineConfig({
+  plugins: [
+    devTranslate({
+      apiKey: process.env.DEV_TRANSLATE_API_KEY,
+      folderName: 'en',
+      lang: Languages.ENGB,
+      localeDir: './locales',
+    }),
+  ],
+});
+```
+
+### Next.js
+
+```javascript title="next.config.mjs"
+import { withDevTranslate, Languages } from '@aexol/nextjs-dev-translate-plugin';
+
+const nextConfig = {};
+
+export default withDevTranslate(nextConfig, {
+  apiKey: process.env.DEV_TRANSLATE_API_KEY,
+  folderName: 'en',
+  lang: Languages.ENGB,
+  localeDir: './locales',
+});
+```
+
+## Next Steps
+
+- [Configuration Reference](/docs/configuration) - Learn all configuration options
+- [CLI Commands](/docs/cli) - Explore all CLI commands
+- [Vite Plugin](/docs/integrations/vite) - Full Vite integration guide
+- [Next.js Plugin](/docs/integrations/nextjs) - Full Next.js integration guide
+- [Dynamite](/docs/dynamite) - React i18n library with build-time extraction

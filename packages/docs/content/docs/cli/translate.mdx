@@ -1,0 +1,149 @@
+---
+title: translate
+description: Translate locale files
+---
+
+# translate
+
+Translate all JSON files in your locale directory.
+
+## Usage
+
+```bash
+dev-translate translate [options]
+```
+
+## Options
+
+| Option    | Alias | Description                                        |
+| --------- | ----- | -------------------------------------------------- |
+| `--watch` | `-w`  | Watch for file changes and translate automatically |
+
+## Examples
+
+### Basic Translation
+
+```bash
+dev-translate translate
+```
+
+This will:
+
+1. Read the `.dev-translate.json` configuration
+2. Find all JSON files in the source language folder
+3. Translate them to all target language folders
+4. Write the translated files
+5. Update the timestamp file
+
+### Watch Mode
+
+```bash
+dev-translate translate -w
+```
+
+In watch mode, the CLI will:
+
+1. Perform an initial translation
+2. Watch for changes in the source language folder
+3. Automatically translate changed files
+
+<Callout type="info">Watch mode is ideal for development. Use the regular command for CI/CD.</Callout>
+
+## How It Works
+
+### Incremental Translation
+
+dev-translate tracks when files were last translated using `.dev-translate.timestamp.json`. Only files modified after this timestamp are sent for translation.
+
+```json title=".dev-translate.timestamp.json"
+{
+  "timestamp": 1704067200000
+}
+```
+
+### Target Language Detection
+
+Target languages are detected automatically based on folder names in your locale directory:
+
+```
+locales/
+├── en/        # Source (inputLanguageFolderName)
+├── de/        # Target: German
+├── fr/        # Target: French
+└── ja/        # Target: Japanese
+```
+
+The folder names are mapped to language codes automatically.
+
+### File Processing
+
+For each source file, dev-translate:
+
+1. Reads the JSON content
+2. Sends it to the translation API with all target languages
+3. Receives translated content for each language
+4. Writes each translation to the corresponding folder
+
+```
+Source: locales/en/common.json
+  → locales/de/common.json
+  → locales/fr/common.json
+  → locales/ja/common.json
+```
+
+## Output
+
+```bash
+$ dev-translate translate
+
+Translating common.json...
+  ✓ de (German) - 150 tokens
+  ✓ fr (French) - 148 tokens
+  ✓ ja (Japanese) - 165 tokens
+
+Translating errors.json...
+  ✓ de (German) - 80 tokens
+  ✓ fr (French) - 78 tokens
+  ✓ ja (Japanese) - 95 tokens
+
+Translation complete!
+Total tokens consumed: 716
+```
+
+## Error Handling
+
+If a translation fails:
+
+- The error is logged to console
+- Other translations continue
+- The timestamp is not updated for failed files
+
+```bash
+$ dev-translate translate
+
+Translating common.json...
+  ✓ de (German) - 150 tokens
+  ✗ fr (French) - API error: Rate limit exceeded
+  ✓ ja (Japanese) - 165 tokens
+
+1 translation failed. Retry with: dev-translate translate
+```
+
+## Configuration Options
+
+The translate command uses these configuration options:
+
+```json title=".dev-translate.json"
+{
+  "apiKey": "your-api-key",
+  "localeDir": "./locales",
+  "inputLanguageFolderName": "en",
+  "inputLanguage": "ENGB",
+  "context": "E-commerce website",
+  "excludePhrases": ["BrandName"],
+  "excludeRegex": "^_",
+  "formality": "default"
+}
+```
+
+See [Configuration](/docs/configuration) for all options.

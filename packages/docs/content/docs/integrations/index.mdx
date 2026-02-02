@@ -1,0 +1,88 @@
+---
+title: Integrations Overview
+description: Framework integrations for dev-translate
+---
+
+# Integrations Overview
+
+dev-translate provides native plugins for popular frameworks to automatically translate your locale files during development.
+
+## Available Integrations
+
+<Cards>
+  <Card title="Vite" href="/docs/integrations/vite" description="Vite plugin for automatic translation" />
+  <Card title="Next.js" href="/docs/integrations/nextjs" description="Next.js plugin for automatic translation" />
+</Cards>
+
+## How Plugins Work
+
+Framework plugins wrap the [`@aexol/dev-translate-watch`](/docs/core) package to provide:
+
+1. **Automatic file watching** - Detects changes to source locale files
+2. **Instant translation** - Translates changed files automatically
+3. **Dev server integration** - Works seamlessly with hot reload
+4. **Production skip** - Only runs in development mode
+
+## Plugin vs CLI
+
+| Feature               | Plugin          | CLI                   |
+| --------------------- | --------------- | --------------------- |
+| Automatic watching    | Yes             | With `-w` flag        |
+| Framework integration | Native          | Manual                |
+| Production builds     | Skipped         | Manual                |
+| Configuration         | In build config | `.dev-translate.json` |
+| CI/CD usage           | Not recommended | Recommended           |
+
+## When to Use Plugins
+
+**Use plugins when:**
+
+- You want translations during development
+- You prefer integrated tooling
+- You use Vite or Next.js
+
+**Use CLI when:**
+
+- You need CI/CD integration
+- You want manual control
+- You use a different framework
+- You prefer separate build steps
+
+## Common Configuration
+
+All plugins share the same configuration options:
+
+```typescript
+type PluginOptions = {
+  // Required
+  apiKey: string;
+  folderName: string; // Source language folder
+  lang: Languages; // Source language
+  localeDir: string; // Locale directory path
+
+  // Optional (from BackendProps)
+  context?: string;
+  excludePhrases?: string[];
+  excludeRegex?: string;
+  includeRegex?: string;
+  formality?: Formality;
+  excludeDotNotationKeys?: string[];
+  projectId?: string;
+  omitCache?: boolean;
+};
+```
+
+## Languages Enum
+
+All plugins export the `Languages` enum:
+
+```typescript
+import { Languages } from '@aexol/vite-plugin-dev-translate';
+// or
+import { Languages } from '@aexol/nextjs-dev-translate-plugin';
+
+Languages.ENGB; // English (UK)
+Languages.DE; // German
+Languages.FR; // French
+// ... and 30+ more
+```
