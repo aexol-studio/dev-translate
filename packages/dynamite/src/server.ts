@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { DynamiteConfig, TranslationMap } from './types.js';
+import type { DynamiteConfig, TranslationMap, TranslationParams } from './types.js';
+import { interpolate } from './utils.js';
 
 export type ServerConfig = Pick<DynamiteConfig, 'localesDir' | 'defaultLocale'>;
 
@@ -47,13 +48,13 @@ export async function getDynamite(
   locale: string,
   config: ServerConfig,
 ): Promise<{
-  t: (key: string) => string;
+  t: (key: string, params?: TranslationParams) => string;
   locale: string;
   translations: TranslationMap;
 }> {
   const translations = loadTranslations(locale, config);
 
-  const t = (key: string): string => translations[key] ?? key;
+  const t = (key: string, params?: TranslationParams): string => interpolate(translations[key] ?? key, params);
 
   return {
     t,
@@ -69,13 +70,13 @@ export function getDynamiteSync(
   locale: string,
   config: ServerConfig,
 ): {
-  t: (key: string) => string;
+  t: (key: string, params?: TranslationParams) => string;
   locale: string;
   translations: TranslationMap;
 } {
   const translations = loadTranslations(locale, config);
 
-  const t = (key: string): string => translations[key] ?? key;
+  const t = (key: string, params?: TranslationParams): string => interpolate(translations[key] ?? key, params);
 
   return {
     t,

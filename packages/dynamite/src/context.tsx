@@ -1,7 +1,8 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import type { DynamiteContextValue, TranslationMap } from './types.js';
+import type { DynamiteContextValue, TranslationMap, TranslationParams } from './types.js';
+import { interpolate } from './utils.js';
 
 const DynamiteContext = createContext<DynamiteContextValue | null>(null);
 
@@ -26,7 +27,7 @@ export function useDynamite() {
     );
   }
 
-  const t = (key: string): string => ctx.translations[key] ?? key;
+  const t = (key: string, params?: TranslationParams): string => interpolate(ctx.translations[key] ?? key, params);
 
   return {
     t,
