@@ -198,7 +198,7 @@ program
         // Optional BackendProps - pass undefined to use defaults
         context: undefined,
         excludePhrases: undefined,
-        excludeRegex: undefined,
+        excludeRegex: ['\\{\\{.*?\\}\\}'],
         formality: undefined,
         excludeDotNotationKeys: undefined,
         projectId: undefined,

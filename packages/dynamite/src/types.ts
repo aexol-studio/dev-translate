@@ -23,3 +23,5 @@ export type DynamiteContextValue = {
 };
 
 export type ExtractedStrings = string[];
+
+export type TranslationParams = Record<string, string | number>;

@@ -6,6 +6,7 @@ commonjs
 # Next.js build output
 .next/
 .source/
+.tmp
 
 # Don't ignore docs lib folder
 !packages/docs/lib/
