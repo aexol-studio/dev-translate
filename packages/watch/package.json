@@ -1,6 +1,6 @@
 {
   "name": "@aexol/dev-translate-watch",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": false,
   "main": "./lib/index.js",
   "author": "Aexol, Artur Czemiel",
@@ -15,7 +15,7 @@
     "commonjs"
   ],
   "dependencies": {
-    "@aexol/dev-translate-core": "^0.3.6",
+    "@aexol/dev-translate-core": "^0.4.2",
     "chokidar": "^3.6.0"
   },
   "exports": {

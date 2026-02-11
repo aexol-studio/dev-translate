@@ -1,0 +1,15 @@
+{
+  "greeting": "Hello, {{name}}!",
+  "multipleVars": "{{user}} sent you {{count}} messages",
+  "withPunctuation": "({{count}}) items remaining",
+  "variableOnly": "{{greeting}}",
+  "noVariables": "This string has no variables",
+  "longTemplate": "Dear {{name}}, your order #{{orderId}} has been shipped to {{address}} and will arrive in {{days}} days",
+  "nested": {
+    "welcome": "Welcome back, {{username}}!",
+    "error": "Error {{code}}: {{message}}",
+    "confirmation": "Are you sure you want to delete \"{{itemName}}\"?"
+  },
+  "withHtml": "Click <a>{{linkText}}</a> to continue",
+  "mixedContent": "You have {{unread}} unread and {{read}} read notifications"
+}

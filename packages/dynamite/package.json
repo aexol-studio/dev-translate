@@ -1,6 +1,6 @@
 {
   "name": "@aexol/dynamite",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": false,
   "description": "React i18n library with build-time string extraction and SSR support",
   "author": "Aexol, Artur Czemiel",
@@ -44,7 +44,7 @@
     }
   },
   "dependencies": {
-    "@aexol/dev-translate-core": "^0.3.6",
+    "@aexol/dev-translate-core": "^0.4.2",
     "commander": "^11.0.0",
     "glob": "^10.3.10"
   },

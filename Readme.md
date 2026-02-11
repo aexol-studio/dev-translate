@@ -393,6 +393,24 @@ export default function RootLayout({ children, params }: { children: React.React
 3. **SSR delivery**: Translations are loaded server-side and injected via React context
 4. **RSC support**: Async `getDynamite()` helper for React Server Components
 
+## Releasing
+
+All packages share the same version. Use the bump script to update all packages at once:
+
+```bash
+npm run bump
+```
+
+This opens an interactive CLI to select patch/minor/major or enter a custom version. After bumping:
+
+```bash
+git add -A && git commit -m "chore: bump all packages to <version>"
+git tag <version>
+git push && git push origin <version>
+```
+
+Pushing the tag triggers the GitHub Actions release workflow, which publishes all packages to npm.
+
 ## License
 
 This project is licensed under the MIT License.
