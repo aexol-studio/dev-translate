@@ -37,6 +37,28 @@ export default async function Page({ params }: { params: { locale: string } }) {
 }
 ```
 
+### With Interpolation
+
+```tsx title="app/[locale]/profile/page.tsx"
+import { getDynamite } from '@aexol/dynamite/server';
+
+export default async function ProfilePage({ params }: { params: { locale: string } }) {
+  const { t } = await getDynamite(params.locale, {
+    localesDir: './locales',
+    defaultLocale: 'en',
+  });
+
+  const user = await getUser();
+
+  return (
+    <main>
+      <h1>{t('Welcome back, {{name}}!', { name: user.name })}</h1>
+      <p>{t('You have {{count}} unread messages', { count: user.unreadCount })}</p>
+    </main>
+  );
+}
+```
+
 ## getDynamiteSync (Sync)
 
 For synchronous usage:

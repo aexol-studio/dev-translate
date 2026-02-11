@@ -174,18 +174,53 @@ export function Greeting({ userName }: { userName?: string }) {
   const { t } = useDynamite();
 
   if (userName) {
-    // Note: For dynamic content, you might need interpolation
-    // which requires a different approach
-    return (
-      <h1>
-        {t('Welcome back')}, {userName}!
-      </h1>
-    );
+    return <h1>{t('Welcome back, {{name}}!', { name: userName })}</h1>;
   }
 
   return <h1>{t('Welcome, guest')}</h1>;
 }
 ```
+
+## String Interpolation
+
+Use `{{placeholder}}` syntax for dynamic values:
+
+```tsx
+const { t } = useDynamite();
+
+// Single variable
+t('Hello, {{name}}!', { name: 'Alice' });
+// → "Hello, Alice!" (or translated equivalent)
+
+// Multiple variables
+t('{{user}} has {{count}} new messages', { user: 'Alice', count: 5 });
+// → "Alice has 5 new messages"
+
+// Missing params are preserved
+t('Hello, {{name}}!');
+// → "Hello, {{name}}!"
+```
+
+### Example: User Dashboard
+
+```tsx title="components/dashboard.tsx"
+'use client';
+
+import { useDynamite } from '@aexol/dynamite';
+
+export function Dashboard({ user }: { user: { name: string; notifications: number } }) {
+  const { t } = useDynamite();
+
+  return (
+    <div>
+      <h1>{t('Welcome back, {{name}}!', { name: user.name })}</h1>
+      <p>{t('You have {{count}} new notifications', { count: user.notifications })}</p>
+    </div>
+  );
+}
+```
+
+Placeholders support `string` and `number` values. The `{{placeholder}}` tokens are automatically preserved during translation — the AI backend knows not to translate them.
 
 ## Accessing Current Locale
 
@@ -219,7 +254,10 @@ t('Please enter your') + ' ' + t('email address');
 // Good - static strings can be extracted
 t('Welcome to our app');
 
-// Bad - dynamic strings cannot be extracted
+// Good - use {{placeholders}} for dynamic content
+t('Welcome to {{appName}}', { appName });
+
+// Bad - template literals cannot be extracted
 t(`Welcome to ${appName}`);
 ```
 
@@ -232,20 +270,6 @@ t('SIGN IN'); // Different key, needs separate translation
 ```
 
 ## Limitations
-
-### No String Interpolation
-
-Dynamite uses strings as keys, so dynamic content needs workarounds:
-
-```tsx
-// Instead of interpolation:
-// t(`Hello ${name}`)  // Won't work
-
-// Use composition:
-<>
-  {t('Hello')}, {name}!
-</>
-```
 
 ### No Plural Forms
 
