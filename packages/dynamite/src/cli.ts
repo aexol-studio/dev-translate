@@ -43,7 +43,7 @@ program
     const config = loadConfig(options.config);
     const srcDirs = config?.srcDirs ?? options.src;
     const extensions = config?.extensions ?? options.extensions;
-    const localesDir = config?.localesDir ?? './locales';
+    const localesDir = path.resolve(path.join(process.cwd(), config?.localesDir ?? 'locales'));
     const sourceLocale = config?.sourceLocale ?? 'en';
     const outputPath = options.output
       ? path.resolve(options.output)
@@ -103,7 +103,7 @@ program
       process.exit(1);
     }
 
-    const localesDir = path.resolve(config?.localesDir ?? options.localesDir);
+    const localesDir = config?.localesDir ?? options.localesDir;
     const sourceLocale = config?.sourceLocale ?? options.source;
     const targetLocales = config?.targetLocales ?? options.targets;
 
